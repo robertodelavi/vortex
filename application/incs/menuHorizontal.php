@@ -1,7 +1,3 @@
-<?php 
-
-?>
-
 <ul class="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-[#0e1726] text-black dark:text-white-dark">
     <li class="menu nav-item relative">
         <a href="javascript:;" class="nav-link">

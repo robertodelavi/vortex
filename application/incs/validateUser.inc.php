@@ -1,4 +1,3 @@
-<?php 
-	//include 'library/DataManipulation.php'; 
-	$data = new DataManipulation(); 
-?>
+<?php
+include 'library/DataManipulation.php';
+$data = new DataManipulation();

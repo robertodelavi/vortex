@@ -1,5 +1,5 @@
 <?php
-interface Command {
-     public function execute ();
+interface Command
+{
+    public function execute();
 }
-?>
