@@ -22,10 +22,70 @@ foreach($result as $row){
 
 ?>
 
-<div x-data="multipleTable" class="panel mt-0">
-    <h5 class="md:absolute md:top-[25px] md:mb-0 mb-5 font-semibold text-lg dark:text-white-light">Clientes</h5>
-    <table id="myTable2" class="whitespace-nowrap"></table>
+<div class="flex h-screen gap-6">
+    <!-- Filtros -->
+    <div class="w-1/3">
+        <!-- Bloco dos filtros -->
+        <div class="panel h-full">
+            <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
+                Filtros
+            </h5>
+            <div class="flex-1 space-y-4">
+                <div>
+                    <label for="name">Full Name</label>
+                    <input id="name" type="text" placeholder="Jimmy Turner" class="form-input" />
+                </div>
+                <div>
+                    <label for="profession">Profession</label>
+                    <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
+                </div>
+                <div>
+                    <label for="country">Country</label>
+                    <select id="country" class="form-select text-white-dark">
+                        <option>All Countries</option>
+                        <option selected="">United States</option>
+                        <option>India</option>
+                        <option>Japan</option>
+                        <option>China</option>
+                        <option>Brazil</option>
+                        <option>Norway</option>
+                        <option>Canada</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="address">Address</label>
+                    <input id="address" type="text" placeholder="New York" class="form-input" />
+                </div>
+                <div>
+                    <label for="profession">Profession</label>
+                    <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
+                </div>
+                <div>
+                    <label for="profession">Profession</label>
+                    <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
+                </div>
+
+                <div class="flex gap-2" >
+                    <div class="">
+                        <button type="button" class="btn btn-primary">Aplicar Filtros</button>
+                    </div>
+                    <div class="">
+                        <button type="button" class="btn btn-secondary">Limpar Filtros</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+    
+    <!-- Listagem -->
+    <div class="w-2/3 ">
+        <div x-data="multipleTable" class="panel h-full mt-0">
+            <h5 class="md:absolute md:top-[25px] md:mb-0 mb-5 font-semibold text-lg dark:text-white-light">Clientes</h5>
+            <table id="myTable2" class="whitespace-nowrap"></table>
+        </div>
+    </div>
 </div>
+
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
@@ -46,7 +106,7 @@ foreach($result as $row){
                     columns: [{
                             select: 0,
                             render: (data, cell, row) => {
-                                return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-${row.dataIndex + 1}.jpeg" />${data}</div>`;
+                                return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-${row.dataIndex + 1}.jpeg" /><a href="?module=principal&acao=visualiza_principal">${data}</a></div>`;
                             },
                             sort: "asc"
                         },
@@ -68,13 +128,13 @@ foreach($result as $row){
                             sortable: false,
                             render: (data, cell, row) => {
                                 return `<div class="flex items-center">
-                                            <button type="button" class="ltr:mr-2 rtl:ml-2" x-tooltip="Edit" x-on:click="alert('opa')">
+                                            <button type="button" class="ltr:mr-2 rtl:ml-2" x-tooltip="Edit" x-on:click="console.log('clicked')">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                                     <path d="M15.2869 3.15178L14.3601 4.07866L5.83882 12.5999L5.83881 12.5999C5.26166 13.1771 4.97308 13.4656 4.7249 13.7838C4.43213 14.1592 4.18114 14.5653 3.97634 14.995C3.80273 15.3593 3.67368 15.7465 3.41556 16.5208L2.32181 19.8021L2.05445 20.6042C1.92743 20.9852 2.0266 21.4053 2.31063 21.6894C2.59466 21.9734 3.01478 22.0726 3.39584 21.9456L4.19792 21.6782L7.47918 20.5844L7.47919 20.5844C8.25353 20.3263 8.6407 20.1973 9.00498 20.0237C9.43469 19.8189 9.84082 19.5679 10.2162 19.2751C10.5344 19.0269 10.8229 18.7383 11.4001 18.1612L11.4001 18.1612L19.9213 9.63993L20.8482 8.71306C22.3839 7.17735 22.3839 4.68748 20.8482 3.15178C19.3125 1.61607 16.8226 1.61607 15.2869 3.15178Z" stroke="currentColor" stroke-width="1.5" />
                                                     <path opacity="0.5" d="M14.36 4.07812C14.36 4.07812 14.4759 6.04774 16.2138 7.78564C17.9517 9.52354 19.9213 9.6394 19.9213 9.6394M4.19789 21.6777L2.32178 19.8015" stroke="currentColor" stroke-width="1.5" />
                                                 </svg>
                                             </button>
-                                            <button type="button" x-tooltip="Delete">
+                                            <button type="button" x-tooltip="Delete" x-on:click="testeFunction">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                     <path opacity="0.5" d="M9.17065 4C9.58249 2.83481 10.6937 2 11.9999 2C13.3062 2 14.4174 2.83481 14.8292 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                                     <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -124,7 +184,7 @@ foreach($result as $row){
                 return status[random];
             },
 
-            myFunction() {
+            testeFunction() {
                 console.log('Clicou!');
             }
         }));
