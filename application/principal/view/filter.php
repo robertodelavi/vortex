@@ -17,7 +17,7 @@ foreach($result as $key => $row){
         array_push($arrRow, trim($row['cli_nome']));
         array_push($arrRow, trim($row['cli_nome']));
         array_push($arrRow, trim($row['cli_nome']));
-        array_push($arrRow, trim($row['cli_nome']));
+        array_push($arrRow, $row['cli_codigo']);
         //
         array_push($filteredData, $arrRow);
     }
