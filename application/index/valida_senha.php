@@ -1,5 +1,7 @@
 <?php
 include 'library/vristo/header-main-auth.php';
+include 'library/DataManipulation.php';
+$data = new DataManipulation();
 ?>
 
 <!-- Loading -->
@@ -25,10 +27,23 @@ class Valida_SenhaCommand implements Command
         $pass = addslashes($_POST['senha']);
         $idSession = $_POST['wf_idSession'];
 
+        // Valida base de dados de autenticação
+        $sqlAuth = "
+        SELECT ue.uem_codigo, e.emp_bd
+        FROM sisusuarios_sisempresas AS ue 
+            JOIN sisusuarios AS u ON (ue.usu_codigo = u.usu_codigo)
+            JOIN sisempresas AS e ON (ue.emp_codigo = e.emp_codigo)
+        WHERE u.usu_email = '${user}' AND u.usu_senha = '${pass}' AND ue.uem_ativado = 's' AND u.usu_ativado = 's' AND e.emp_ativado = 's' ";
+        
+        $resultAuth = $data->find('dynamic', $sqlAuth);
+
+        var_dump($resultAuth);
+
+
         $login = new Login();
         $login->table = 'usuario';
 
-        //echo $idSession;
+        // echo $idSession;
         $result = $login->validateUser(array('usu_login' => $user, 'usu_senha' => $pass), $idSession);
         if ($result['login'] == 'Logado') {
             /*$sql = 'INSERT INTO usuario_acesso(usu_codigo) VALUES ('.$_SESSION['wf_userId'].')';

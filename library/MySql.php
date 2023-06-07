@@ -4,32 +4,23 @@
  */
 class MySql
 {
-    //conexao com o banco de dados
-    function connOpen()
-    {	
-		/*$server   = "localhost:3306";    // Endereço do servidor
-        $user     = 'brroboti_1';  // Usuário
-        $passw    = 'brt4mysql';        // Senha
-        $database = 'brroboti_1';  // Nome Banco*/
 
-        $server   = 'localhost';	 //Endereço do servidor
-		$user     = 'root';			 // Usuário		
-		$passw	  = '';	     // Senha
-		$database = 'brrobotica';	 // Nome Banco
+    private $conn; // Propriedade para armazenar a conexão
+
+    //conexao com o banco de dados
+    function connOpen($database = 'vortex__autenticacao'){	
+		$server = 'localhost';	 
+		$user = 'root';			 
+		$passw = '';	     
+        // $database = 'vortex__autenticacao';
 		
 		$this->conn = mysqli_connect($server, $user, $passw, $database);
         mysqli_set_charset($this->conn, "utf8");
 
-        if (!$this->conn)
-        {//caso haja erro na conexao
+        if (!$this->conn) { // Caso haja erro na conexao
             echo 'Erro ao conectar com o servidor. '.$this->error();
             exit (1);
         }
-        
-        // if (!mysqli_select_db($database, $this->conn)){//caso nao abra a base de dados
-  //           echo 'Erro ao selecionar a base de dados. '.$this->error();
-  //           exit (1);
-  //       }
     }
 
     //fechar a conexao com o banco

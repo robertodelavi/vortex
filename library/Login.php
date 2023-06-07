@@ -40,7 +40,7 @@ class Login{
 				$sql = 'INSERT INTO usuario_acesso(usu_codigo) VALUES ('.$_SESSION['wf_userId'].')';
 				$result = $db->executeQuery($sql,false);
 				
-				// Cria um cookie com o usuário
+				// Cria um cookie com o usuï¿½rio
 				$tempo_cookie = strtotime("+2 day", time());
 				setcookie('wf_userId', $_SESSION['wf_userId'], $tempo_cookie, "/");			
 				setcookie('wf_userName', $_SESSION['wf_userName'], $tempo_cookie, "/");			
