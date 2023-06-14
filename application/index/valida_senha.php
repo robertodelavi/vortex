@@ -27,53 +27,58 @@ class Valida_SenhaCommand implements Command
         $pass = addslashes($_POST['senha']);
         $idSession = $_POST['wf_idSession'];
 
-        // Valida base de dados de autenticação
-        $sqlAuth = "
-        SELECT ue.uem_codigo, e.emp_bd
-        FROM sisusuarios_sisempresas AS ue 
-            JOIN sisusuarios AS u ON (ue.usu_codigo = u.usu_codigo)
-            JOIN sisempresas AS e ON (ue.emp_codigo = e.emp_codigo)
-        WHERE u.usu_email = '${user}' AND u.usu_senha = '${pass}' AND ue.uem_ativado = 's' AND u.usu_ativado = 's' AND e.emp_ativado = 's' ";
-        
-        $resultAuth = $data->find('dynamic', $sqlAuth);
-
-        var_dump($resultAuth);
-
-
         $login = new Login();
-        $login->table = 'usuario';
+        $login->tableAuth = 'sisusuarios';
+        $login->table = 'sisusuarios';
 
-        // echo $idSession;
-        $result = $login->validateUser(array('usu_login' => $user, 'usu_senha' => $pass), $idSession);
-        if ($result['login'] == 'Logado') {
-            /*$sql = 'INSERT INTO usuario_acesso(usu_codigo) VALUES ('.$_SESSION['wf_userId'].')';
-        	$data->executaSQL($sql);*/
-
-            switch ($_SESSION['wf_userPermissao']) {
-                case 1: //administrador
-                    echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                    break;
-                case 2: //Vendas
-                    echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                    break;
-                case 3: //Aux. ADM
-                    echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                    break;
-                case 4: //Produtção
-                    echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                    break;
-                case 5: //Almoxarifado
-                case 6:
-                case 7:
-                case 8:
-                case 10:
-                    echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                    break;
-                case 9:
-                    echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=listacliente_principal'>";
-                    break;
+        // Autentica usuário
+        $resultAuth = $login->authenticateUser(array('usu_email' => $user, 'usu_senha' => $pass), $idSession);
+        if($resultAuth['login'] == 'Autenticado' && $resultAuth['emp_bd'] != null){
+            // Loga usuário
+            $result = $login->validateUser(
+                array(
+                    'emp_bd' => $resultAuth['emp_bd'], 
+                    'emp_nome' => $resultAuth['emp_nome'], 
+                    'emp_cidade' => $resultAuth['emp_cidade'], 
+                    'emp_estado' => $resultAuth['emp_estado']
+                ), 
+                array(
+                    'usu_email' => $user, 
+                    'usu_senha' => $pass
+                ), $idSession);
+                
+            if ($result['login'] == 'Logado') {
+                // echo 'Entrouuuu: '.$result['nome']; exit;
+    
+                echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
+                // switch ($_SESSION['wf_userPermissao']) {
+                //     case 1: //administrador
+                //         break;
+                //     case 2: //Vendas
+                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
+                //         break;
+                //     case 3: //Aux. ADM
+                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
+                //         break;
+                //     case 4: //Produtção
+                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
+                //         break;
+                //     case 5: //Almoxarifado
+                //     case 6:
+                //     case 7:
+                //     case 8:
+                //     case 10:
+                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
+                //         break;
+                //     case 9:
+                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=listacliente_principal'>";
+                //         break;
+                // }
+            } else {
+                echo "<meta http-equiv='refresh' content='0;URL=?module=index&erro=2'>";
             }
-        } else {
+        }else{
+            // Erro ao autenticar usuário
             echo "<meta http-equiv='refresh' content='0;URL=?module=index&erro=1'>";
         }
     }

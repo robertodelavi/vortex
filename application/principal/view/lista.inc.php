@@ -1,17 +1,23 @@
 <?php
-$sql = "SELECT * FROM clientes LIMIT 30";
+	
+$sql = "SELECT imo_codigo, imo_edificio FROM imoveis WHERE imo_edificio <> '' LIMIT 30";
 $result = $data->find('dynamic', $sql);
+
+echo '---> '.$_SESSION['database'];
+echo '---> '.$_SESSION['unidade'];
+echo '---> '.$_SESSION['unidadeCidade'];
+var_dump($result);
 
 $tableResult = [];
 foreach($result as $row){
     $arrRow = [];
-    array_push($arrRow, trim($row['cli_nome']));
-    array_push($arrRow, trim($row['usu_codigo'] + 60));
+    array_push($arrRow, trim($row['imo_edificio']));
+    array_push($arrRow, trim($row['imo_codigo'] + 60));
     array_push($arrRow, 'Tozzo');
     array_push($arrRow, '2023-01-08');
     array_push($arrRow, 'r@gmail.com');
     array_push($arrRow, '3352-4671');
-    array_push($arrRow, $row['cli_codigo']);
+    array_push($arrRow, $row['imo_codigo']);
     //
     array_push($tableResult, $arrRow);
 }

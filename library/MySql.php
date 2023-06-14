@@ -6,57 +6,59 @@ class MySql
 {
 
     private $conn; // Propriedade para armazenar a conexão
+    private $database; // Propriedade para armazenar o nome do banco de dados
 
-    //conexao com o banco de dados
-    function connOpen($database = 'vortex__autenticacao'){	
-		$server = 'localhost';	 
-		$user = 'root';			 
-		$passw = '';	     
-        // $database = 'vortex__autenticacao';
-		
-		$this->conn = mysqli_connect($server, $user, $passw, $database);
+    // Conexão com o banco de dados
+    function connOpen($database)
+    {   
+        $server = 'localhost';     
+        $user = 'root';             
+        $passw = '';         
+        $this->database = $database;
+
+        $this->conn = mysqli_connect($server, $user, $passw, $this->database);
         mysqli_set_charset($this->conn, "utf8");
 
-        if (!$this->conn) { // Caso haja erro na conexao
+        if (!$this->conn) { // Caso haja erro na conexão
             echo 'Erro ao conectar com o servidor. '.$this->error();
             exit (1);
         }
     }
 
-    //fechar a conexao com o banco
+    // Fechar a conexão com o banco
     function connClose()
     {
         mysqli_close($this->conn);
     }
 
     /**
-     * executa uma sql no banco
+     * Executa uma consulta SQL no banco
      *
-     * @param String $sql, comando SQL a ser executado no banco ex: SELECT * FROM tabela
-     * @param Boolean $boolean, true retorna ultima id, false retorna resultado
+     * @param String $sql Comando SQL a ser executado no banco ex: SELECT * FROM tabela
+     * @param Boolean $param True retorna última id, False retorna resultado
      * @return Variante
      */
-    function executeQuery($sql,$param=false)
+    function executeQuery($sql, $param = false)
     {
-        $this->connOpen();
+        $this->connOpen($this->database);
 
         $this->result = mysqli_query($this->conn, $sql);
-        if (!$this->result)
-        {//caso nao execute a query corretamente
-            echo 'Não foi possivel executar o comando SQL. '.$this->error();
+        if (!$this->result) { // Caso não execute a query corretamente
+            echo 'Não foi possível executar o comando SQL. '.$this->error();
             exit (1);
         }
         
-        if ($param){
+        if ($param) {
             $this->result = $this->lastId();
         }
-            $this->connClose();
         
-            return $this->result;
+        $this->connClose();
+        
+        return $this->result;
     }
 
     /**
-     * contar e retorna o numero de linhas de uma consulta
+     * Conta e retorna o número de linhas de uma consulta
      *
      * @return integer
      */
@@ -66,7 +68,7 @@ class MySql
     }
 
     /**
-     * mostrar o erro caso haja
+     * Mostra o erro caso haja
      *
      * @return String
      */
@@ -76,13 +78,14 @@ class MySql
     }
 
     /**
-     * retorna o valor do campo
+     * Retorna o valor do campo
      *
-     * @param Integer $num, numero da linha a ser mostrada o valor
-     * @param String $field, nome do campo a ser mostrado o valor
+     * @param Integer $num Número da linha a ser mostrada o valor
+     * @param String $field Nome do campo a ser mostrado o valor
      * @return Variante
      */
-    function result($result, $i, $field){
+    function result($result, $i, $field)
+    {
         if (mysqli_data_seek($result, $i)) {
             $row = mysqli_fetch_assoc($result);
             return $row[$field];
@@ -90,19 +93,22 @@ class MySql
     }
     
     /**
-     * Retorna o ultimo id inserido no banco
+     * Retorna o último id inserido no banco
      * 
      * @return Integer
      */
-    function lastId(){
-        return mysqli_insert_id();
+    function lastId()
+    {
+        return mysqli_insert_id($this->conn);
     }
     
-    function countFields($array){
+    function countFields($array)
+    {
         return @mysqli_num_fields($array);
     }
     
-    function fieldName($array,$num){        
+    function fieldName($array, $num)
+    {        
         return mysqli_fetch_field($array);
     }
 }

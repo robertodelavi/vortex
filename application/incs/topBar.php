@@ -71,6 +71,15 @@
                 </svg>
             </button>
         </div>
+
+        <!-- Unidade Logada -->
+        <div>            
+            <?php echo $_SESSION['unidade']; ?>
+            <div class="text-xs text-gray-500">
+                <?php echo $_SESSION['unidadeCidade']; ?>
+            </div>        
+        </div>
+
         <div>
             <a href="javascript:;" x-cloak x-show="$store.app.theme === 'light'" href="javascript:;" class="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="$store.app.toggleTheme('dark')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -4,13 +4,13 @@ class Login{
 	private $cookiePath = '/';
 	private $prefixoChaves = 'usuario_';
 	
+	var $tableAuth;
 	var $table;
-	
-	function validateUser($params, $session){
-		if(!isset($_SESSION)){
-			session_start();
-    	}
-		$db = new MySql();
+
+	// Acessa banco de autenticação
+	function authenticateUser($params, $session){
+		$dbAuth = new MySql();
+		$dbAuth->connOpen('vortex__autenticacao');
 		
 		$i = 0;
 		foreach($params as $key => $valor){
@@ -22,26 +22,77 @@ class Login{
 			}  
 		}
 
-		$sql = "SELECT * FROM ".$this->table." WHERE usu_situacao = 1 AND ".$conditions;
+		$sql = "
+		SELECT ue.uem_codigo, e.emp_bd, e.emp_nome, e.emp_cidade, e.emp_estado
+        FROM sisusuarios_sisempresas AS ue 
+            JOIN sisusuarios AS u ON (ue.usu_codigo = u.usu_codigo)
+            JOIN sisempresas AS e ON (ue.emp_codigo = e.emp_codigo)
+        WHERE u.usu_email = '".$params['usu_email']."' AND u.usu_senha = '".$params['usu_senha']."' AND ue.uem_ativado = 's' AND u.usu_ativado = 's' AND e.emp_ativado = 's' ";
+		$result = $dbAuth->executeQuery($sql, false);
+		if ($dbAuth->countLines($result) > 0){
+			for ($i=0;$i<$dbAuth->countLines($result);$i++){
+				$retorno['login'] = 'Autenticado';
+				$retorno['emp_bd'] = $dbAuth->result($result, $i, 'emp_bd');
+				$retorno['emp_nome'] = $dbAuth->result($result, $i, 'emp_nome');
+				$retorno['emp_cidade'] = $dbAuth->result($result, $i, 'emp_cidade');
+				$retorno['emp_estado'] = $dbAuth->result($result, $i, 'emp_estado');
+				$retorno['mensagem'] = "Autenticado com Sucesso";
+			}
+		}else{
+			$retorno['login'] 	 = "falha";
+			$retorno['mensagem'] = "Senha e/ou login invalido";				
+		}
+		return $retorno;			
+	}
+	
+	// Loga no banco da imobiliária
+	function validateUser($authData, $params, $session){
+		if(!isset($_SESSION)){
+			session_start();
+    	}
+
+		if(!isset($authData['emp_bd'])){
+			return false;
+		}			
+
+		$db = new MySql();
+		$db->connOpen($authData['emp_bd']);
+		
+		$i = 0;
+		foreach($params as $key => $valor){
+			if($i == 0){
+				$conditions = $key." = '".$valor."'";
+				$i++;
+			}else{
+				$conditions .= " AND ".$key." = '".$valor."'";
+			}  
+		}
+
+		$sql = "SELECT * FROM ".$this->table." WHERE usu_ativado = 's' AND ".$conditions;
 		$result = $db->executeQuery($sql,false);
 		if ($db->countLines($result) > 0){
 			for ($i=0;$i<$db->countLines($result);$i++){
+				$_SESSION['database'] 			= $authData['emp_bd'];
+				$_SESSION['unidade'] 			= $authData['emp_nome'];
+				$_SESSION['unidadeCidade'] 		= $authData['emp_cidade'].'/'.$authData['emp_estado'];
+				//
 				$_SESSION['wf_userId'] 			= $db->result($result, $i,'usu_codigo');
 				$_SESSION['wf_userName'] 		= $db->result($result, $i,'usu_nome');	
 				$_SESSION['wf_userEmail'] 		= $db->result($result, $i,'usu_email');									
-				$_SESSION['wf_userPermissao'] 	= $db->result($result, $i,'upe_codigo');
-				$_SESSION['wf_userCliente'] 	= $db->result($result, $i,'cli_codigo');
+				$_SESSION['wf_userPermissao'] 	= 1;
+				$_SESSION['wf_userCliente'] 	= 1;
 				$_SESSION['wf_userSession'] 	= $session;
 
 				$retorno['login'] 	 = 'Logado';
 				$retorno['nome'] 	 = $db->result($result, $i,'usu_nome');
 				$retorno['mensagem'] = "Logado com Sucesso";
 
-				$sql = 'INSERT INTO usuario_acesso(usu_codigo) VALUES ('.$_SESSION['wf_userId'].')';
-				$result = $db->executeQuery($sql,false);
-				
 				// Cria um cookie com o usu�rio
 				$tempo_cookie = strtotime("+2 day", time());
+				setcookie('database', $_SESSION['database'], $tempo_cookie, "/");
+				setcookie('unidade', $_SESSION['unidade'], $tempo_cookie, "/");
+				setcookie('unidadeCidade', $_SESSION['unidadeCidade'], $tempo_cookie, "/");
+				//
 				setcookie('wf_userId', $_SESSION['wf_userId'], $tempo_cookie, "/");			
 				setcookie('wf_userName', $_SESSION['wf_userName'], $tempo_cookie, "/");			
 				setcookie('wf_userEmail', $_SESSION['wf_userEmail'], $tempo_cookie, "/");

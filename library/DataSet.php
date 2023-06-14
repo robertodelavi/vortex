@@ -1,14 +1,16 @@
 <?php
 	require_once 'MySql.php';
 	
-    class DataSet{
-    	function executeRecord($sql){
+    class DataSet{	
+		function executeRecord($sql){
 			$database = new MySql();
+			$database->connOpen($_SESSION['database']);
 			$database->executeQuery($sql);   		
     	}
 		
 		function listRecord($sql){
 			$database = new MySql();	
+			$database->connOpen($_SESSION['database']);
 			$result = $database->executeQuery($sql);
 	
 			for($i = 0;$i < $database->countFields($result);$i++){		
@@ -26,6 +28,7 @@
 				
 		function lastId($sql){
 			$database = new MySql();
+			$database->connOpen($_SESSION['database']);
 			$result = $database->executeQuery($sql,true);
 			return $result;			
 		}
