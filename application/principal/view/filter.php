@@ -1,23 +1,31 @@
 <?php
-require_once('../../../library/MySql.php'); // Conecta ao BD
-require_once('../../../library/DataManipulation.php'); 
+session_start();
+require_once '../../../library/MySql.php';
+$bd = new MySql();
+$bd->connOpen($_SESSION['database']);
 //
-$data = new DataManipulation();
-$sql = "SELECT imo_codigo, imo_edificio FROM imoveis WHERE imo_edificio <> '' LIMIT 3";
-$result = $data->find('dynamic', $sql);
+
+// Recupera os valores do formulário
+$formData = $_POST;
+$values = json_decode($formData['values'], true);
+
+// Exemplo: exibindo o valor do campo 'name'
+$name = $values['name'];
+
+$sql = "SELECT imo_codigo, imo_edificio FROM imoveis WHERE imo_edificio LIKE '%".$name."%' ";
+$result = $bd->executeQuery($sql, false);
 
 $filteredData = [];
-foreach($result as $key => $row){
-
-    if($key < 3){
+if ($bd->countLines($result) > 0){
+    for ($i=0; $i< $bd->countLines($result); $i++){
         $arrRow = [];
-        array_push($arrRow, trim($row['imo_edificio']));
-        array_push($arrRow, trim($row['imo_codigo'] + 60));
-        array_push($arrRow, trim($row['imo_edificio']));
-        array_push($arrRow, trim($row['imo_edificio']));
-        array_push($arrRow, trim($row['imo_edificio']));
-        array_push($arrRow, trim($row['imo_edificio']));
-        array_push($arrRow, $row['imo_codigo']);
+        array_push($arrRow, trim($bd->result($result, $i, 'imo_edificio')));
+        array_push($arrRow, trim($bd->result($result, $i, 'imo_codigo') + 60));
+        array_push($arrRow, 'Tozzo');
+        array_push($arrRow, '2023-01-08');
+        array_push($arrRow, 'r@gmail.com');
+        array_push($arrRow, '3352-4671');
+        array_push($arrRow, $bd->result($result, $i, 'imo_codigo'));
         //
         array_push($filteredData, $arrRow);
     }

@@ -112,4 +112,5 @@ class MySql
         return mysqli_fetch_field($array);
     }
 }
+    
 ?>

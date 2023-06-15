@@ -4,7 +4,7 @@
 		case 'lista':
 			require_once 'application/principal/view/lista.inc.php';
 		break;
-
+		
 		case 'listacliente':
 			require_once 'application/principal/view/listaCliente.inc.php';
 		break;

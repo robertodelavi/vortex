@@ -3,10 +3,10 @@
 $sql = "SELECT imo_codigo, imo_edificio FROM imoveis WHERE imo_edificio <> '' LIMIT 30";
 $result = $data->find('dynamic', $sql);
 
-echo '---> '.$_SESSION['database'];
-echo '---> '.$_SESSION['unidade'];
-echo '---> '.$_SESSION['unidadeCidade'];
-var_dump($result);
+// echo '---> '.$_SESSION['database'];
+// echo '---> '.$_SESSION['unidade'];
+// echo '---> '.$_SESSION['unidadeCidade'];
+// var_dump($result);
 
 $tableResult = [];
 foreach($result as $row){
@@ -39,8 +39,8 @@ foreach($result as $row){
             <div x-data="multipleTable" class="flex-1 "> <!-- Da acesso aos dados da tabela -->
                 <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
                     <div>
-                        <label for="name">Full Name</label>
-                        <input id="name" type="text" placeholder="Jimmy Turner" class="form-input" />
+                        <label for="name">Nome</label>
+                        <input id="name" name="name" type="text" placeholder="Ed. Fiorentin" class="form-input" />
                     </div>
                     <div>
                         <label for="profession">Profession</label>
@@ -88,7 +88,7 @@ foreach($result as $row){
     <div class="w-2/3 ">
         <div x-data="multipleTable" class="panel h-full mt-0">
             <!-- Listagem -->
-            <h5 class="md:absolute md:top-[25px] md:mb-0 mb-5 font-semibold text-lg dark:text-white-light">Clientes</h5>
+            <h5 class="md:absolute md:top-[25px] md:mb-0 mb-5 font-semibold text-lg dark:text-white-light">Imóveis</h5>
             <table id="myTable2" class="whitespace-nowrap"></table>            
             
             <!-- Modal delete -->
@@ -247,8 +247,9 @@ foreach($result as $row){
                 event.preventDefault();
                 
                 // Obtém os valores do formulário
-                const formData = new FormData(event.target);
-                
+                const formData = new FormData(event.target);                
+                this.setFormValues(formData);                
+                                
                 // Faz a requisição AJAX para o arquivo PHP
                 fetch('application/principal/view/filter.php', {
                     method: 'POST',
@@ -263,6 +264,15 @@ foreach($result as $row){
                 .catch(error => {
                     console.error('Erro ao enviar o formulário:', error);
                 });
+            },
+
+            setFormValues(formData){
+                const formValues = {};
+                for (let [key, value] of formData.entries()) {
+                    formValues[key] = value;
+                }
+                // Adiciona os valores extras ao formData
+                formData.append('values', JSON.stringify(formValues));
             },
 
             formatDate(date) {
