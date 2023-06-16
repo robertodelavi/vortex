@@ -1,4 +1,30 @@
+<?php  
+    $sql = '
+    SELECT pro.pro_codigo, pro.pro_nome
+    FROM sispermissoes AS per 
+        JOIN sisprogramas AS pro ON per.per_programa = pro.pro_codigo
+    WHERE per_usuario = '.$_SESSION['v_usu_codigo'].' AND per_empresa = 1';
+    $result = $data->find('dynamic', $sql);
+
+    function hasPermission($result, $programa){
+        foreach ($result as $key => $value) {
+            if($value['pro_nome'] == $programa) return true;
+        }
+        return false;
+    }
+    
+    function hasSubmenuPermission($result, $arrProgramas){
+        foreach ($result as $key => $value) {
+            foreach ($arrProgramas as $keyPrograma => $valuePrograma) {
+                if($value['pro_nome'] == $valuePrograma) return true;
+            }
+        }
+        return false;
+    }   
+?>
+
 <ul class="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-[#0e1726] text-black dark:text-white-dark">
+    <!-- SISTEMA -->
     <li class="menu nav-item relative">
         <a href="javascript:;" class="nav-link">
             <div class="flex items-center">
@@ -15,20 +41,36 @@
             </div>
         </a>
         <ul class="sub-menu">
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/">Sales</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/analytics.php">Analytics</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/finance.php">Finance</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/crypto.php">Crypto</a>
-            </li>
+            <?php 
+                if(hasPermission($result, 'Sistema')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Avisos</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Empresas</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Usuários</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Permissões de Acesso</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Perfil de Usuários</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Agenda de Atividades</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Mês de Referência da Locação</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Abertura de Caixa</a></li>';
+                }
+            ?>                  
         </ul>
     </li>
+
+    <!-- CADASTROS -->
     <li class="menu nav-item relative">
         <a href="javascript:;" class="nav-link">
             <div class="flex items-center">
@@ -44,7 +86,7 @@
                     <path d="M13 7.4C13 6.26863 13 5.70294 13.3515 5.35147C13.7029 5 14.2686 5 15.4 5C17.0971 5 17.9456 5 18.4728 5.52721C19 6.05442 19 6.90294 19 8.6C19 9.73137 19 10.2971 18.6485 10.6485C18.2971 11 17.7314 11 16.6 11H15.4C14.2686 11 13.7029 11 13.3515 10.6485C13 10.2971 13 9.73137 13 8.6V7.4Z" fill="currentColor" />
                     <path d="M13.3515 18.6485C13 18.2971 13 17.7314 13 16.6V15.4C13 14.2686 13 13.7029 13.3515 13.3515C13.7029 13 14.2686 13 15.4 13H16.6C17.7314 13 18.2971 13 18.6485 13.3515C19 13.7029 19 14.2686 19 15.4C19 17.097 19 17.9456 18.4728 18.4728C17.9456 19 17.0971 19 15.4 19C14.2687 19 13.7029 19 13.3515 18.6485Z" fill="currentColor" />
                 </svg>
-                <span class="px-1">Apps</span>
+                <span class="px-1">Cadastros</span>
             </div>
             <div class="right_arrow">
                 <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,50 +95,111 @@
             </div>
         </a>
         <ul class="sub-menu">
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/apps/chat.php">Chat</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/apps/mailbox.php">Mailbox</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/apps/todolist.php">Todo List</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/apps/notes.php">Notes</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/apps/scrumboard.php">Scrumboard</a>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/apps/contacts.php">Contacts</a>
-            </li>
-            <li class="relative">
-                <a href="javascript:;">Invoice
-                    <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                </a>
-                <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                    <li>
-                        <a href="<?php echo BASE_THEME_URL; ?>/apps/invoice/list.php">List</a>
-                    </li>
-                    <li>
-                        <a href="<?php echo BASE_THEME_URL; ?>/apps/invoice/preview.php">Preview</a>
-                    </li>
-                    <li>
-                        <a href="<?php echo BASE_THEME_URL; ?>/apps/invoice/add.php">Add</a>
-                    </li>
-                    <li>
-                        <a href="<?php echo BASE_THEME_URL; ?>/apps/invoice/edit.php">Edit</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="<?php echo BASE_THEME_URL; ?>/apps/calendar.php">Calendar</a>
-            </li>
+            <?php 
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Pessoas</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Profissões</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Cidades</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Países</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Bairros</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Corretores</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Empreendimentos</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Condomínios</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Tipos de Piso</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Tipos de Forro</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Origem Atendimento</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Motivo Conclusão Atendimento</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Tipos de Imóvel</a></li>';
+                }
+                if(hasPermission($result, 'sisEmpresas')){
+                    echo '<li><a href="?module=aviso&acao=lista_aviso">Feriados do Ano</a></li>';
+                }
+
+                // Com submenus 
+                if(hasSubmenuPermission($result, array('sisEmpresas','sis2','sis3', 'sis4'))){
+                    echo '
+                    <li class="relative">
+                        <a href="javascript:;">Locação
+                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </a>
+                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">';
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Categorias da Locação</a></li>';
+                            }
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Indicadores de Reajuste</a></li>';
+                            }
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Motivos de Saída</a></li>';
+                            }
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Tabela I.R.R.F.</a></li>';
+                            }
+                        echo '
+                        </ul>
+                    </li>';
+                }
+
+                // Com submenus 
+                if(hasSubmenuPermission($result, array('sisEmpresas','sis2','sis3', 'sis4', 'sis5'))){
+                    echo '
+                    <li class="relative">
+                        <a href="javascript:;">Financeiro
+                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </a>
+                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">';
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Bancos</a></li>';
+                            }
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Contas</a></li>';
+                            }
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Plano de Contas</a></li>';
+                            }
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Categorias do Financeiro</a></li>';
+                            }
+                            if(hasPermission($result, 'sisEmpresas')){
+                                echo '<li><a href="?module=aviso&acao=lista_aviso">Moedas</a></li>';
+                            }
+                        echo '
+                        </ul>
+                    </li>';
+                }
+            ?>   
         </ul>
     </li>
     <li class="menu nav-item relative">

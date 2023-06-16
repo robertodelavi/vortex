@@ -1,6 +1,5 @@
 <?php
-	require_once 'MySql.php';
-	
+	require_once 'MySql.php';	
     class DataSet{	
 		function executeRecord($sql){
 			$database = new MySql();

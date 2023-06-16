@@ -72,6 +72,7 @@ class Login{
 		$result = $db->executeQuery($sql,false);
 		if ($db->countLines($result) > 0){
 			for ($i=0;$i<$db->countLines($result);$i++){
+				$_SESSION['v_usu_codigo'] 		= $db->result($result, $i,'usu_codigo');
 				$_SESSION['database'] 			= $authData['emp_bd'];
 				$_SESSION['unidade'] 			= $authData['emp_nome'];
 				$_SESSION['unidadeCidade'] 		= $authData['emp_cidade'].'/'.$authData['emp_estado'];
@@ -89,6 +90,7 @@ class Login{
 
 				// Cria um cookie com o usu�rio
 				$tempo_cookie = strtotime("+2 day", time());
+				setcookie('v_usu_codigo', $_SESSION['v_usu_codigo'], $tempo_cookie, "/");
 				setcookie('database', $_SESSION['database'], $tempo_cookie, "/");
 				setcookie('unidade', $_SESSION['unidade'], $tempo_cookie, "/");
 				setcookie('unidadeCidade', $_SESSION['unidadeCidade'], $tempo_cookie, "/");

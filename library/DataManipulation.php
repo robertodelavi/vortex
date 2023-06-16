@@ -1,7 +1,6 @@
 <?php
 require_once 'DataSet.php';
-class DataManipulation
-{
+class DataManipulation{
     var $tabela;
     function executaSQL($sql)
     {
@@ -90,8 +89,7 @@ class DataManipulation
         }
     }
 
-    function find($type = false, $params = false, $order = false)
-    {
+    function find($type = false, $params = false, $order = false){
         $dataset = new DataSet();
 
         switch ($type) {
@@ -118,9 +116,9 @@ class DataManipulation
                 $sql = "SELECT * FROM " . $this->tabela . " WHERE " . $conditions;
                 break;
 
-            case 'dynamic':
-                $sql = $params;
-                break;
+            case 'dynamic': 
+                $sql = $params; 
+            break;
         }
         if ($order != false) {
             $sql .= " order by " . $order;
