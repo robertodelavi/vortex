@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/06/2023 às 10:10
+-- Tempo de geração: 17/06/2023 às 12:46
 -- Versão do servidor: 10.4.17-MariaDB
 -- Versão do PHP: 7.4.15
 
@@ -116,7 +116,7 @@ CREATE TABLE `sisusuarios_sisempresas` (
 --
 
 INSERT INTO `sisusuarios_sisempresas` (`uem_codigo`, `uem_ativado`, `usu_codigo`, `emp_codigo`) VALUES
-(1, 's', 1, 1),
+(1, 's', 1, 2),
 (2, 's', 2, 1);
 
 --
