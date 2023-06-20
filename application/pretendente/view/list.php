@@ -1,6 +1,6 @@
 <?php
 	
-$sql = "SELECT imo_codigo, imo_edificio FROM imoveis WHERE imo_edificio <> '' LIMIT 30";
+$sql = "SELECT prw_codigo, prw_nome FROM pretendentes LIMIT 100";
 $result = $data->find('dynamic', $sql);
 
 // echo '---> '.$_SESSION['database'];
@@ -11,13 +11,13 @@ $result = $data->find('dynamic', $sql);
 $tableResult = [];
 foreach($result as $row){
     $arrRow = [];
-    array_push($arrRow, trim($row['imo_edificio']));
-    array_push($arrRow, trim($row['imo_codigo'] + 60));
+    array_push($arrRow, trim($row['prw_nome']));
+    array_push($arrRow, trim($row['prw_codigo'] + 60));
     array_push($arrRow, 'Tozzo');
     array_push($arrRow, '2023-01-08');
     array_push($arrRow, 'r@gmail.com');
     array_push($arrRow, '3352-4671');
-    array_push($arrRow, $row['imo_codigo']);
+    array_push($arrRow, $row['prw_codigo']);
     //
     array_push($tableResult, $arrRow);
 }
@@ -158,9 +158,10 @@ foreach($result as $row){
                         {
                             select: 0,
                             render: (data, cell, row) => {
+                                const id = row.cells[6].data
                                 return `<div class="flex items-center w-max">
                                             <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-${row.dataIndex + 1}.jpeg" />
-                                            <a href="?module=principal&acao=visualiza_principal" class="hover:text-primary">${data}</a>
+                                            <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}');" class="hover:text-primary">${id} - ${data}</a>
                                         </div>`;
                             }
                         },
@@ -182,7 +183,7 @@ foreach($result as $row){
                             sortable: false,
                             render: (data, cell, row) => {
                                 return `<div class="flex gap-4 items-center" >
-                                            <a href="?module=principal&acao=visualiza_principal" class="hover:text-info">
+                                            <a href="?module=pretendente&acao=edita_pretendente" class="hover:text-info">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                                     <path
                                                         opacity="0.5"
@@ -251,7 +252,7 @@ foreach($result as $row){
                 this.setFormValues(formData);                
                                 
                 // Faz a requisição AJAX para o arquivo PHP
-                fetch('application/principal/view/filter.php', {
+                fetch('application/pretendente/view/filter.php', {
                     method: 'POST',
                     body: formData
                 })
