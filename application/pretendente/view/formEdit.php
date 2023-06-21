@@ -238,7 +238,7 @@ $perfis = $data->find('dynamic', $sql);
                                             <td>' . $row['tpi_descricao'] . '</td>
                                             <td>' . number_format(($row['ppf_valorini'] / 100), 2, ',', '.') . ' a ' . number_format(($row['ppf_valorfim'] / 100), 2, ',', '.') . '</td>
                                             <td>                                            
-                                                <button class="btn btn-dark" @click="toggle;openModalEditPerfil(' . $row['ppf_codigo'] . ');">Editar</button>    
+                                                <button class="btn btn-dark" @click="toggle; openModalEditPerfil(\'' . $row['ppf_pretendente'] . '\', \'' . $row['ppf_codigo'] . '\');">Editar</button>    
                                             </td>
                                         </tr>';
                                     }
@@ -444,29 +444,31 @@ $perfis = $data->find('dynamic', $sql);
 </div>
 
 <script>
-    function openModalEditPerfil(id) {
-        console.log('funçao do modal...', id)
-        // Enviar o ID via AJAX para um arquivo PHP separado
-        // e tratar a resposta para preencher os dados no modal.
-        // Exemplo de chamada AJAX usando o fetch:
-        fetch('application/pretendente/view/ajax/getDataPerfilBusca.php', {
-            method: 'POST',
-            body: JSON.stringify({ id: id }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Dados retornados do ajax: ', data)
-                    const profileData = data.data;
-
-                    // Inserir os dados nos inputs do modal
-                    document.getElementById('perfilBuscaNome').value = profileData.nome;
-                    document.getElementById('perfilBuscaTipoImovel').value = profileData.tipoImovel;
-                    // ...
+    function openModalEditPerfil(ppf_pretendente, ppf_codigo) {
+        if(ppf_pretendente && ppf_codigo){
+            console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
+            // Enviar o ID via AJAX para um arquivo PHP separado
+            // e tratar a resposta para preencher os dados no modal.
+            // Exemplo de chamada AJAX usando o fetch:
+            fetch('application/pretendente/view/ajax/getDataPerfilBusca.php', {
+                method: 'POST',
+                body: JSON.stringify({ ppf_pretendente: ppf_pretendente, ppf_codigo: ppf_codigo }),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            });
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Dados retornados do ajax: ', data)
+                        const profileData = data.data;
+    
+                        // Inserir os dados nos inputs do modal
+                        document.getElementById('perfilBuscaNome').value = profileData.nome;
+                        document.getElementById('perfilBuscaTipoImovel').value = profileData.tipoImovel;
+                        // ...
+                    }
+                });
+        }
     }
 </script>
