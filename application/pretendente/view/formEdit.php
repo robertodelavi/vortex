@@ -7,6 +7,8 @@ $sql = '
     WHERE ppf_pretendente = ' . $_POST['param_0'];
 $perfis = $data->find('dynamic', $sql);
 
+
+
 // var_dump($perfis);
 
 ?>
@@ -280,18 +282,125 @@ $perfis = $data->find('dynamic', $sql);
                                     <div class="mt-5" id="resultAjaxPerfil">
                                         <div class="flex flex-col sm:flex-row">
 
-                                            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                            <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6">
                                                 <div>
-                                                    <label for="perfilBuscaNome">Nome do Pretendente</label>
+                                                    <label for="perfilBuscaNome">Nome do Perfil</label>
                                                     <input name="nome" id="perfilBuscaNome" type="text"
                                                         placeholder="Jimmy Turner" class="form-input" />
                                                 </div>
                                                 <div>
-                                                    <label for="perfilBuscaNome">Tipo de Imóvel</label>
+                                                    <label for="perfilBuscaTipoImovel">Tipo de Imóvel</label>
                                                     <input name="nome" id="perfilBuscaTipoImovel" type="text"
                                                         placeholder="Apartamento" class="form-input" />
                                                 </div>
+                                                <div>
+                                                    <label for="perfilBuscaTipoImovel">Empreendimento</label>
+                                                    <input name="nome" id="perfilBuscaEmpreendimento" type="text"
+                                                        placeholder="Empreendimento..." class="form-input" />
+                                                </div>
+
+                                                <!-- Dormitórios -->
+                                                <div>
+                                                    <label for="perfilBuscaFaixaValor">Dormitórios</label>
+                                                    <div class="flex w-full">
+                                                        <div class="flex items-center w-full">
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0"
+                                                                    class="form-input" />
+                                                            </div>
+                                                            <div class="px-3">até</div>
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0"
+                                                                    class="form-input" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Sendo Suítes -->
+                                                <div>
+                                                    <label for="perfilBuscaFaixaValor">Sendo Suítes</label>
+                                                    <div class="flex w-full">
+                                                        <div class="flex items-center w-full">
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0"
+                                                                    class="form-input" />
+                                                            </div>
+                                                            <div class="px-3">até</div>
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0"
+                                                                    class="form-input" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Garagem -->
+                                                <div>
+                                                    <label for="perfilBuscaTipoImovel">Garagem</label>
+                                                    <input name="nome" type="text" placeholder="0" class="form-input" />
+                                                </div>
+
+                                                <!-- Faixa de valor -->
+                                                <div>
+                                                    <label for="perfilBuscaFaixaValor">Faixa de Valor</label>
+                                                    <div class="flex w-full">
+                                                        <div class="flex items-center w-full">
+                                                            <div class="w-full">
+                                                                <input id="currencyMask1" type="text"
+                                                                    onkeyup="formatCurrency(this)" placeholder="R$ 0,00"
+                                                                    class="form-input" />
+                                                            </div>
+                                                            <div class="px-3">até</div>
+                                                            <div class="w-full">
+                                                                <input id="currencyMask2" type="text"
+                                                                    onkeyup="formatCurrency(this)" placeholder="R$ 0,00"
+                                                                    class="form-input" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Área Terreno m² -->
+                                                <div>
+                                                    <label for="perfilBuscaFaixaValor">Área Terreno (m²)</label>
+                                                    <div class="flex w-full">
+                                                        <div class="flex items-center w-full">
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0,00"
+                                                                    class="form-input" />
+                                                            </div>
+                                                            <div class="px-3">até</div>
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0,00"
+                                                                    class="form-input" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Área Construída m² -->
+                                                <div>
+                                                    <label for="perfilBuscaFaixaValor">Área Construída (m²)</label>
+                                                    <div class="flex w-full">
+                                                        <div class="flex items-center w-full">
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0,00"
+                                                                    class="form-input" />
+                                                            </div>
+                                                            <div class="px-3">até</div>
+                                                            <div class="w-full">
+                                                                <input id="xxxx" type="text" placeholder="0,00"
+                                                                    class="form-input" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
+
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -445,7 +554,7 @@ $perfis = $data->find('dynamic', $sql);
 
 <script>
     function openModalEditPerfil(ppf_pretendente, ppf_codigo) {
-        if(ppf_pretendente && ppf_codigo){
+        if (ppf_pretendente && ppf_codigo) {
             console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
             // Enviar o ID via AJAX para um arquivo PHP separado
             // e tratar a resposta para preencher os dados no modal.
@@ -462,7 +571,7 @@ $perfis = $data->find('dynamic', $sql);
                     if (data.success) {
                         console.log('Dados retornados do ajax: ', data)
                         const profileData = data.data;
-    
+
                         // Inserir os dados nos inputs do modal
                         document.getElementById('perfilBuscaNome').value = profileData.nome;
                         document.getElementById('perfilBuscaTipoImovel').value = profileData.tipoImovel;
