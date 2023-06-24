@@ -28,9 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //* FAVORITOS
         $html = '
-        <button type="button" class="btn btn-info" @click="showMessage("Example notification text.", $store.app.rtlClass === "rtl" ? "top-start" : "top-end")">Top Right</button>
-
-        <!-- FAVORITOS -->
         <div>
             <h5 class="font-semibold text-lg mb-4">Favoritos</h5>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
