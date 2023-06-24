@@ -7,8 +7,6 @@ $sql = '
     WHERE ppf_pretendente = ' . $_POST['param_0'];
 $perfis = $data->find('dynamic', $sql);
 
-
-
 // var_dump($perfis);
 
 ?>
@@ -91,27 +89,80 @@ $perfis = $data->find('dynamic', $sql);
 
         <!-- DADOS DO PRETENDENTE -->
         <template x-if="tab === 'pretendente'">
-            <?php include_once('application/pretendente/view/abas/dadosPretendente/lista.php'); ?>            
+            <?php include_once('application/pretendente/view/abas/dadosPretendente/lista.php'); ?>
         </template>
 
         <!-- PERFIS DE BUSCA -->
         <template x-if="tab === 'perfis'">
             <?php include_once('application/pretendente/view/abas/perfilBusca/lista.php'); ?>
         </template>
-        
+
         <!-- HISTÓRICO DE ATENDIMENTOS -->
         <template x-if="tab === 'historico-atendimentos'">
-            <?php include_once('application/pretendente/view/abas/historicoAtendimentos/lista.php'); ?>            
+            <?php include_once('application/pretendente/view/abas/historicoAtendimentos/lista.php'); ?>
         </template>
-        
+
         <!-- IMÓVEIS -->
         <template x-if="tab === 'imoveis'">
-            <?php include_once('application/pretendente/view/abas/imoveis/lista.php'); ?>                        
+            <?php 
+                $meusImoveis = 'Opa, blz.. dados do arquivo A gg';
+                include_once('application/pretendente/view/abas/imoveis/lista.php'); 
+            ?>
         </template>
     </div>
 </div>
 
 <script>
+
+    //* IMOVEIS    
+    //* Atualiza imoveis sugeridos pro pretendente
+    updateImoveisSugeridos();
+    function updateImoveisSugeridos() {
+        console.log("🚀 ~ updateImoveisSugeridos")
+
+        var data = {
+            pretendente: <?php echo $_POST['param_0']; ?>
+        };
+
+        fetch('application/pretendente/view/ajax/updateImoveisSugeridos.php', {
+            method: 'POST',
+            body: JSON.stringify(data) // Converte o objeto em uma string JSON
+        }).then(response => response.json()).then(data => {
+            console.log('Dados retornados do ajax: ', data)
+            const imoveis = data.data;
+            console.log("🚀 ~ imoveis:", imoveis)
+
+            // Envia const imoveis para o arquivo de listagem de imóveis no arquivo php da aba imóveis via AJAX com fetch
+            fetch('application/pretendente/view/abas/imoveis/lista.php', {
+                method: 'POST',
+                body: JSON.stringify({ imoveis: imoveis }) // Envia a variável imoveis dentro de um objeto com a chave 'imoveis'
+            });          
+
+        }).catch(error => {
+            console.error('Erro ao enviar dados:', error);
+        });
+    }
+
+    //* Favoritar
+    function setFavorite(action, id) {
+        var data = {
+            action: action,
+            id: id,
+            pretendente: <?php echo $_POST['param_0']; ?>
+        };
+
+        fetch('application/pretendente/view/ajax/setFavorite.php', {
+            method: 'POST',
+            body: JSON.stringify(data) // Converte o objeto em uma string JSON
+        }).then(response => response.json()).then(data => {
+            console.log('Dados retornados do ajax: ', data)
+            updateImoveisSugeridos(); // Atualiza listagem dos imóveis
+        }).catch(error => {
+            console.error('Erro ao enviar dados:', error);
+        });
+    }
+
+
     function openModalEditPerfil(ppf_pretendente, ppf_codigo) {
         if (ppf_pretendente && ppf_codigo) {
             console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
