@@ -68,7 +68,7 @@ $perfis = $data->find('dynamic', $sql);
             <li class="inline-block">
                 <a href="javascript:;"
                     class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                    :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'">
+                    :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'" onClick="getImoveis()">
 
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5">
@@ -104,47 +104,36 @@ $perfis = $data->find('dynamic', $sql);
 
         <!-- IMÓVEIS -->
         <template x-if="tab === 'imoveis'">
-            <?php 
-                $meusImoveis = 'Opa, blz.. dados do arquivo A gg';
-                include_once('application/pretendente/view/abas/imoveis/lista.php'); 
-            ?>
+            <!-- Imóveis vindo do ajax -->            
+            <div id="resulAjaxImoveis"></div>    
         </template>
     </div>
 </div>
+
 
 <script>
 
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
-    updateImoveisSugeridos();
-    function updateImoveisSugeridos() {
-        console.log("🚀 ~ updateImoveisSugeridos")
+    function getImoveis() {
+        console.log("🚀 ~ getImoveis")
 
         var data = {
             pretendente: <?php echo $_POST['param_0']; ?>
         };
 
-        fetch('application/pretendente/view/ajax/updateImoveisSugeridos.php', {
+        fetch('application/pretendente/view/ajax/getImoveis.php', {
             method: 'POST',
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
-            console.log('Dados retornados do ajax: ', data)
-            const imoveis = data.data;
-            console.log("🚀 ~ imoveis:", imoveis)
-
-            // Envia const imoveis para o arquivo de listagem de imóveis no arquivo php da aba imóveis via AJAX com fetch
-            fetch('application/pretendente/view/abas/imoveis/lista.php', {
-                method: 'POST',
-                body: JSON.stringify({ imoveis: imoveis }) // Envia a variável imoveis dentro de um objeto com a chave 'imoveis'
-            });          
-
-        }).catch(error => {
-            console.error('Erro ao enviar dados:', error);
-        });
+            // Seta resultado do ajax na div
+            document.getElementById('resulAjaxImoveis').innerHTML = data;
+        })            
     }
 
     //* Favoritar
     function setFavorite(action, id) {
+        console.log("🚀 ~ setFavorite ~ setFavorite:", action, id)
         var data = {
             action: action,
             id: id,
@@ -156,19 +145,17 @@ $perfis = $data->find('dynamic', $sql);
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
             console.log('Dados retornados do ajax: ', data)
-            updateImoveisSugeridos(); // Atualiza listagem dos imóveis
+            getImoveis(); // Atualiza listagem dos imóveis
+            action ? toast('Item favoritado com sucesso!', 'warning', 3000) : toast('Item desfavoritado com sucesso!', '', 3000)
         }).catch(error => {
             console.error('Erro ao enviar dados:', error);
         });
     }
 
-
     function openModalEditPerfil(ppf_pretendente, ppf_codigo) {
         if (ppf_pretendente && ppf_codigo) {
             console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
-            // Enviar o ID via AJAX para um arquivo PHP separado
-            // e tratar a resposta para preencher os dados no modal.
-            // Exemplo de chamada AJAX usando o fetch:
+            
             fetch('application/pretendente/view/ajax/getDataPerfilBusca.php', {
                 method: 'POST',
                 body: JSON.stringify({ ppf_pretendente: ppf_pretendente, ppf_codigo: ppf_codigo }),
@@ -190,4 +177,23 @@ $perfis = $data->find('dynamic', $sql);
                 });
         }
     }
+
+    function toast(title, color, time){
+        const toast = window.Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: time,
+            showCloseButton: true,
+            showConfirmButton: false,
+
+            customClass: {
+                popup: `color-${color}`
+            },
+        });
+        toast.fire({
+            title: title,
+        });    
+    }
+    
 </script>
