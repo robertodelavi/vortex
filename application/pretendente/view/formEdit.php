@@ -68,7 +68,8 @@ $perfis = $data->find('dynamic', $sql);
             <li class="inline-block">
                 <a href="javascript:;"
                     class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                    :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'" onClick="getImoveis()">
+                    :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
+                    onClick="getImoveis()">
 
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5">
@@ -104,8 +105,8 @@ $perfis = $data->find('dynamic', $sql);
 
         <!-- IMÓVEIS -->
         <template x-if="tab === 'imoveis'">
-            <!-- Imóveis vindo do ajax -->            
-            <div id="resulAjaxImoveis"></div>    
+            <!-- Imóveis vindo do ajax -->
+            <div id="resulAjaxImoveis"></div>
         </template>
     </div>
 </div>
@@ -128,7 +129,7 @@ $perfis = $data->find('dynamic', $sql);
         }).then(response => response.json()).then(data => {
             // Seta resultado do ajax na div
             document.getElementById('resulAjaxImoveis').innerHTML = data;
-        })            
+        })
     }
 
     //* Favoritar
@@ -146,7 +147,7 @@ $perfis = $data->find('dynamic', $sql);
         }).then(response => response.json()).then(data => {
             console.log('Dados retornados do ajax: ', data)
             getImoveis(); // Atualiza listagem dos imóveis
-            action ? toast('Item favoritado com sucesso!', 'warning', 3000) : toast('Item desfavoritado com sucesso!', '', 3000)
+            action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
         }).catch(error => {
             console.error('Erro ao enviar dados:', error);
         });
@@ -155,30 +156,21 @@ $perfis = $data->find('dynamic', $sql);
     function openModalEditPerfil(ppf_pretendente, ppf_codigo) {
         if (ppf_pretendente && ppf_codigo) {
             console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
-            
+
             fetch('application/pretendente/view/ajax/getDataPerfilBusca.php', {
                 method: 'POST',
                 body: JSON.stringify({ ppf_pretendente: ppf_pretendente, ppf_codigo: ppf_codigo }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log('Dados retornados do ajax: ', data)
-                        const profileData = data.data;
-
-                        // Inserir os dados nos inputs do modal
-                        document.getElementById('perfilBuscaNome').value = profileData.nome;
-                        document.getElementById('perfilBuscaTipoImovel').value = profileData.tipoImovel;
-                        // ...
-                    }
-                });
+            }).then(response => response.json()).then(data => {
+                // Seta resultado do ajax na div
+                document.getElementById('resulAjaxPerfilBusca').innerHTML = data;
+            });
         }
     }
 
-    function toast(title, color, time){
+    function toast(title, color, time) {
         const toast = window.Swal.mixin({
             toast: true,
             position: 'bottom-end',
@@ -193,7 +185,7 @@ $perfis = $data->find('dynamic', $sql);
         });
         toast.fire({
             title: title,
-        });    
+        });
     }
-    
+
 </script>

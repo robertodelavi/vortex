@@ -14,130 +14,17 @@
                 </button>
             </div>
             <div class="p-5">
-                <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">
-                    <p>Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus
-                        egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis
-                        parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices
-                        sed urna ac pulvinar. Ut sit amet ullamcorper mi.</p>
-
-                    <!-- Dados retornados do ajax -->
-                    <div class="mt-5" id="resultAjaxPerfil">
-                        <div class="flex flex-col sm:flex-row">
-
-                            <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                <div>
-                                    <label for="perfilBuscaNome">Nome do Perfil</label>
-                                    <input name="nome" id="perfilBuscaNome" type="text" placeholder="Jimmy Turner"
-                                        class="form-input" />
-                                </div>
-                                <div>
-                                    <label for="perfilBuscaTipoImovel">Tipo de Imóvel</label>
-                                    <input name="nome" id="perfilBuscaTipoImovel" type="text" placeholder="Apartamento"
-                                        class="form-input" />
-                                </div>
-                                <div>
-                                    <label for="perfilBuscaTipoImovel">Empreendimento</label>
-                                    <input name="nome" id="perfilBuscaEmpreendimento" type="text"
-                                        placeholder="Empreendimento..." class="form-input" />
-                                </div>
-
-                                <!-- Dormitórios -->
-                                <div>
-                                    <label for="perfilBuscaFaixaValor">Dormitórios</label>
-                                    <div class="flex w-full">
-                                        <div class="flex items-center w-full">
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0" class="form-input" />
-                                            </div>
-                                            <div class="px-3">até</div>
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0" class="form-input" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Sendo Suítes -->
-                                <div>
-                                    <label for="perfilBuscaFaixaValor">Sendo Suítes</label>
-                                    <div class="flex w-full">
-                                        <div class="flex items-center w-full">
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0" class="form-input" />
-                                            </div>
-                                            <div class="px-3">até</div>
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0" class="form-input" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Garagem -->
-                                <div>
-                                    <label for="perfilBuscaTipoImovel">Garagem</label>
-                                    <input name="nome" type="text" placeholder="0" class="form-input" />
-                                </div>
-
-                                <!-- Faixa de valor -->
-                                <div>
-                                    <label for="perfilBuscaFaixaValor">Faixa de Valor</label>
-                                    <div class="flex w-full">
-                                        <div class="flex items-center w-full">
-                                            <div class="w-full">
-                                                <input id="currencyMask1" type="text" onkeyup="formatCurrency(this)"
-                                                    placeholder="R$ 0,00" class="form-input" />
-                                            </div>
-                                            <div class="px-3">até</div>
-                                            <div class="w-full">
-                                                <input id="currencyMask2" type="text" onkeyup="formatCurrency(this)"
-                                                    placeholder="R$ 0,00" class="form-input" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Área Terreno m² -->
-                                <div>
-                                    <label for="perfilBuscaFaixaValor">Área Terreno (m²)</label>
-                                    <div class="flex w-full">
-                                        <div class="flex items-center w-full">
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0,00" class="form-input" />
-                                            </div>
-                                            <div class="px-3">até</div>
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0,00" class="form-input" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Área Construída m² -->
-                                <div>
-                                    <label for="perfilBuscaFaixaValor">Área Construída (m²)</label>
-                                    <div class="flex w-full">
-                                        <div class="flex items-center w-full">
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0,00" class="form-input" />
-                                            </div>
-                                            <div class="px-3">até</div>
-                                            <div class="w-full">
-                                                <input id="xxxx" type="text" placeholder="0,00" class="form-input" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <form role="form" method="POST" action="?module=pretendente&acao=update_pretendente" id="MyForm" name="MyForm" >
+                    <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">
+                        <!-- Perfil vindo do ajax -->
+                        <div id="resulAjaxPerfilBusca"></div>                    
                     </div>
-                </div>
-                <div class="flex justify-end items-center mt-8">
-                    <button type="button" class="btn btn-outline-danger" @click="toggle">Discard</button>
-                    <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" @click="toggle">Save</button>
-                </div>
+                    <div class="flex justify-end items-center mt-8">
+                        <button type="button" class="btn btn-outline-dark" @click="toggle">Cancelar</button>
+                        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" @click="toggle">Salvar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Fim modal -->

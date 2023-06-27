@@ -107,5 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Retorna resposta
         echo json_encode($html);
+        exit;
     }
 }
