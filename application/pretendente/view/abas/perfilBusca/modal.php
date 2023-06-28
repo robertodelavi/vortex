@@ -14,16 +14,10 @@
                 </button>
             </div>
             <div class="p-5">
-                <form role="form" method="POST" action="?module=pretendente&acao=update_pretendente" id="MyForm" name="MyForm" >
-                    <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">
-                        <!-- Perfil vindo do ajax -->
-                        <div id="resulAjaxPerfilBusca"></div>                    
-                    </div>
-                    <div class="flex justify-end items-center mt-8">
-                        <button type="button" class="btn btn-outline-dark" @click="toggle">Cancelar</button>
-                        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" @click="toggle">Salvar</button>
-                    </div>
-                </form>
+                <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">                    
+                    <!-- Perfil vindo do ajax -->
+                    <div id="resulAjaxPerfilBusca"></div>                    
+                </div>
             </div>
         </div>
     </div>

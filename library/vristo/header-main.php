@@ -23,10 +23,9 @@
     <script defer src="<?php echo BASE_THEME_URL; ?>/assets/js/tippy-bundle.umd.min.js"></script>
     <script defer src="<?php echo BASE_THEME_URL; ?>/assets/js/sweetalert.min.js"></script>
     <script src="<?php echo BASE_THEME_URL; ?>/assets/js/alpine-mask.min.js"></script>    
-    <script src="<?php echo BASE_THEME_URL; ?>/assets/js/customMasks/money.js"></script>       
-
+    <script src="<?php echo BASE_THEME_URL; ?>/assets/js/customMasks/money.js"></script>     
+    <script src="<?php echo BASE_THEME_URL; ?>/assets/js/customFunctions/functions.js"></script> 
 </head>
-
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden horizontal" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme, $store.app.menu, $store.app.layout,$store.app.rtlClass]">
 

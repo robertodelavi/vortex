@@ -3,6 +3,7 @@
 //$arrayVlr = "'".$param_0.",".$param_1."'";
 //$arrayVlr = $param_0;				
 function nextPage(url, vlr, target){
+	console.log("🚀 ~ nextPage ~ nextPage:")
 	var num_indice = 0;
 	vlr = ''+vlr+'';		
 	var array_vlr = new Array();

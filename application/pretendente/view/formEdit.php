@@ -9,7 +9,18 @@ $perfis = $data->find('dynamic', $sql);
 
 // var_dump($perfis);
 
+// TOASTS
+if($_GET['tab'] == 2){
+    echo '
+    <script>
+        setTimeout(() => {
+            toast("Perfil de busca atualizado com sucesso!", "success", 3000);
+        }, 300);
+    </script>';
+}
+
 ?>
+
 
 <div class="pt-0">
     <div class="flex items-center justify-between mb-5">
@@ -17,7 +28,7 @@ $perfis = $data->find('dynamic', $sql);
     </div>
 
     <!-- ABAS -->
-    <div x-data="{tab: 'pretendente'}">
+    <div x-data="{tab: <?php echo isset($_GET['tab']) && $_GET['tab'] == 2 ? '\'perfis\'' : '\'pretendente\'' ?>}">
         <ul
             class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
             <li class="inline-block">
@@ -93,8 +104,8 @@ $perfis = $data->find('dynamic', $sql);
             <?php include_once('application/pretendente/view/abas/dadosPretendente/lista.php'); ?>
         </template>
 
-        <!-- PERFIS DE BUSCA -->
-        <template x-if="tab === 'perfis'">
+        <!-- PERFIS DE BUSCA -->        
+        <template x-if="tab === 'perfis'">        
             <?php include_once('application/pretendente/view/abas/perfilBusca/lista.php'); ?>
         </template>
 
@@ -111,8 +122,10 @@ $perfis = $data->find('dynamic', $sql);
     </div>
 </div>
 
-
 <script>
+
+    
+
 
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
@@ -170,22 +183,6 @@ $perfis = $data->find('dynamic', $sql);
         }
     }
 
-    function toast(title, color, time) {
-        const toast = window.Swal.mixin({
-            toast: true,
-            position: 'bottom-end',
-            showConfirmButton: false,
-            timer: time,
-            showCloseButton: true,
-            showConfirmButton: false,
-
-            customClass: {
-                popup: `color-${color}`
-            },
-        });
-        toast.fire({
-            title: title,
-        });
-    }
+    
 
 </script>
