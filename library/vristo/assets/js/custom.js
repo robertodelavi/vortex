@@ -57,10 +57,16 @@
                 this.open = !this.open;
             },
         }));
-        Alpine.data('modal', (initialOpenState = false) => ({
+        Alpine.data('modal', (initialOpenState = false, initialOpenDeleteState = false) => ({
             open: initialOpenState,
+            openDelete: initialOpenDeleteState,
+
+            toggleDelete() {
+                this.openDelete = !this.openDelete;
+            },
 
             toggle() {
+                console.log('no toggleeeee')
                 this.open = !this.open;
             },
         }));
