@@ -7,14 +7,18 @@ $data = new DataManipulation();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $value = json_decode(file_get_contents('php://input'), true); // Recebendo os dados do corpo da requisição
-    if (isset($value['ppf_pretendente']) && isset($value['ppf_codigo'])) {
-        // Dados do perfil
-        $sql = "
-        SELECT * 
-        FROM pretendentesperfil AS pp
-            LEFT JOIN tipoimovel AS ti ON (ti.tpi_codigo = pp.ppf_tipoimovel)
-        WHERE pp.ppf_pretendente = " . $value['ppf_pretendente']." AND pp.ppf_codigo = ".$value['ppf_codigo'];
-        $result = $data->find('dynamic', $sql);
+    if (isset($value['action']) && isset($value['ppf_pretendente'])) {
+
+        // Somente na edição
+        if (isset($value['ppf_pretendente']) && isset($value['ppf_codigo'])) {
+            // Dados do perfil
+            $sql = "
+            SELECT * 
+            FROM pretendentesperfil AS pp
+                LEFT JOIN tipoimovel AS ti ON (ti.tpi_codigo = pp.ppf_tipoimovel)
+            WHERE pp.ppf_pretendente = " . $value['ppf_pretendente'] . " AND pp.ppf_codigo = ".$value['ppf_codigo'];
+            $result = $data->find('dynamic', $sql);
+        }
 
         // Tipo de imóvel
         $sql = '
@@ -46,10 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Monta resposta
         $html = '
-        <form method="POST" action="?module=pretendente&acao=update_pretendente" id="MyForm" name="MyForm" >
-            <input type="hidden" name="ppf_pretendente" value="'.$value['ppf_pretendente'].'" />
-            <input type="hidden" name="ppf_codigo" value="'.$value['ppf_codigo'].'" />
-
+        <form method="POST" action="'.$value['action'].'" id="MyForm" name="MyForm" >
+            <input type="hidden" name="ppf_pretendente" value="'.$value['ppf_pretendente'].'" />';
+            // Somente na edição envia ppf_codigo
+            if (isset($value['ppf_codigo'])) { $html .= '<input type="hidden" name="ppf_codigo" value="'.$value['ppf_codigo'].'" />'; }
+            
+            $html .= '
             <!-- Mensagem -->
             <div class="flex items-center p-3.5 rounded text-info bg-info-light dark:bg-info-dark-light">
                 <span class="ltr:pr-2 rtl:pl-2">Aqui, você tem a opção de configurar e nomear perfis de busca
@@ -65,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Nome do Perfil -->
                         <div>
                             <label for="nome">Nome do Perfil</label>
-                            <input name="ppf_nome" id="nome" type="text" value="'.$result[0]['ppf_nome'].'" placeholder="Jimmy Turner"
+                            <input name="ppf_nome" id="nome" type="text" value="'.$result[0]['ppf_nome'].'" placeholder="Apto 2 quartos, 1 vaga, 60m²"
                                 class="form-input" />
                         </div>
 

@@ -21,7 +21,6 @@ if($_GET['tab'] == 2){
 
 ?>
 
-
 <div class="pt-0">
     <div class="flex items-center justify-between mb-5">
         <h5 class="font-semibold text-lg dark:text-white-light">Detalhes do Cliente</h5>
@@ -105,8 +104,11 @@ if($_GET['tab'] == 2){
         </template>
 
         <!-- PERFIS DE BUSCA -->        
-        <template x-if="tab === 'perfis'">        
-            <?php include_once('application/pretendente/view/abas/perfilBusca/lista.php'); ?>
+        <template x-if="tab === 'perfis'"> 
+            <?php 
+                $showConfirmModal = false;
+                include_once('application/pretendente/view/abas/perfilBusca/lista.php'); 
+            ?>
         </template>
 
         <!-- HISTÓRICO DE ATENDIMENTOS -->
@@ -123,13 +125,9 @@ if($_GET['tab'] == 2){
 </div>
 
 <script>
-
-    
-
-
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
-    function getImoveis() {
+    const getImoveis = () => {
         console.log("🚀 ~ getImoveis")
 
         var data = {
@@ -146,7 +144,7 @@ if($_GET['tab'] == 2){
     }
 
     //* Favoritar
-    function setFavorite(action, id) {
+    const setFavorite = (action, id) => {
         console.log("🚀 ~ setFavorite ~ setFavorite:", action, id)
         var data = {
             action: action,
@@ -166,13 +164,17 @@ if($_GET['tab'] == 2){
         });
     }
 
-    function openModalEditPerfil(ppf_pretendente, ppf_codigo) {
-        if (ppf_pretendente && ppf_codigo) {
-            console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
-
+    //* Perfil de busca
+    const openModalEditPerfil = (ppf_pretendente, ppf_codigo) => {        
+        console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
+        if (ppf_pretendente /*&& ppf_codigo*/) {
             fetch('application/pretendente/view/ajax/getDataPerfilBusca.php', {
                 method: 'POST',
-                body: JSON.stringify({ ppf_pretendente: ppf_pretendente, ppf_codigo: ppf_codigo }),
+                body: JSON.stringify({ 
+                    action: (ppf_pretendente > 0 && ppf_codigo > 0 ? '?module=pretendente&acao=update_pretendente' : '?module=pretendente&acao=grava_pretendente'), 
+                    ppf_pretendente: ppf_pretendente, 
+                    ppf_codigo: ppf_codigo 
+                }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -183,6 +185,9 @@ if($_GET['tab'] == 2){
         }
     }
 
-    
+    const confirmDeletePerfilBusca = (ppf_pretendente, ppf_codigo) => {
+        console.log("🚀 ~ deletePerfilBusca ~ ppf_pretendente, ppf_codigo:", ppf_pretendente, ppf_codigo)
+        // openDeleteModal = true;
+    }    
 
 </script>
