@@ -66,7 +66,6 @@
             },
 
             toggle() {
-                console.log('no toggleeeee')
                 this.open = !this.open;
             },
         }));

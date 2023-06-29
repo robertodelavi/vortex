@@ -29,7 +29,7 @@
                                         '.file_get_contents('application/incs/icons/edit.svg').'
                                     </button> 
 
-                                    <button type="button" x-tooltip="Excluir Perfil de Busca" data-placement="left" class="ml-2 hover:text-danger" @click="toggleDelete; confirmDeletePerfilBusca(\'' . $row['ppf_pretendente'] . '\', \'' . $row['ppf_codigo'] . '\')">
+                                    <button type="button" x-tooltip="Excluir Perfil de Busca" data-placement="left" class="ml-2 hover:text-danger" @click="toggleDelete;">
                                         '.file_get_contents('application/incs/icons/delete.svg').'
                                     </button>
                                 </td>
@@ -88,20 +88,12 @@
                         este item?</div>
 
                     <div class="flex justify-center items-center mt-8">
-                        <button type="button" class="btn btn-danger" @click="deleteItem">Excluir</button>
+                        <button type="button" class="btn btn-danger" @click="deletePerfilBusca()">Excluir</button>
                         <button type="button" class="btn btn-outline-primary ltr:ml-4 rtl:mr-4"
-                            @click="isAddEventModal = false">Cancelar</button>
+                        @click="toggleDelete">Cancelar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<script>
-    const confirmDeletePerfilBusca = (ppf_pretendente, ppf_codigo) => {
-        console.log("🚀 ~ deletePerfilBusca ~ ppf_pretendente, ppf_codigo:", ppf_pretendente, ppf_codigo)
-        <?php echo '$showConfirmModal = true;'; ?>
-    }   
-</script>

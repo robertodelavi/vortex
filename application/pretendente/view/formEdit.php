@@ -105,10 +105,7 @@ if($_GET['tab'] == 2){
 
         <!-- PERFIS DE BUSCA -->        
         <template x-if="tab === 'perfis'"> 
-            <?php 
-                $showConfirmModal = false;
-                include_once('application/pretendente/view/abas/perfilBusca/lista.php'); 
-            ?>
+            <?php include_once('application/pretendente/view/abas/perfilBusca/lista.php'); ?>
         </template>
 
         <!-- HISTÓRICO DE ATENDIMENTOS -->
@@ -185,9 +182,8 @@ if($_GET['tab'] == 2){
         }
     }
 
-    const confirmDeletePerfilBusca = (ppf_pretendente, ppf_codigo) => {
-        console.log("🚀 ~ deletePerfilBusca ~ ppf_pretendente, ppf_codigo:", ppf_pretendente, ppf_codigo)
-        // openDeleteModal = true;
+    const deletePerfilBusca = () => {
+        console.log("🚀 ~ deletePerfilBusca")
     }    
 
 </script>
