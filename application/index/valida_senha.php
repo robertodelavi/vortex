@@ -37,10 +37,13 @@ class Valida_SenhaCommand implements Command
             // Loga usuário
             $result = $login->validateUser(
                 array(
-                    'emp_bd' => $resultAuth['emp_bd'], 
-                    'emp_nome' => $resultAuth['emp_nome'], 
-                    'emp_cidade' => $resultAuth['emp_cidade'], 
-                    'emp_estado' => $resultAuth['emp_estado']
+                    'emp_bd'      => $resultAuth['emp_bd'], 
+                    'emp_bd_host' => $resultAuth['emp_bd_host'], 
+                    'emp_bd_user' => $resultAuth['emp_bd_user'], 
+                    'emp_bd_pass' => $resultAuth['emp_bd_pass'], 
+                    'emp_nome'    => $resultAuth['emp_nome'], 
+                    'emp_cidade'  => $resultAuth['emp_cidade'], 
+                    'emp_estado'  => $resultAuth['emp_estado']
                 ), 
                 array(
                     'usu_email' => $user, 

@@ -10,7 +10,7 @@ class Login{
 	// Acessa banco de autenticação
 	function authenticateUser($params, $session){
 		$dbAuth = new MySql();
-		$dbAuth->connOpen('vortex__autenticacao');
+		$dbAuth->connOpen('localhost','vortex__autenticacao','root', '');
 		
 		$i = 0;
 		foreach($params as $key => $valor){
@@ -22,17 +22,33 @@ class Login{
 			}  
 		}
 
-		$sql = "
-		SELECT ue.uem_codigo, e.emp_bd, e.emp_nome, e.emp_cidade, e.emp_estado
-        FROM sisusuarios_sisempresas AS ue 
-            JOIN sisusuarios AS u ON (ue.usu_codigo = u.usu_codigo)
-            JOIN sisempresas AS e ON (ue.emp_codigo = e.emp_codigo)
-        WHERE u.usu_email = '".$params['usu_email']."' AND u.usu_senha = '".$params['usu_senha']."' AND ue.uem_ativado = 's' AND u.usu_ativado = 's' AND e.emp_ativado = 's' ";
+		$sql = "SELECT 
+					ue.uem_codigo, 
+					e.emp_bd, 
+					e.emp_bd_host, 
+					e.emp_bd_user, 
+					e.emp_bd_pass, 
+					e.emp_nome, 
+					e.emp_cidade, 
+					e.emp_estado
+        		FROM sisusuarios_sisempresas AS ue 
+            		JOIN sisusuarios AS u ON (ue.usu_codigo = u.usu_codigo)
+            		JOIN sisempresas AS e ON (ue.emp_codigo = e.emp_codigo)
+        		WHERE 
+					u.usu_email = '".$params['usu_email']."' AND 
+					u.usu_senha = '".$params['usu_senha']."' AND 
+					ue.uem_ativado = 's' AND 
+					u.usu_ativado = 's' AND 
+					e.emp_ativado = 's' ";
 		$result = $dbAuth->executeQuery($sql, false);
+
 		if ($dbAuth->countLines($result) > 0){
 			for ($i=0;$i<$dbAuth->countLines($result);$i++){
 				$retorno['login'] = 'Autenticado';
 				$retorno['emp_bd'] = $dbAuth->result($result, $i, 'emp_bd');
+				$retorno['emp_bd_host'] = $dbAuth->result($result, $i, 'emp_bd_host');
+				$retorno['emp_bd_user'] = $dbAuth->result($result, $i, 'emp_bd_user');
+				$retorno['emp_bd_pass'] = $dbAuth->result($result, $i, 'emp_bd_pass');
 				$retorno['emp_nome'] = $dbAuth->result($result, $i, 'emp_nome');
 				$retorno['emp_cidade'] = $dbAuth->result($result, $i, 'emp_cidade');
 				$retorno['emp_estado'] = $dbAuth->result($result, $i, 'emp_estado');
@@ -56,7 +72,7 @@ class Login{
 		}			
 
 		$db = new MySql();
-		$db->connOpen($authData['emp_bd']);
+		$db->connOpen($authData['emp_bd_host'], $authData['emp_bd'], $authData['emp_bd_user'], $authData['emp_bd_pass']);
 		
 		$i = 0;
 		foreach($params as $key => $valor){
@@ -74,6 +90,9 @@ class Login{
 			for ($i=0;$i<$db->countLines($result);$i++){
 				$_SESSION['v_usu_codigo'] 		= $db->result($result, $i,'usu_codigo');
 				$_SESSION['database'] 			= $authData['emp_bd'];
+				$_SESSION['database_host'] 		= $authData['emp_bd_host'];
+				$_SESSION['database_user'] 		= $authData['emp_bd_user'];
+				$_SESSION['database_pass'] 		= $authData['emp_bd_pass'];
 				$_SESSION['unidade'] 			= $authData['emp_nome'];
 				$_SESSION['unidadeCidade'] 		= $authData['emp_cidade'].'/'.$authData['emp_estado'];
 				//
@@ -92,6 +111,9 @@ class Login{
 				$tempo_cookie = strtotime("+2 day", time());
 				setcookie('v_usu_codigo', $_SESSION['v_usu_codigo'], $tempo_cookie, "/");
 				setcookie('database', $_SESSION['database'], $tempo_cookie, "/");
+				setcookie('database_host', $_SESSION['database'], $tempo_cookie, "/");
+				setcookie('database_user', $_SESSION['database'], $tempo_cookie, "/");
+				setcookie('database_pass', $_SESSION['database'], $tempo_cookie, "/");
 				setcookie('unidade', $_SESSION['unidade'], $tempo_cookie, "/");
 				setcookie('unidadeCidade', $_SESSION['unidadeCidade'], $tempo_cookie, "/");
 				//
@@ -111,20 +133,12 @@ class Login{
 	}
 
 	function logout(){
+		unset($_SESSION);
 		/*unset($_SESSION['wf_userName']);
 		unset($_SESSION['wf_userEmail']);
 		unset($_SESSION['wf_userPermissao']);
 		unset($_SESSION['wf_userCliente']);*/
 	}
-	
-	function getLogin(){
-		if ((isset($_SESSION['wf_idSession']))&&($_SESSION['wf_idSession'] == $_SESSION['wf_userSession'])){
-			$retorno['logged'] = "yes";
-		}else{
-			$retorno['logged'] = "no";
-		}
-		return $retorno;			
-	}	
 }
 
 ?>

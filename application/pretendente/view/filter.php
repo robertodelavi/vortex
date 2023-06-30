@@ -2,7 +2,7 @@
 session_start();
 require_once '../../../library/MySql.php';
 $bd = new MySql();
-$bd->connOpen($_SESSION['database']);
+$bd->connOpen($_SESSION['database_host'], $_SESSION['database'], $_SESSION['database_user'], $_SESSION['database_pass']);
 //
 
 // Recupera os valores do formulário

@@ -5,18 +5,22 @@
 class MySql
 {
 
-    private $conn; // Propriedade para armazenar a conexão
-    private $database; // Propriedade para armazenar o nome do banco de dados
-
+    private $conn;      // Propriedade para armazenar a conexão
+    private $database;  // Propriedade para armazenar o nome do banco de dados
+    private $server;    // Propriedade para armazenar o Host do banco de dados
+    private $user;      // Propriedade para armazenar o Usuario do banco de dados
+    private $passw;     // Propriedade para armazenar o Senha do banco de dados
+    public $result;
+    
     // Conexão com o banco de dados
-    function connOpen($database)
+    function connOpen($server, $database, $user, $passw)
     {   
-        $server = 'localhost';     
-        $user = 'root';             
-        $passw = '';         
         $this->database = $database;
-
-        $this->conn = mysqli_connect($server, $user, $passw, $this->database);
+        $this->server   = $server;
+        $this->user     = $user;
+        $this->passw    = $passw;
+        
+        $this->conn = mysqli_connect($this->server, $this->user, $this->passw, $this->database);
         mysqli_set_charset($this->conn, "utf8");
 
         if (!$this->conn) { // Caso haja erro na conexão
@@ -40,7 +44,7 @@ class MySql
      */
     function executeQuery($sql, $param = false)
     {
-        $this->connOpen($this->database);
+        $this->connOpen($this->server, $this->database, $this->user, $this->passw);
 
         $this->result = mysqli_query($this->conn, $sql);
         if (!$this->result) { // Caso não execute a query corretamente

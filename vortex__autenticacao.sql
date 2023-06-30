@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17/06/2023 às 12:46
--- Versão do servidor: 10.4.17-MariaDB
--- Versão do PHP: 7.4.15
+-- Tempo de geração: 29-Jun-2023 às 21:53
+-- Versão do servidor: 10.4.19-MariaDB
+-- versão do PHP: 7.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -53,7 +53,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `sisempresas`
+-- Estrutura da tabela `sisempresas`
 --
 
 CREATE TABLE `sisempresas` (
@@ -61,6 +61,9 @@ CREATE TABLE `sisempresas` (
   `emp_ativado` set('s','n') DEFAULT 'n',
   `emp_nome` varchar(255) NOT NULL DEFAULT '',
   `emp_bd` varchar(255) NOT NULL COMMENT 'Nome do banco de dados para fazer conexão ao logar no sistema',
+  `emp_bd_host` text NOT NULL,
+  `emp_bd_user` varchar(100) NOT NULL,
+  `emp_bd_pass` varchar(255) NOT NULL,
   `emp_email` varchar(150) NOT NULL DEFAULT '',
   `emp_telefone` varchar(50) NOT NULL DEFAULT '',
   `emp_cidade` varchar(255) NOT NULL,
@@ -68,17 +71,17 @@ CREATE TABLE `sisempresas` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Despejando dados para a tabela `sisempresas`
+-- Extraindo dados da tabela `sisempresas`
 --
 
-INSERT INTO `sisempresas` (`emp_codigo`, `emp_ativado`, `emp_nome`, `emp_bd`, `emp_email`, `emp_telefone`, `emp_cidade`, `emp_estado`) VALUES
-(1, 's', 'Nostra Casa', 'vortex_nostracasa', 'contato@nostracasa.com.br', '(49) 3322-8466', 'Chapecó', 'SC'),
-(2, 's', 'Santa Maria', 'vortex_santamaria', 'contato@santamaria.com.br', '(49) 3322-3387', 'Chapecó', 'SC');
+INSERT INTO `sisempresas` (`emp_codigo`, `emp_ativado`, `emp_nome`, `emp_bd`, `emp_bd_host`, `emp_bd_user`, `emp_bd_pass`, `emp_email`, `emp_telefone`, `emp_cidade`, `emp_estado`) VALUES
+(1, 's', 'Nostra Casa', 'vortex_nostracasa', 'localhost', 'root', '', 'contato@nostracasa.com.br', '(49) 3322-8466', 'Chapecó', 'SC'),
+(2, 's', 'Santa Maria', 'vortex_santamaria', 'locahost', 'root', '', 'contato@santamaria.com.br', '(49) 3322-3387', 'Chapecó', 'SC');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `sisusuarios`
+-- Estrutura da tabela `sisusuarios`
 --
 
 CREATE TABLE `sisusuarios` (
@@ -91,7 +94,7 @@ CREATE TABLE `sisusuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `sisusuarios`
+-- Extraindo dados da tabela `sisusuarios`
 --
 
 INSERT INTO `sisusuarios` (`usu_codigo`, `usu_ativado`, `usu_email`, `usu_senha`, `usu_nome`, `usu_telefone`) VALUES
@@ -101,7 +104,7 @@ INSERT INTO `sisusuarios` (`usu_codigo`, `usu_ativado`, `usu_email`, `usu_senha`
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `sisusuarios_sisempresas`
+-- Estrutura da tabela `sisusuarios_sisempresas`
 --
 
 CREATE TABLE `sisusuarios_sisempresas` (
@@ -112,11 +115,11 @@ CREATE TABLE `sisusuarios_sisempresas` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Despejando dados para a tabela `sisusuarios_sisempresas`
+-- Extraindo dados da tabela `sisusuarios_sisempresas`
 --
 
 INSERT INTO `sisusuarios_sisempresas` (`uem_codigo`, `uem_ativado`, `usu_codigo`, `emp_codigo`) VALUES
-(1, 's', 1, 2),
+(1, 's', 1, 1),
 (2, 's', 2, 1);
 
 --
@@ -124,7 +127,7 @@ INSERT INTO `sisusuarios_sisempresas` (`uem_codigo`, `uem_ativado`, `usu_codigo`
 --
 
 --
--- Índices de tabela `sisempresas`
+-- Índices para tabela `sisempresas`
 --
 ALTER TABLE `sisempresas`
   ADD PRIMARY KEY (`emp_codigo`),
@@ -132,13 +135,13 @@ ALTER TABLE `sisempresas`
   ADD KEY `emp_bd` (`emp_bd`);
 
 --
--- Índices de tabela `sisusuarios`
+-- Índices para tabela `sisusuarios`
 --
 ALTER TABLE `sisusuarios`
   ADD PRIMARY KEY (`usu_codigo`);
 
 --
--- Índices de tabela `sisusuarios_sisempresas`
+-- Índices para tabela `sisusuarios_sisempresas`
 --
 ALTER TABLE `sisusuarios_sisempresas`
   ADD PRIMARY KEY (`uem_codigo`),
@@ -146,7 +149,7 @@ ALTER TABLE `sisusuarios_sisempresas`
   ADD KEY `emp_codigo` (`emp_codigo`);
 
 --
--- AUTO_INCREMENT para tabelas despejadas
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
