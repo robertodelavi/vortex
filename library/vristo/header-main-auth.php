@@ -3,7 +3,7 @@
 
 <?php 
     //* Configurações padrões do projeto
-    include 'configs.php'; 
+    include_once 'configs.php';    
 ?>
 
 <head>
