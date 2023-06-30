@@ -5,7 +5,7 @@
  * $arrayVlr = $param_0;				
 */
 function nextPage(url, vlr, target){
-	console.log("🚀 ~ nextPage ~ nextPage:")
+	console.log("🚀 ~ nextPage")
 	var num_indice = 0;
 	vlr = ''+vlr+'';		
 	var array_vlr = new Array();
@@ -47,6 +47,43 @@ function nextPage(url, vlr, target){
 	document.getElementById("EnviaParam").action = url;
 	document.forms["EnviaParam"].submit();
 }
+
+function nextPageArray(url, values, target) {
+	console.log("🚀 ~ nextPageArray");
+  
+	var num_indice = values.length;
+	
+	var div_fnp = document.createElement("div");
+	div_fnp.setAttribute("id", "form_next_page");
+	document.body.appendChild(div_fnp);
+  
+	var div_princ = document.getElementById('form_next_page');
+  
+	var formulario = document.createElement("form");
+	formulario.setAttribute("id", "EnviaParam");
+	formulario.setAttribute("method", "POST");
+	formulario.setAttribute("action", url);
+	
+	if (target == '_blank') {
+	  formulario.setAttribute("target", target);
+	}
+	
+	div_princ.appendChild(formulario);
+  
+	for (var i = 0; i < num_indice; i++) {
+	  var form_enviaPar = document.getElementById("EnviaParam");
+	  var parametro = document.createElement("input");
+	  parametro.setAttribute("type", "hidden");
+	  parametro.setAttribute("name", "param_" + i);
+	  parametro.setAttribute("id", "param_" + i);
+	  parametro.setAttribute("value", values[i]);
+	  form_enviaPar.appendChild(parametro);
+	}
+  
+	// Envia o formulário
+	document.getElementById("EnviaParam").action = url;
+	document.forms["EnviaParam"].submit();
+}  
 
 function toast(title, color, time) {
 	console.log("🚀 ~ toast")

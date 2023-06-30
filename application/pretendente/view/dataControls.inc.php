@@ -33,9 +33,10 @@
 		break;
 
 		case 'deleta_pretendente':
-			$data->tabela = 'clientes';
-			$data->delete($_POST['param_0']);
-			echo '<body onload="nextPage(\'?module=principal&acao=lista_principal&ms=1\', \'\' )"></body>';
+			$data->tabela = 'pretendentesperfil';
+			$sql = 'DELETE FROM pretendentesperfil WHERE ppf_pretendente = '.$_POST['param_0'].' AND ppf_codigo = '.$_POST['param_1'];
+			$data->executaSQL($sql);
+			echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['param_0'].'\' )"></body>';
 		break;
 	}
 ?>

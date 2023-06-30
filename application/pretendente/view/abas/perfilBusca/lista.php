@@ -29,9 +29,10 @@
                                         '.file_get_contents('application/incs/icons/edit.svg').'
                                     </button> 
 
-                                    <button type="button" x-tooltip="Excluir Perfil de Busca" data-placement="left" class="ml-2 hover:text-danger" @click="toggleDelete;">
+                                    <button type="button" x-tooltip="Excluir Perfil de Busca" data-placement="left" class="ml-2 hover:text-danger" @click="toggleDelete; setDeleteId(\'' . $row['ppf_pretendente'] . '\', \'' . $row['ppf_codigo'] . '\');" >
                                         '.file_get_contents('application/incs/icons/delete.svg').'
                                     </button>
+
                                 </td>
                             </tr>';
                         }
@@ -47,7 +48,7 @@
     </div>
 
     <!-- Modal editar -->
-    <div class="fixed inset-0 bg-[black]/60 z-[999] hidden" :class="open && '!block'">
+    <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="open && '!block'">
         <div class="flex items-start justify-center min-h-screen px-4" @click.self="open = false">
             <div x-show="open" x-transition x-transition.duration.300
                 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">

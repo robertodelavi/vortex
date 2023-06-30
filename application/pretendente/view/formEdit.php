@@ -182,8 +182,15 @@ if($_GET['tab'] == 2){
         }
     }
 
+    //* Delete Perfil de busca
+    let globalPpfPretendente = null
+    let globalPpfCodigo = null
+    const setDeleteId = (ppf_pretendente, ppf_codigo) => {
+        globalPpfPretendente = ppf_pretendente
+        globalPpfCodigo = ppf_codigo
+    }
     const deletePerfilBusca = () => {
-        console.log("🚀 ~ deletePerfilBusca")
+        nextPageArray('?module=pretendente&acao=deleta_pretendente', [globalPpfPretendente, globalPpfCodigo])
     }    
 
 </script>
