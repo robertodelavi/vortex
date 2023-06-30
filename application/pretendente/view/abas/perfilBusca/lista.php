@@ -26,11 +26,11 @@
                                 <td>' . number_format(($row['ppf_valorini'] / 100), 2, ',', '.') . ' a ' . number_format(($row['ppf_valorfim'] / 100), 2, ',', '.') . '</td>
                                 <td>     
                                     <button type="button" x-tooltip="Editar Perfil de Busca" data-placement="left" class="mr-2 hover:text-info" @click="toggle; openModalEditPerfil(\'' . $row['ppf_pretendente'] . '\', \'' . $row['ppf_codigo'] . '\');">
-                                        '.file_get_contents('application/incs/icons/edit.svg').'
+                                        '.file_get_contents('application/icons/edit.svg').'
                                     </button> 
 
                                     <button type="button" x-tooltip="Excluir Perfil de Busca" data-placement="left" class="ml-2 hover:text-danger" @click="toggleDelete; setDeleteId(\'' . $row['ppf_pretendente'] . '\', \'' . $row['ppf_codigo'] . '\');" >
-                                        '.file_get_contents('application/incs/icons/delete.svg').'
+                                        '.file_get_contents('application/icons/delete.svg').'
                                     </button>
 
                                 </td>
@@ -55,7 +55,7 @@
                 <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                     <h5 class="font-bold text-lg">Perfil de Busca</h5>
                     <button type="button" class="text-white-dark hover:text-dark" @click="toggle">
-                        <?php echo file_get_contents('application/incs/icons/close.svg'); ?>
+                        <?php echo file_get_contents('application/icons/close.svg'); ?>
                     </button>
                 </div>
                 <div class="p-5">
@@ -76,14 +76,14 @@
                 <button type="button"
                     class="absolute top-4 ltr:right-4 rtl:left-4 text-white-dark hover:text-dark"
                     @click="toggleDelete">
-                    <?php echo file_get_contents('application/incs/icons/close.svg'); ?>
+                    <?php echo file_get_contents('application/icons/close.svg'); ?>
                 </button>
                 <h3
                     class="text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
                     Excluir</h3>
                 <div class="p-5 text-center">
                     <div class="text-white bg-danger ring-4 ring-danger/30 p-4 rounded-full w-fit mx-auto">
-                        <?php echo file_get_contents('application/incs/icons/deleteRounded.svg'); ?>
+                        <?php echo file_get_contents('application/icons/deleteRounded.svg'); ?>
                     </div>
                     <div class="sm:w-3/4 mx-auto mt-5">Tem certeza que deseja <b class="text-danger">excluir</b>
                         este item?</div>

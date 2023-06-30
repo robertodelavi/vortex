@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <!-- FAVORITAR -->
                                         <div class="absolute top-2 right-2 bg-white dark:bg-dark rounded p-2 flex">
                                             <button type="button" class="text-warning group" x-tooltip="Desfavoritar Imóvel" @click="() => setFavorite(false, ' . $imovel['imo_codigo'] . ')">
-                                                ' . file_get_contents('../../../incs/icons/starContained.svg') . '
+                                                ' . file_get_contents('../../../icons/starContained.svg') . '
                                             </button>
                                         </div>
                                     </div>                        
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <!-- FAVORITAR -->
                                     <div class="absolute top-2 right-2 bg-white dark:bg-dark rounded p-2 flex">
                                         <button type="button" class="text-warning group" data-imovel-id="6" x-tooltip="Favoritar Imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')">
-                                            ' . file_get_contents('../../../incs/icons/star.svg') . '
+                                            ' . file_get_contents('../../../icons/star.svg') . '
                                         </button>
                                     </div>
         
