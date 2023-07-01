@@ -95,6 +95,16 @@ class MySql
             return $row[$field];
         }
     }
+
+    function resultAll($result, $total){
+        $rows = [];
+        for($i=0; $i< $total; $i++){
+            if (mysqli_data_seek($result, $i)) {
+                $rows[$i] = mysqli_fetch_assoc($result);
+            }
+        }
+        return $rows;
+    }
     
     /**
      * Retorna o último id inserido no banco

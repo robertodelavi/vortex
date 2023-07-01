@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 29-Jun-2023 às 21:53
+-- Tempo de geração: 01-Jul-2023 às 16:07
 -- Versão do servidor: 10.4.19-MariaDB
 -- versão do PHP: 7.3.28
 
@@ -81,6 +81,37 @@ INSERT INTO `sisempresas` (`emp_codigo`, `emp_ativado`, `emp_nome`, `emp_bd`, `e
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `sismenu`
+--
+
+CREATE TABLE `sismenu` (
+  `men_codigo` int(11) NOT NULL,
+  `men_nome` text NOT NULL COMMENT 'Nome que irá aparecer no Menu para o usuário.',
+  `men_url` text DEFAULT NULL COMMENT 'Sem URL é um menu com filhos, com URL é só passar o link de acesso interno do sistema',
+  `men_icone` text DEFAULT NULL COMMENT 'icone somente para os menus principais ( sem url e sem pai)',
+  `men_pai` int(11) DEFAULT NULL COMMENT 'codigo do menu pai.',
+  `pro_nome` text NOT NULL COMMENT 'Nome do programa, no sistema principal (sisprograma)',
+  `men_situacao` int(11) NOT NULL DEFAULT 1,
+  `men_target` text DEFAULT NULL COMMENT 'Caso precise enviar como _seft ou _blank',
+  `men_flag` text DEFAULT NULL COMMENT 'Deve ser usado no caso de termos algo para sinalizar, como Novo, Atenção e etc.',
+  `men_ordem` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `sismenu`
+--
+
+INSERT INTO `sismenu` (`men_codigo`, `men_nome`, `men_url`, `men_icone`, `men_pai`, `pro_nome`, `men_situacao`, `men_target`, `men_flag`, `men_ordem`) VALUES
+(1, 'Sistema', NULL, 'application/icons/sistema.svg', NULL, '', 1, NULL, NULL, 0),
+(2, 'Empresas', '?module=sistema&acao=lista_empresa', NULL, 1, 'sisEmpresas', 1, NULL, NULL, 0),
+(3, 'Programas', '?module=sistema&acao=lista_programa', NULL, 1, 'sisProgramas', 1, NULL, NULL, 0),
+(4, 'Cadastros', NULL, 'application/icons/refresh.svg', NULL, '', 1, NULL, NULL, 0),
+(5, 'Financeiro', NULL, NULL, 4, '', 1, NULL, NULL, 0),
+(6, 'Bancos', '?module=cadastro&acao=lista_finbanco', NULL, 5, 'cadBancos', 1, NULL, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `sisusuarios`
 --
 
@@ -135,6 +166,12 @@ ALTER TABLE `sisempresas`
   ADD KEY `emp_bd` (`emp_bd`);
 
 --
+-- Índices para tabela `sismenu`
+--
+ALTER TABLE `sismenu`
+  ADD PRIMARY KEY (`men_codigo`);
+
+--
 -- Índices para tabela `sisusuarios`
 --
 ALTER TABLE `sisusuarios`
@@ -157,6 +194,12 @@ ALTER TABLE `sisusuarios_sisempresas`
 --
 ALTER TABLE `sisempresas`
   MODIFY `emp_codigo` int(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `sismenu`
+--
+ALTER TABLE `sismenu`
+  MODIFY `men_codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `sisusuarios`

@@ -6,11 +6,16 @@ class Login{
 	
 	var $tableAuth;
 	var $table;
+	var $menu;
 
 	// Acessa banco de autenticação
 	function authenticateUser($params, $session){
 		$dbAuth = new MySql();
 		$dbAuth->connOpen('localhost','vortex__autenticacao','root', '');
+		
+		$sql = "SELECT * FROM sismenu WHERE men_situacao = 1";
+		$mentotal = $dbAuth->executeQuery($sql,false);	
+		$this->$menu = $dbAuth->resultAll($mentotal, $dbAuth->countLines($mentotal));
 		
 		$i = 0;
 		foreach($params as $key => $valor){
@@ -86,6 +91,7 @@ class Login{
 
 		$sql = "SELECT * FROM ".$this->table." WHERE usu_ativado = 's' AND ".$conditions;
 		$result = $db->executeQuery($sql,false);
+
 		if ($db->countLines($result) > 0){
 			for ($i=0;$i<$db->countLines($result);$i++){
 				$_SESSION['v_usu_codigo'] 		= $db->result($result, $i,'usu_codigo');
@@ -93,7 +99,8 @@ class Login{
 				$_SESSION['database_host'] 		= $authData['emp_bd_host'];
 				$_SESSION['database_user'] 		= $authData['emp_bd_user'];
 				$_SESSION['database_pass'] 		= $authData['emp_bd_pass'];
-				$_SESSION['unidade'] 			= $authData['emp_nome'];
+				$_SESSION['unidade'] 			= $authData['emp_nome'];	
+				$_SESSION['menu']				= $this->$menu;
 				$_SESSION['unidadeCidade'] 		= $authData['emp_cidade'].'/'.$authData['emp_estado'];
 				//
 				$_SESSION['wf_userId'] 			= $db->result($result, $i,'usu_codigo');
