@@ -1,54 +1,259 @@
-<div>
-    <form class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]">
-        <h6 class="text-lg font-bold mb-5">Dados Gerais</h6>
-        <div class="flex flex-col sm:flex-row">
+<?php 
+    $sql = '
+    SELECT * 
+    FROM pretendentes AS p 
+    WHERE p.prw_codigo = '.$_POST['param_0'];
+    $result = $data->find('dynamic', $sql);
 
-            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
+    $sexo = array(
+        'm' => 'Masculino',
+        'f' => 'Feminino'
+    );
+
+    $sql = '
+    SELECT * 
+    FROM pretendentescontato
+    ORDER BY pco_descricao ASC';
+    $formaContato = $data->find('dynamic', $sql);
+
+    $sql = '
+    SELECT * 
+    FROM sisusuarios
+    WHERE usu_ativado = "s"
+    ORDER BY usu_nome ASC';
+    $profissionais = $data->find('dynamic', $sql);
+
+    $sql = '
+    SELECT * 
+    FROM pretendentesperfilcliente';
+    $perfilCliente = $data->find('dynamic', $sql);
+    
+    $sql = '
+    SELECT * 
+    FROM pretendentesobjetivo';
+    $objetivo = $data->find('dynamic', $sql);
+    
+    $sql = '
+    SELECT * 
+    FROM pretendentesorigem
+    ORDER BY por_descricao ASC';
+    $origem = $data->find('dynamic', $sql);
+    
+    $sql = '
+    SELECT * 
+    FROM tipoimovel
+    ORDER BY tpi_descricao ASC';
+    $tipoImovel = $data->find('dynamic', $sql);
+    
+    $sql = '
+    SELECT * 
+    FROM empreendimentos
+    ORDER BY epr_descricao ASC';
+    $empreendimento = $data->find('dynamic', $sql);
+    
+    $sql = '
+    SELECT * 
+    FROM pretendentesstatusnegocio';
+    $statusNegocio = $data->find('dynamic', $sql);
+?>
+
+<div>
+    <form method="POST" action="?module=pretendente&acao=updatedados_pretendente" class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]">
+        <div class="flex justify-between mb-4">
+            <div>
+                <h5 class="text-lg font-semibold">Dados Gerais</h5>
+            </div>    
+            <div>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>            
+        </div>   
+        
+        <input type="hidden" name="prw_codigo" value="<?php echo $_POST['param_0']; ?>" />
+        
+        <div class="flex flex-col sm:flex-row">
+            <div class="flex-1 grid md:grid-cols-4 sm:grid-cols-2 gap-5">
                 <div>
                     <label for="name">Nome do Pretendente</label>
-                    <input name="nome" id="name" type="text" placeholder="Jimmy Turner" class="form-input" />
-                </div>
-                <div>
-                    <label for="email">E-mail</label>
-                    <input name="email" id="email" type="email" placeholder="fulano@email.com" class="form-input" />
+                    <input name="prw_nome" type="text" placeholder="João da Silva" class="form-input" value="<?php echo $result[0]['prw_nome']; ?>" />
                 </div>
                 <div>
                     <label for="country">Sexo</label>
-                    <select id="country" class="form-select text-white-dark">
-                        <option selected="">Masculino</option>
-                        <option>Feminino</option>
+                    <select name="prw_sexo" class="form-select text-white-dark">
+                        <option>-- Selecione --</option>
+                        <?php 
+                            foreach($sexo as $key => $row){
+                                $selected = $result[0]['prw_sexo'] == $key ? 'selected' : '';
+                                echo '
+                                <option value="'.$key.'" '.$selected.' >
+                                    '.$row.'
+                                </option>';
+                            }
+                        ?>
                     </select>
                 </div>
                 <div>
-                    <label for="address">Address</label>
-                    <input id="address" type="text" placeholder="New York" class="form-input" />
+                    <label for="email">Ano de Nascimento</label>
+                    <input name="prw_anonascimento" type="number" class="form-input" value="<?php echo $result[0]['prw_anonascimento']; ?>" />
                 </div>
                 <div>
-                    <label for="location">Location</label>
-                    <input id="location" type="text" placeholder="Location" class="form-input" />
+                    <label for="country">Forma de Contato</label>
+                    <select name="prw_contato" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($formaContato as $row){
+                                $selected = $result[0]['prw_contato'] == $row['pco_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['pco_codigo'].'" '.$selected.' >
+                                    '.$row['pco_descricao'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
                 </div>
                 <div>
-                    <label for="phone">Phone</label>
-                    <input id="phone" type="text" placeholder="+1 (530) 555-12121" class="form-input" />
+                    <label for="address">Telefones</label>
+                    <input name="prw_telefones" type="text" placeholder="(49) 99999-9999" class="form-input" value="<?php echo $result[0]['prw_telefones']; ?>" />
                 </div>
                 <div>
-                    <label for="email">Email</label>
-                    <input id="email" type="email" placeholder="Jimmy@gmail.com" class="form-input" />
+                    <label for="email">E-mail</label>
+                    <input name="prw_email" type="email" placeholder="fulano@email.com" class="form-input" value="<?php echo $result[0]['prw_email']; ?>" />
+                </div>
+                <div>
+                    <label for="country">Atendido por</label>
+                    <select name="prw_usuario" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($profissionais as $row){
+                                $selected = $result[0]['prw_usuario'] == $row['usu_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['usu_codigo'].'" '.$selected.' >
+                                    '.$row['usu_nome'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="phone">Cidade</label>
+                    <input name="prw_cidadeorigem" type="text" class="form-input" value="<?php echo $result[0]['prw_cidadeorigem']; ?>" />
+                </div>
+                
+                <div>
+                    <label for="country">Perfil do Cliente</label>
+                    <select name="prw_perfilcliente" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($perfilCliente as $row){
+                                $selected = $result[0]['prw_perfilcliente'] == $row['ppc_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['ppc_codigo'].'" '.$selected.' >
+                                    '.$row['ppc_descricao'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="country">Objetivo do Atendimento</label>
+                    <select name="prw_objetivo" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($objetivo as $row){
+                                $selected = $result[0]['prw_objetivo'] == $row['pob_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['pob_codigo'].'" '.$selected.' >
+                                    '.$row['pob_descricao'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="country">Origem do Atendimento</label>
+                    <select name="prw_origem" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($origem as $row){
+                                $selected = $result[0]['prw_origem'] == $row['por_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['por_codigo'].'" '.$selected.' >
+                                    '.$row['por_descricao'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="country">Tipo Imóvel Principal</label>
+                    <select name="prw_tipoimovelprincipal" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($tipoImovel as $row){
+                                $selected = $result[0]['prw_tipoimovelprincipal'] == $row['tpi_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['tpi_codigo'].'" '.$selected.' >
+                                    '.$row['tpi_descricao'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="country">Empreendimento</label>
+                    <select name="prw_empreendimento" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($empreendimento as $row){
+                                $selected = $result[0]['prw_empreendimento'] == $row['epr_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['epr_codigo'].'" '.$selected.' >
+                                    '.$row['epr_descricao'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="country">Status do Negócio</label>
+                    <select name="prw_psn_codigo" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($statusNegocio as $row){
+                                $selected = $result[0]['prw_psn_codigo'] == $row['psn_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['psn_codigo'].'" '.$selected.' >
+                                    '.$row['psn_descricao'].'
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="phone">Valor de Prospecção</label>
+                    <input name="prw_valorprospeccao" type="text" class="form-input" value="<?php echo $result[0]['prw_valorprospeccao']; ?>" />
                 </div>
                 <div>
                     <label for="web">Website</label>
                     <input id="web" type="text" placeholder="Enter URL" class="form-input" />
                 </div>
-                <div>
-                    <label class="inline-flex cursor-pointer">
-                        <input type="checkbox" class="form-checkbox" />
-                        <span class="text-white-dark relative checked:bg-none">Make this my default
-                            address</span>
-                    </label>
+
+                <div class="sm:col-span-3 md:col-span-4" >
+                    <label for="web">Observações</label>
+                    <textarea name="prw_obs" class="form-input"><?php echo $result[0]['prw_obs']; ?></textarea>
                 </div>
-                <div class="sm:col-span-2 mt-3">
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
+
+                <!-- <div>
+                    <div>
+                        <label class="inline-flex cursor-pointer">
+                            <input type="checkbox" class="form-checkbox" />
+                            <span class="text-white-dark relative checked:bg-none">Make this my default
+                                address</span>
+                        </label>
+                    </div>
+                    <div class="sm:col-span-2 mt-3">
+                        <button type="button" class="btn btn-primary">Save</button>
+                    </div>
+                </div> -->
             </div>
         </div>
     </form>

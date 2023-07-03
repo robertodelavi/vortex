@@ -19,7 +19,10 @@
 
 		case 'deleta':
 		case 'grava':
+		
 		case 'update':
+		case 'updatedados':
+		
 		case 'ativar':
 		case 'inativar':
 		case 'excluir':

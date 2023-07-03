@@ -1,7 +1,12 @@
 <div x-data="modal">
     <div class="panel">
-        <div class="mb-5">
-            <h5 class="font-semibold text-lg mb-4">Meus Perfis</h5>
+        <div class="flex justify-between mb-4">
+            <div>
+                <h5 class="font-semibold text-lg">Meus Perfis</h5>
+            </div>
+            <div>
+                <button class="btn btn-primary" @click="toggle; openModalEditPerfil('<?php echo $_POST['param_0']; ?>', null);">Novo</button>    
+            </div>
         </div>
         <div class="mb-5">
             <table>
@@ -42,9 +47,7 @@
                     ?>
                 </tbody>
             </table>
-        </div>
-
-        <button class="btn btn-primary" @click="toggle; openModalEditPerfil('<?php echo $_POST['param_0']; ?>', null);">Novo</button>    
+        </div>        
     </div>
 
     <!-- Modal editar -->

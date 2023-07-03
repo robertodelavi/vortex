@@ -1,22 +1,34 @@
 <?php
 // Perfis de busca
 $sql = '
-    SELECT * 
-    FROM pretendentesperfil AS pp
-        LEFT JOIN tipoimovel AS ti ON (pp.ppf_tipoimovel = ti.tpi_codigo)
-    WHERE ppf_pretendente = ' . $_POST['param_0'];
+SELECT * 
+FROM pretendentesperfil AS pp
+    LEFT JOIN tipoimovel AS ti ON (pp.ppf_tipoimovel = ti.tpi_codigo)
+WHERE ppf_pretendente = ' . $_POST['param_0'];
 $perfis = $data->find('dynamic', $sql);
 
 // var_dump($perfis);
 
 // TOASTS
-if($_GET['tab'] == 2){
-    echo '
-    <script>
-        setTimeout(() => {
-            toast("Perfil de busca atualizado com sucesso!", "success", 3000);
-        }, 300);
-    </script>';
+if(isset($_GET['tab'])){
+    switch($_GET['tab']){
+        case 1:
+            echo '
+            <script>
+                setTimeout(() => {
+                    toast("Dados do pretendente atualizados com sucesso!", "success", 3000);
+                }, 300);
+            </script>';
+        break;
+        case 2:
+            echo '
+            <script>
+                setTimeout(() => {
+                    toast("Perfil de busca atualizado com sucesso!", "success", 3000);
+                }, 300);
+            </script>';
+        break;
+    }
 }
 
 ?>
@@ -111,8 +123,6 @@ if($_GET['tab'] == 2){
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
     const getImoveis = () => {
-        console.log("🚀 ~ getImoveis")
-
         var data = {
             pretendente: <?php echo $_POST['param_0']; ?>
         };
@@ -128,7 +138,6 @@ if($_GET['tab'] == 2){
 
     //* Favoritar
     const setFavorite = (action, id) => {
-        console.log("🚀 ~ setFavorite ~ setFavorite:", action, id)
         var data = {
             action: action,
             id: id,
@@ -149,8 +158,7 @@ if($_GET['tab'] == 2){
 
     //* Perfil de busca
     const openModalEditPerfil = (ppf_pretendente, ppf_codigo) => {        
-        console.log('funçao do modal...', ppf_pretendente, ppf_codigo)
-        if (ppf_pretendente /*&& ppf_codigo*/) {
+        if (ppf_pretendente) {
             fetch('application/pretendente/view/ajax/getDataPerfilBusca.php', {
                 method: 'POST',
                 body: JSON.stringify({ 
