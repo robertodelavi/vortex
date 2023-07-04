@@ -98,17 +98,31 @@ if(isset($_GET['tab'])){
 
         <!-- DADOS DO PRETENDENTE -->
         <template x-if="tab === 'pretendente'">
-            <?php include_once('application/pretendente/view/abas/dadosPretendente/lista.php'); ?>
+            <form method="POST" action="?module=pretendente&acao=updatedados_pretendente" class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <h5 class="text-lg font-semibold">Dados Gerais</h5>
+                    </div>    
+                    <div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>            
+                </div>   
+                
+                <input type="hidden" name="prw_codigo" value="<?php echo $_POST['param_0']; ?>" />
+                
+                <?php include_once('application/pretendente/view/dadosPretendente/formDadosPretendente.php'); ?>
+            </form>
+        </div>
         </template>
 
         <!-- PERFIS DE BUSCA -->        
         <template x-if="tab === 'perfis'"> 
-            <?php include_once('application/pretendente/view/abas/perfilBusca/lista.php'); ?>
+            <?php include_once('application/pretendente/view/perfilBusca/lista.php'); ?>
         </template>
 
         <!-- HISTÓRICO DE ATENDIMENTOS -->
         <template x-if="tab === 'historico-atendimentos'">
-            <?php include_once('application/pretendente/view/abas/historicoAtendimentos/lista.php'); ?>
+            <?php include_once('application/pretendente/view/historicoAtendimentos/lista.php'); ?>
         </template>
 
         <!-- IMÓVEIS -->
@@ -127,7 +141,7 @@ if(isset($_GET['tab'])){
             pretendente: <?php echo $_POST['param_0']; ?>
         };
 
-        fetch('application/pretendente/view/ajax/getImoveis.php', {
+        fetch('application/pretendente/view/imoveis/getImoveis.php', {
             method: 'POST',
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
@@ -144,7 +158,7 @@ if(isset($_GET['tab'])){
             pretendente: <?php echo $_POST['param_0']; ?>
         };
 
-        fetch('application/pretendente/view/ajax/setFavorite.php', {
+        fetch('application/pretendente/view/imoveis/setFavorite.php', {
             method: 'POST',
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
@@ -159,7 +173,7 @@ if(isset($_GET['tab'])){
     //* Perfil de busca
     const openModalEditPerfil = (ppf_pretendente, ppf_codigo) => {        
         if (ppf_pretendente) {
-            fetch('application/pretendente/view/ajax/getDataPerfilBusca.php', {
+            fetch('application/pretendente/view/perfilBusca/formPerfilBusca.php', {
                 method: 'POST',
                 body: JSON.stringify({ 
                     action: (ppf_pretendente > 0 && ppf_codigo > 0 ? '?module=pretendente&acao=update_pretendente' : '?module=pretendente&acao=grava_pretendente'), 

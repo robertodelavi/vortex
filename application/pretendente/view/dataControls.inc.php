@@ -3,12 +3,22 @@
 	switch($_GET['acao']){
 
 		// DADOS DO PRETENDENTE
+		case 'gravadados_pretendente':
+			echo 'opaaa';
+			$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
+			$data->tabela = 'pretendentes';
+			$data->add($_POST);
+
+			$prw_codigo = $data->MaxValue('prw_codigo', 'pretendentes');
+
+			echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=1\', \''.$prw_codigo.'\' )"></body>';
+		break;
+
 		case 'updatedados_pretendente':
 			if(isset($_POST['prw_codigo']) && $_POST['prw_codigo'] > 0){
 				// Converte moeda pra float
-				// $_POST['ppf_valorini'] = moneyToFloat($_POST['ppf_valorini']);
-				// $_POST['ppf_valorfim'] = moneyToFloat($_POST['ppf_valorfim']);
-								
+				$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
+												
 				$data->tabela = 'pretendentes';
 				$data->update($_POST);
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=1\', \''.$_POST['prw_codigo'].'\' )"></body>';
@@ -18,7 +28,6 @@
 				// Erro post..
 			}
 		break;
-
 
 		// PERFIS DE BUSCA
 		case 'grava_pretendente':

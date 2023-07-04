@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="rounded-md overflow-hidden mb-5 shadow-[0_6px_10px_0_rgba(0,0,0,0.14),_0_1px_18px_0_rgba(0,0,0,0.12),_0_3px_5px_-1px_rgba(0,0,0,0.20)]">                                                
                                     
                                     <div class="rounded-md overflow-hidden relative" style="height: 300px;">
-                                        <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/abas/imoveis/img/foto-3.jpg);"></div>
+                                        <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-3.jpg);"></div>
                                         
                                         <!-- FAVORITAR -->
                                         <div class="absolute top-2 right-2 bg-white dark:bg-dark rounded p-2 flex">
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div id="imoveis-container" class="cursor-pointer border-2 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary rounded-md hover:transition-colors duration-300 bg-white dark:bg-[#0e1726] p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),_0px_12px_24px_-4px_rgba(145,158,171,0.12)]">
                             <div class="rounded-md overflow-hidden mb-5 shadow-[0_6px_10px_0_rgba(0,0,0,0.14),_0_1px_18px_0_rgba(0,0,0,0.12),_0_3px_5px_-1px_rgba(0,0,0,0.20)]">  
                                 <div class="rounded-md overflow-hidden relative" style="height: 300px;">
-                                    <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/abas/imoveis/img/foto-3.jpg);"></div>
+                                    <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-3.jpg);"></div>
                                     
                                     <!-- FAVORITAR -->
                                     <div class="absolute top-2 right-2 bg-white dark:bg-dark rounded p-2 flex">

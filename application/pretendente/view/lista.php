@@ -28,115 +28,124 @@ foreach ($result as $row) {
 
 ?>
 
-<div class="flex h-screen gap-6">
-    <!-- Filtros -->
-    <div class="w-1/3">
-        <!-- Bloco dos filtros -->
-        <div class="panel h-full">
-            <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
-                Filtros
-            </h5>
-            <div x-data="multipleTable" class="flex-1 "> <!-- Da acesso aos dados da tabela -->
-                <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
-                    <div>
-                        <label for="name">Nome</label>
-                        <input id="name" name="name" type="text" placeholder="Ed. Fiorentin" class="form-input" />
-                    </div>
-                    <div>
-                        <label for="profession">Profession</label>
-                        <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                    </div>
-                    <div>
-                        <label for="country">Country</label>
-                        <select id="country" class="form-select text-white-dark">
-                            <option>All Countries</option>
-                            <option selected="">United States</option>
-                            <option>India</option>
-                            <option>Japan</option>
-                            <option>China</option>
-                            <option>Brazil</option>
-                            <option>Norway</option>
-                            <option>Canada</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="address">Address</label>
-                        <input id="address" type="text" placeholder="New York" class="form-input" />
-                    </div>
-                    <div>
-                        <label for="profession">Profession</label>
-                        <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                    </div>
-                    <div>
-                        <label for="profession">Profession</label>
-                        <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                    </div>
-
-                    <div class="flex gap-2 mt-4">
-                        <div class="">
-                            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+<div x-data="modal">
+    <div class="flex h-screen gap-6">
+        <!-- Filtros -->
+        <div class="w-1/3">
+            <!-- Bloco dos filtros -->
+            <div class="panel h-full">
+                <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
+                    Filtros
+                </h5>
+                <div x-data="multipleTable" class="flex-1 "> <!-- Da acesso aos dados da tabela -->
+                    <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
+                        <div>
+                            <label for="name">Nome</label>
+                            <input id="name" name="name" type="text" placeholder="Ed. Fiorentin" class="form-input" />
                         </div>
-                        <div class="">
-                            <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar
-                                Filtros</button>
+                        <div>
+                            <label for="profession">Profession</label>
+                            <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
                         </div>
-                    </div>
-                </form>
+                        <div>
+                            <label for="country">Country</label>
+                            <select id="country" class="form-select text-white-dark">
+                                <option>All Countries</option>
+                                <option selected="">United States</option>
+                                <option>India</option>
+                                <option>Japan</option>
+                                <option>China</option>
+                                <option>Brazil</option>
+                                <option>Norway</option>
+                                <option>Canada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="address">Address</label>
+                            <input id="address" type="text" placeholder="New York" class="form-input" />
+                        </div>
+                        <div>
+                            <label for="profession">Profession</label>
+                            <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
+                        </div>
+                        <div>
+                            <label for="profession">Profession</label>
+                            <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
+                        </div>
+    
+                        <div class="flex gap-2 mt-4">
+                            <div class="">
+                                <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                            </div>
+                            <div class="">
+                                <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar
+                                    Filtros</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="w-2/3 ">
-        <div x-data="multipleTable" class="panel h-full mt-0">
-            <!-- Listagem -->
-            <h5 class="md:absolute md:top-[25px] md:mb-0 mb-5 font-semibold text-lg dark:text-white-light">
-                Pretendentes</h5>
-            <table id="myTable2" class="whitespace-nowrap"></table>
-
-            <!-- Modal delete -->
-            <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden"
-                :class="isAddEventModal && '!block'">
-                <div class="flex items-center justify-center min-h-screen px-4" @click.self="isAddEventModal = false">
-                    <div x-show="isAddEventModal" x-transition x-transition.duration.300
-                        class="panel border-0 p-0 rounded-lg overflow-hidden md:w-full max-w-lg w-[90%] my-8">
-                        <button type="button"
-                            class="absolute top-4 ltr:right-4 rtl:left-4 text-white-dark hover:text-dark"
-                            @click="isAddEventModal = false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round" class="w-6 h-6">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-                        <h3
-                            class="text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
-                            Excluir</h3>
-                        <div class="p-5 text-center">
-                            <div class="text-white bg-danger ring-4 ring-danger/30 p-4 rounded-full w-fit mx-auto">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 mx-auto">
-                                    <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round"></path>
-                                    <path
-                                        d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5"
-                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                                    <path opacity="0.5" d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round"></path>
-                                    <path opacity="0.5" d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round"></path>
-                                    <path opacity="0.5"
-                                        d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
-                                        stroke="currentColor" stroke-width="1.5"></path>
+    
+        <div class="w-2/3 ">
+            <div x-data="multipleTable" class="panel h-full mt-0">
+                <!-- Listagem -->
+                <div class="flex justify-between items-center ">
+                    <h5 class="font-semibold text-lg dark:text-white-light">
+                        Pretendentes
+                    </h5>
+                    <div>                    
+                        <button id="searchButton" class="btn btn-primary" @click="toggle;" >Novo</button>                    
+                    </div>
+                </div>
+    
+                <table id="myTable2" class="whitespace-nowrap"></table>
+    
+                <!-- Modal delete -->
+                <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden"
+                    :class="isAddEventModal && '!block'">
+                    <div class="flex items-center justify-center min-h-screen px-4" @click.self="isAddEventModal = false">
+                        <div x-show="isAddEventModal" x-transition x-transition.duration.300
+                            class="panel border-0 p-0 rounded-lg overflow-hidden md:w-full max-w-lg w-[90%] my-8">
+                            <button type="button"
+                                class="absolute top-4 ltr:right-4 rtl:left-4 text-white-dark hover:text-dark"
+                                @click="isAddEventModal = false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" class="w-6 h-6">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
-                            </div>
-                            <div class="sm:w-3/4 mx-auto mt-5">Tem certeza que deseja <b class="text-danger">excluir</b>
-                                este item?</div>
-
-                            <div class="flex justify-center items-center mt-8">
-                                <button type="button" class="btn btn-danger" @click="deleteItem">Excluir</button>
-                                <button type="button" class="btn btn-outline-primary ltr:ml-4 rtl:mr-4"
-                                    @click="isAddEventModal = false">Cancelar</button>
+                            </button>
+                            <h3
+                                class="text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
+                                Excluir</h3>
+                            <div class="p-5 text-center">
+                                <div class="text-white bg-danger ring-4 ring-danger/30 p-4 rounded-full w-fit mx-auto">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 mx-auto">
+                                        <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round"></path>
+                                        <path
+                                            d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path opacity="0.5" d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round"></path>
+                                        <path opacity="0.5" d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round"></path>
+                                        <path opacity="0.5"
+                                            d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
+                                            stroke="currentColor" stroke-width="1.5"></path>
+                                    </svg>
+                                </div>
+                                <div class="sm:w-3/4 mx-auto mt-5">Tem certeza que deseja <b class="text-danger">excluir</b>
+                                    este item?</div>
+    
+                                <div class="flex justify-center items-center mt-8">
+                                    <button type="button" class="btn btn-danger" @click="deleteItem">Excluir</button>
+                                    <button type="button" class="btn btn-outline-primary ltr:ml-4 rtl:mr-4"
+                                        @click="isAddEventModal = false">Cancelar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,6 +153,35 @@ foreach ($result as $row) {
             </div>
         </div>
     </div>
+
+    <!-- Modal novo pretendente -->
+    <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="open && '!block'">
+        <div class="flex items-start justify-center min-h-screen px-4" @click.self="open = false">
+            <div x-show="open" x-transition x-transition.duration.300
+                class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">
+                <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                    <h5 class="font-bold text-lg">Novo Pretendente</h5>
+                    <button type="button" class="text-white-dark hover:text-dark" @click="toggle">
+                        <?php echo file_get_contents('application/icons/close.svg'); ?>
+                    </button>
+                </div>
+                <div class="p-5">
+                    <form method="POST" action="?module=pretendente&acao=gravadados_pretendente" >
+                        <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]"> 
+                            <!-- Formulário do pretendente  -->
+                            <?php include_once('application/pretendente/view/dadosPretendente/formDadosPretendente.php'); ?>
+                        </div>
+                        
+                        <div class="flex justify-end items-center mt-8">
+                            <button type="button" class="btn btn-outline-dark" @click="toggle">Cancelar</button>
+                            <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" @click="toggle">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
@@ -171,7 +209,7 @@ foreach ($result as $row) {
                         headings: ['Name', 'Progress', 'Company', 'Start Date', 'Email', 'Phone No.', 'Action'],
                         data: data
                     },
-                    searchable: true,
+                    searchable: false,
                     perPage: 10,
                     perPageSelect: [10, 20, 30, 50, 100],
                     columns: [

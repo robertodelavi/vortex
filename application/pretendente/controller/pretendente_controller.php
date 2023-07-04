@@ -5,10 +5,10 @@
 
 	switch ($action) {
 		case 'lista':
-			require_once 'application/'.$module.'/view/list.php';
+			require_once 'application/'.$module.'/view/lista.php';
 		break;
 		
-		case 'novo':
+		// case 'novo':
 		case 'edita':
 			require_once 'application/'.$module.'/view/formEdit.php';
 		break;
@@ -18,7 +18,9 @@
 		break;
 
 		case 'deleta':
+		
 		case 'grava':
+		case 'gravadados':
 		
 		case 'update':
 		case 'updatedados':
