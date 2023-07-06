@@ -29,6 +29,29 @@
 			}
 		break;
 
+		case 'deletadados_pretendente':
+			if(isset($_POST['param_0']) && $_POST['param_0'] > 0){				
+				// Pretendente
+				$sql = 'DELETE FROM pretendentes WHERE prw_codigo = '.$_POST['param_0'];
+				$data->executaSQL($sql);
+				// Histórico
+				$sql = 'DELETE FROM pretendenteshistorico WHERE prh_pretendente = '.$_POST['param_0'];
+				$data->executaSQL($sql);
+				// Perfil
+				$sql = 'DELETE FROM pretendentesperfil WHERE ppf_pretendente = '.$_POST['param_0'];
+				$data->executaSQL($sql);
+				// Visitas
+				$sql = 'DELETE FROM pretendentesvisitas WHERE prv_pretendente = '.$_POST['param_0'];
+				$data->executaSQL($sql);
+				// Imóveis
+				$sql = 'DELETE FROM pretendentesimoveis WHERE pwi_pretendente = '.$_POST['param_0'];
+				$data->executaSQL($sql);
+				$res = 1;
+			}
+			echo '<body onload="nextPage(\'?module=pretendente&acao=lista_pretendente&res='.$res.'\', \'\' )"></body>';
+			
+		break;
+
 		// PERFIS DE BUSCA
 		case 'grava_pretendente':
 			if(isset($_POST['ppf_pretendente']) && $_POST['ppf_pretendente'] > 0){

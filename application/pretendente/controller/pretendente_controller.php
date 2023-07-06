@@ -18,6 +18,7 @@
 		break;
 
 		case 'deleta':
+		case 'deletadados':
 		
 		case 'grava':
 		case 'gravadados':
