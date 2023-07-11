@@ -18,46 +18,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result && count($result) > 0) {
             $html = '
-            <div class="flex">
+            <div x-data="lightbox" class="flex">
                 <div class="w-1/2 mr-2">
-                    <div class="rounded-md overflow-hidden relative w-full" style="height: 300px; width: 100%;">
-                        <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-2.jpg);"></div>                        
+
+                    <!-- LightBox da capa -->
+                    <div class="rounded-md overflow-hidden relative w-full border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary hover:transition-colors duration-300" style="height: 300px; width: 100%;">
+                        <template x-for="(item, i) in getItems" :key="i">
+                            <template x-if="i == 0">
+                                <a href="javascript:;" x-tooltip="Ampliar imagem" >
+                                    <img :src="item.src" alt="image-gallery" data-fancybox="gallery" class="rounded-md w-full h-full object-cover" :data-caption="item.title" />
+                                </a>
+                            </template>
+                        </template>    
                     </div>         
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4 text-center" >
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
-                        <div class="rounded-md overflow-hidden relative w-full" style="height: 80px; width: 100%;">
-                            <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url(application/pretendente/view/imoveis/img/foto-4.jpg);"></div>                        
-                        </div>         
+                    <!-- LightBox da galeria -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4 text-center" x-init="bindFancybox()">
+                        <template x-for="(item, i) in getItems" :key="i">
+                            <template x-if="i > 0">
+                                <a href="javascript:;" x-tooltip="Ampliar imagem" >
+                                    <img :src="item.src" alt="image-gallery" data-fancybox="gallery" class="rounded-md w-full h-full object-cover border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary hover:transition-colors duration-300" :data-caption="item.title" />
+                                </a>
+                            </template>
+                        </template>    
                     </div>
                 </div>
 

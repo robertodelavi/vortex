@@ -33,6 +33,9 @@ if(isset($_GET['tab'])){
 
 ?>
 
+<link rel='stylesheet' type='text/css' media='screen' href='<?php echo BASE_THEME_URL; ?>/assets/css/fancybox.css'>
+<script src="<?php echo BASE_THEME_URL; ?>/assets/js/fancybox.umd.js"></script>
+
 <div x-data="modal" >
     <div class="pt-0">
         <div class="flex items-center justify-between mb-5">
@@ -236,6 +239,74 @@ if(isset($_GET['tab'])){
     }
     const deletePerfilBusca = () => {
         nextPageArray('?module=pretendente&acao=deleta_pretendente', [globalPpfPretendente, globalPpfCodigo])
-    }    
+    }   
+
+    //* LightBox da visualização do imóvel
+    document.addEventListener("alpine:init", () => {
+        Alpine.data("lightbox", () => ({
+            allcontrols: 1,
+            items: [],
+
+            getItems() {
+                return this.items = [{
+                        src: ('application/pretendente/view/imoveis/img/foto-5.jpg'),
+                        title: 'This is dummy caption. It has been placed here solely to demonstrate the look and feel of finished, typeset text.',
+                        description: 'Photo: Samuel Rohl',
+                    },
+                    {
+                        src: ('application/pretendente/view/imoveis/img/foto-1.jpg'),
+                        title: 'This is dummy caption. It has been placed here solely to demonstrate the look and feel of finished, typeset text.',
+                        description: 'Photo: Samuel Rohl',
+                    },
+                    {
+                        src: ('application/pretendente/view/imoveis/img/foto-3.jpg'),
+                        title: "Dummy caption. It's Greek to you. Unless, of course, you're Greek, in which case, it really makes no sense.",
+                        description: 'Photo: Michael Hull',
+                    },
+                    {
+                        src: ('application/pretendente/view/imoveis/img/foto-4.jpg'),
+                        title: 'This is dummy caption.',
+                        description: 'Photo: Folkert Gorter'
+                    },
+                    {
+                        src: ('application/pretendente/view/imoveis/img/foto-5.jpg'),
+                        title: "It's a dummy caption. He who searches for meaning here will be sorely disappointed.",
+                        description: 'Photo: Thomas Lefebvre',
+                    },
+                    {
+                        src: ('application/pretendente/view/imoveis/img/foto-3.jpg'),
+                        title: "It's a dummy caption. He who searches for meaning here will be sorely disappointed.",
+                        description: 'Photo: Thomas Lefebvre',
+                    },
+
+                ] 
+            },
+
+            bindFancybox() {
+                if (this.allcontrols == 1) {
+                    Fancybox.bind('[data-fancybox="gallery"]', {
+                        Carousel: {
+                            Navigation: {
+                                prevTpl: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M11 5l-7 7 7 7"/><path d="M4 12h16"/></svg>',
+                                nextTpl: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M13 5l7 7-7 7"/></svg>',
+                            },
+                        },
+                    });
+                } else if (this.allcontrols == 2) {
+                    Fancybox.bind('[data-fancybox="gallery"]', {
+                        Carousel: {
+                            Navigation: {
+                                prevTpl: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M11 5l-7 7 7 7"/><path d="M4 12h16"/></svg>',
+                                nextTpl: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M13 5l7 7-7 7"/></svg>',
+                            },
+                        },
+                        Thumbs: false,
+                        Toolbar: false,
+                        closeButton: "top",
+                    });
+                }
+            }
+        }));
+    }); 
 
 </script>
