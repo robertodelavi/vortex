@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result && count($result) > 0) {
             $html = '
-            <div x-data="lightbox" class="flex">
+            <div class="flex">
                 <div class="w-1/2 mr-2">
 
                     <!-- LightBox da capa -->
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <template x-for="(item, i) in getItems" :key="i">
                             <template x-if="i > 0">
                                 <a href="javascript:;" x-tooltip="Ampliar imagem" >
-                                    <img :src="item.src" alt="image-gallery" data-fancybox="gallery" class="rounded-md w-full h-full object-cover border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary hover:transition-colors duration-300" :data-caption="item.title" />
+                                    <img :src="item.src" alt="image-gallery" data-fancybox="gallery" class="rounded-md w-full h-full object-cover border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary hover:transition-colors duration-300" :data-caption="item.title" style="height: 100px; width: 100%;" />
                                 </a>
                             </template>
                         </template>    
