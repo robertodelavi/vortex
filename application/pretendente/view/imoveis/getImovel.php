@@ -62,7 +62,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 Código: ' . $result[0]['imo_codigo'] . '
                             </p>
                         </div>
-                    </div>              
+                    </div>
+                    
+                    <!-- Principais características -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 text-center">
+                        <div class="flex flex-col items-center mt-5">
+                            <div class="mb-1">
+                                ' . file_get_contents('../../../../application/icons/area.svg') . '       
+                            </div>
+                            <div>
+                                <p class="text-primary font-bold text-md mb-0" >
+                                    '.($result[0]['imo_areaconstruida'] ? number_format(($result[0]['imo_areaconstruida'] / 100), 0, ',', '.') : '0').' m²
+                                </p>
+                                <p class="text-xs mt-0" >Área total</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-center mt-5">
+                            <div class="mb-1">
+                                ' . file_get_contents('../../../../application/icons/area2.svg') . '       
+                            </div>
+                            <div>
+                                <p class="text-primary font-bold text-md mb-0" >
+                                    '.($result[0]['imo_areaprivativa'] ? number_format(($result[0]['imo_areaprivativa'] / 100), 0, ',', '.') : '0').' m²
+                                </p>
+                                <p class="text-xs mt-0" >Área construída</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center mt-5">
+                            <div class="mb-1">
+                                ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '       
+                            </div>
+                            <div>
+                                <p class="text-primary font-bold text-md mb-0" >
+                                    '.($result[0]['imo_quartos'] ? $result[0]['imo_quartos'] : '0').'
+                                </p>
+                                <p class="text-xs mt-0" >Quartos</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-center mt-5">
+                            <div class="mb-1">
+                                ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '       
+                            </div>
+                            <div>
+                                <p class="text-primary font-bold text-md mb-0" >
+                                    '.($result[0]['imo_suites'] ? $result[0]['imo_suites'] : '0').'
+                                </p>
+                                <p class="text-xs mt-0" >Suítes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-center mt-5">
+                            <div class="mb-1">
+                                ' . file_get_contents('../../../../application/icons/banheiro.svg') . '       
+                            </div>
+                            <div>
+                                <p class="text-primary font-bold text-md mb-0" >
+                                    '.($result[0]['imo_banheiros'] ? $result[0]['imo_banheiros'] : '0').'
+                                </p>
+                                <p class="text-xs mt-0" >Banheiros</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-center mt-5">
+                            <div class="mb-1">
+                                ' . file_get_contents('../../../../application/icons/vagagaragem.svg') . '       
+                            </div>
+                            <div>
+                                <p class="text-primary font-bold text-md mb-0" >
+                                    '.($result[0]['imo_garagem'] ? $result[0]['imo_garagem'] : '0').'
+                                </p>
+                                <p class="text-xs mt-0" >Vagas</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-center mt-5">
+                            <div class="mb-1">
+                                ' . file_get_contents('../../../../application/icons/cozinha.svg') . '       
+                            </div>
+                            <div>
+                                <p class="text-primary font-bold text-md mb-0" >
+                                    '.($result[0]['imo_cozinha'] ? $result[0]['imo_cozinha'] : '0').'
+                                </p>
+                                <p class="text-xs mt-0" >Cozinhas</p>
+                            </div>
+                        </div>
+
+                        
+                                  
+                    </div>
+
                 </div>
             </div>';
         }else{

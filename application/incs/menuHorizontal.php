@@ -28,16 +28,22 @@
     $result = $data->find('dynamic', $sql);
 
     function hasPermission($result, $programa){
-        foreach ($result as $key => $value) {
-            if($value['pro_nome'] == $programa) return true;
+        if($result && count($result) > 0){
+            foreach ($result as $key => $value) {
+                if($value['pro_nome'] == $programa) return true;
+            }
         }
         return false;
     }
     
     function hasSubmenuPermission($result, $arrProgramas){
-        foreach ($result as $key => $value) {
-            foreach ($arrProgramas as $keyPrograma => $valuePrograma) {
-                if($value['pro_nome'] == $valuePrograma) return true;
+        if($result && count($result) > 0){
+            foreach ($result as $key => $value) {
+                if($arrProgramas && count($arrProgramas) > 0){
+                    foreach ($arrProgramas as $keyPrograma => $valuePrograma) {
+                        if($value['pro_nome'] == $valuePrograma) return true;
+                    }
+                }
             }
         }
         return false;
