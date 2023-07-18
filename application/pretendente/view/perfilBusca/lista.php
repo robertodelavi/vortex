@@ -1,3 +1,12 @@
+<?php 
+    $sql = '
+    SELECT * 
+    FROM pretendentesperfil AS pp
+        LEFT JOIN tipoimovel AS ti ON (pp.ppf_tipoimovel = ti.tpi_codigo)
+    WHERE ppf_pretendente = ' . $_POST['param_0'];
+    $result = $data->find('dynamic', $sql);
+?>
+
 <div x-data="modal">
     <div class="panel">
         <div class="flex justify-between mb-4">
@@ -21,8 +30,8 @@
                 </thead>
                 <tbody>
                     <?php
-                    if ($perfis > 0) {
-                        foreach ($perfis as $row) {
+                    if ($result > 0) {
+                        foreach ($result as $row) {
                             echo '
                             <tr>
                                 <td>' . $row['ppf_nome'] . '</td>

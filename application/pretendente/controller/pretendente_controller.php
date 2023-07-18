@@ -21,9 +21,11 @@
 		case 'deletadados':
 		
 		case 'grava':
+		case 'gravahistorico':
 		case 'gravadados':
 		
 		case 'update':
+		case 'updatehistorico':
 		case 'updatedados':
 		
 		case 'ativar':

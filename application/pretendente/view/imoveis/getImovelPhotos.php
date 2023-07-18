@@ -18,12 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $res = array();
         if($result && count($result) > 0){
             foreach ($result as $key => $value) {
+                $foto = $value['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$value['imf_arquivo'] : 'application/images/no-image-transparent.png';
                 $res[] = array(
-                    'src' => 'application/images/clientes/1/imoveis/'.$value['imf_arquivo'],
+                    'src' => $foto,
                     'title' => $value['imf_descricao'] ? $value['imf_descricao'] : 'Imagem '.($key+1), 
                     'description' => $value['imf_descricao'] ? $value['imf_descricao'] : 'Sem descrição'
                 );
             }
+        }else{
+            $res[0] = array(
+                'src' => 'application/images/no-image-transparent.png',
+                'title' => 'Sem imagem', 
+                'description' => ''
+            );
         }
 
         // Retorna resposta

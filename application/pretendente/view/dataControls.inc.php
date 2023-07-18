@@ -4,7 +4,6 @@
 
 		// DADOS DO PRETENDENTE
 		case 'gravadados_pretendente':
-			echo 'opaaa';
 			$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 			$data->tabela = 'pretendentes';
 			$data->add($_POST);
@@ -89,6 +88,38 @@
 			$sql = 'DELETE FROM pretendentesperfil WHERE ppf_pretendente = '.$_POST['param_0'].' AND ppf_codigo = '.$_POST['param_1'];
 			$data->executaSQL($sql);
 			echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['param_0'].'\' )"></body>';
+		break;
+
+		// HISTÓRICO DE ATENDIMENTOS 
+		case 'gravahistorico_pretendente':
+			if(isset($_POST['prh_pretendente'])){
+				// Converter data
+				$_POST['prh_data'] = str_replace('-', '', $_POST['prh_data']);
+				$_POST['prh_datacad'] = date('Ymd');
+				$_POST['prh_horacad'] = date('Hi');
+								
+				$data->tabela = 'pretendenteshistorico';
+				$data->add($_POST);
+				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3\', \''.$_POST['prh_pretendente'].'\' )"></body>';
+				exit;
+			}else{
+				// Erro post..
+			}
+		break;
+
+		case 'updatehistorico_pretendente':
+			if(isset($_POST['prh_pretendente']) && $_POST['prh_codigo'] > 0){
+				// Converter data
+				$_POST['prh_data'] = str_replace('-', '', $_POST['prh_data']);
+
+				$data->tabela = 'pretendenteshistorico';
+				$data->update($_POST);
+				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3\', \''.$_POST['prh_pretendente'].'\' )"></body>';
+				exit;
+
+			}else{
+				// Erro post..
+			}
 		break;
 	}
 ?>

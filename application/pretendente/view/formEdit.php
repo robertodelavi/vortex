@@ -1,13 +1,13 @@
 <?php
-// Perfis de busca
+
 $sql = '
-SELECT * 
-FROM pretendentesperfil AS pp
-    LEFT JOIN tipoimovel AS ti ON (pp.ppf_tipoimovel = ti.tpi_codigo)
-WHERE ppf_pretendente = ' . $_POST['param_0'];
-$perfis = $data->find('dynamic', $sql);
+SELECT p.prw_codigo, p.prw_nome
+FROM pretendentes AS p 
+WHERE p.prw_codigo = ' . $_POST['param_0'];
+$result = $data->find('dynamic', $sql);
 
 // TOASTS
+$currentTab = 'pretendente';
 if(isset($_GET['tab'])){
     switch($_GET['tab']){
         case 1:
@@ -17,6 +17,7 @@ if(isset($_GET['tab'])){
                     toast("Dados do pretendente atualizados com sucesso!", "success", 3000);
                 }, 300);
             </script>';
+            $currentTab = 'pretendente';
         break;
         case 2:
             echo '
@@ -25,6 +26,16 @@ if(isset($_GET['tab'])){
                     toast("Perfil de busca atualizado com sucesso!", "success", 3000);
                 }, 300);
             </script>';
+            $currentTab = 'perfis';
+        break;
+        case 3:
+            echo '
+            <script>
+                setTimeout(() => {
+                    toast("Histórico de atendimento atualizado com sucesso!", "success", 3000);
+                }, 300);
+            </script>';
+            $currentTab = 'historico-atendimentos';
         break;
     }
 }
@@ -38,11 +49,21 @@ if(isset($_GET['tab'])){
     <div x-data="modal" >
         <div class="pt-0">
             <div class="flex items-center justify-between mb-5">
-                <h5 class="font-semibold text-lg dark:text-white-light">Detalhes do Cliente</h5>
+                <div>
+                    <p>Pretendente</p>
+                    <h5 class="font-semibold text-lg dark:text-white-light "><?php echo $result[0]['prw_nome']; ?></h5>
+                </div>
+
+                <div>
+                    <button type="button" onclick="nextPage('?module=pretendente&acao=lista_pretendente', '');" class="btn btn btn-outline-dark">
+                        <?php echo file_get_contents('application/icons/voltar.svg'); ?>
+                        Voltar
+                    </button>   
+                </div>
             </div>
         
             <!-- ABAS -->
-            <div x-data="{tab: <?php echo isset($_GET['tab']) && $_GET['tab'] == 2 ? '\'perfis\'' : '\'pretendente\'' ?>}">
+            <div x-data="{tab: '<?php echo $currentTab; ?>'}">
                 <ul
                     class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
                     <li class="inline-block">
@@ -229,6 +250,26 @@ if(isset($_GET['tab'])){
                 document.getElementById('resulAjaxPerfilBusca').innerHTML = data;
             });
         }
+    }
+
+    //* Histórico de atendimentos
+    const openModalEditHistoricoAtendimento = (prh_pretendente, prh_codigo) => {
+        if(prh_pretendente){
+            fetch('application/pretendente/view/historicoAtendimentos/formHistoricoAtendimento.php', {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    action: (prh_pretendente > 0 && prh_codigo > 0 ? '?module=pretendente&acao=updatehistorico_pretendente' : '?module=pretendente&acao=gravahistorico_pretendente'), 
+                    prh_pretendente: prh_pretendente, 
+                    prh_codigo: prh_codigo 
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json()).then(data => {
+                // Seta resultado do ajax na div
+                document.getElementById('resulAjaxHistoricoAtendimento').innerHTML = data;
+            });
+        }        
     }
 
     //* Delete Perfil de busca
