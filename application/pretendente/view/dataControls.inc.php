@@ -95,6 +95,7 @@
 			if(isset($_POST['prh_pretendente'])){
 				// Converter data
 				$_POST['prh_data'] = str_replace('-', '', $_POST['prh_data']);
+				$_POST['prh_avisar'] = $_POST['prh_avisar'] ? $_POST['prh_avisar'] : 'n';
 				$_POST['prh_datacad'] = date('Ymd');
 				$_POST['prh_horacad'] = date('Hi');
 								
@@ -111,10 +112,11 @@
 			if(isset($_POST['prh_pretendente']) && $_POST['prh_codigo'] > 0){
 				// Converter data
 				$_POST['prh_data'] = str_replace('-', '', $_POST['prh_data']);
-
+				$_POST['prh_avisar'] = $_POST['prh_avisar'] ? $_POST['prh_avisar'] : 'n';
+				
 				$data->tabela = 'pretendenteshistorico';
 				$data->update($_POST);
-				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3\', \''.$_POST['prh_pretendente'].'\' )"></body>';
+				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3&contato='.$_POST['prh_contato'].'\', \''.$_POST['prh_pretendente'].'\' )"></body>';
 				exit;
 
 			}else{

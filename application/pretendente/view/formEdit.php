@@ -68,53 +68,38 @@ if(isset($_GET['tab'])){
                     class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
                     <li class="inline-block">
                         <a href="javascript:;"
-                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'pretendente'}" @click="tab='pretendente'">
         
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5">
-                                <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
-                                <ellipse opacity="0.5" cx="12" cy="17" rx="7" ry="4" stroke="currentColor" stroke-width="1.5" />
-                            </svg>
+                            <?php echo file_get_contents('application/icons/pessoa.svg'); ?>
                             Dados do Pretendente
                         </a>
                     </li>
                     <li class="inline-block">
                         <a href="javascript:;"
-                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'perfis'}" @click="tab='perfis'">
         
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5">
-                                <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                                <path d="M12 6V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                <path
-                                    d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                            </svg>
+                            <?php echo file_get_contents('application/icons/perfis.svg'); ?>
                             Perfis de Busca
                         </a>
                     </li>
                     <li class="inline-block">
                         <a href="javascript:;"
-                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'historico-atendimentos'}"
                             @click="tab='historico-atendimentos'">
         
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5">
-                                <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
-                                <ellipse opacity="0.5" cx="12" cy="17" rx="7" ry="4" stroke="currentColor" stroke-width="1.5" />
-                            </svg>
+                            <?php echo file_get_contents('application/icons/historico.svg'); ?>
                             Histórico de Atendimentos
                         </a>
                     </li>
                     <li class="inline-block">
                         <a href="javascript:;"
-                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
                             onClick="getImoveis()">
-                            <?php echo file_get_contents('application/icons/imovel.svg'); ?>
+                            <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
                             Imóveis
                         </a>
                     </li>

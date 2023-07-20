@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($value['prh_pretendente']) && isset($value['prh_codigo'])) {
             // Dados do histórico de atendimento
             $sql = '
-            SELECT ph.prh_codigo, DATE_FORMAT(ph.prh_data, "%Y-%m-%d") AS prh_data, ph.prh_descricao, pc.pco_codigo, ph.prh_horacad, u.usu_nome, ph.prh_avisar 
+            SELECT ph.prh_codigo, DATE_FORMAT(ph.prh_data, "%Y-%m-%d") AS prh_data, ph.prh_descricao, pc.pco_codigo, ph.prh_horacad, ph.prh_contato, u.usu_nome, ph.prh_avisar 
             FROM pretendenteshistorico AS ph 
                 JOIN pretendentes AS p ON (ph.prh_pretendente = p.prw_codigo)
                 LEFT JOIN pretendentescontato AS pc ON (pc.pco_codigo = ph.prh_codigo)
@@ -43,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <span class="ltr:pr-2 rtl:pl-2">Aqui contém o histórico dos atendimentos realizados pra este pretendente. É possível inserir uma observação e alterar informações referentes ao atendimento.</span>
             </div>
 
-            <!-- Dados retornados do ajax -->
             <div class="mt-5" >
                 <div class="flex flex-col sm:flex-row">
                     <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -57,11 +56,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select name="prh_contato" class="form-select">
                                 <option>-- Selecione --</option>';
                                 foreach ($formasContato as $key => $value) {
-                                    $selected = ($result[0]['pco_codigo'] == $value['pco_codigo']) ? 'selected' : '';
+                                    $selected = ($result[0]['prh_contato'] == $value['pco_codigo']) ? 'selected' : '';
                                     $html .= '<option value="' . $value['pco_codigo'] . '" '.$selected.' >' . $value['pco_descricao'] . '</option>';
                                 }
                             $html .= '
                             </select>
+                        </div>
+
+                        <div class="flex items-center ">
+                            <label class="cursor-pointer mt-6">
+                                <input type="checkbox" name="prh_avisar" value="s" class="form-checkbox" '.($result[0]['prh_avisar'] == 's' ? 'checked' : '').' />
+                                <span class="text-white-dark relative checked:bg-none">Agendamento: avisar na data</span>
+                            </label>
                         </div>
                     </div>
                 </div>

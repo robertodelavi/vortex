@@ -1,9 +1,9 @@
 <?php 
     $sql = '
-    SELECT ph.prh_codigo, DATE_FORMAT(ph.prh_data, "%d/%m/%Y") AS prh_data, pc.pco_descricao, ph.prh_descricao, DATE_FORMAT(ph.prh_datacad, "%d/%m/%Y") AS prh_datacad, ph.prh_horacad, u.usu_nome, ph.prh_avisar 
+    SELECT ph.prh_codigo, DATE_FORMAT(ph.prh_data, "%d/%m/%Y") AS prh_data, pc.pco_descricao, ph.prh_descricao, DATE_FORMAT(ph.prh_datacad, "%d/%m/%Y") AS prh_datacad, ph.prh_horacad, ph.prh_usuario, u.usu_nome, ph.prh_contato, ph.prh_avisar
     FROM pretendenteshistorico AS ph 
         JOIN pretendentes AS p ON (ph.prh_pretendente = p.prw_codigo)
-        LEFT JOIN pretendentescontato AS pc ON (pc.pco_codigo = ph.prh_codigo)
+        LEFT JOIN pretendentescontato AS pc ON (pc.pco_codigo = ph.prh_contato)
         LEFT JOIN sisusuarios AS u ON (ph.prh_usuario = u.usu_codigo)
     WHERE ph.prh_pretendente = ' . $_POST['param_0'];
     $result = $data->find('dynamic', $sql);
@@ -28,13 +28,15 @@
                         <th>Profissional</th>
                         <th>Forma de Atendimento</th>
                         <th>Avisar</th>
+                        <th>Funil</th>
                         <th class="text-center">Ação</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     if ($result > 0) {
-                        foreach ($result as $row) {
+                        foreach ($result as $key => $row) {
+                            $funilColor = $key < 2 ? 'bg-success' : ($key < 4 ? 'bg-warning' : 'bg-danger');
                             echo '
                             <tr>
                                 <td>' . $row['prh_data'] . '</td>
@@ -47,6 +49,14 @@
                                     '<span class="badge whitespace-nowrap badge-outline-danger">Não avisar</span>'
                                     ) . 
                                 '</td>
+
+                                <!-- Funil -->
+                                <td>
+                                    <div @click="toggleDelete;" x-tooltip="Alterar funil" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer"> 
+                                        <div class="'.$funilColor.' h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.(100 - ($key * 20)).'%"></div> 
+                                    </div>
+                                </td>
+
                                 <td>     
                                     <button type="button" x-tooltip="Editar Histórico de Atendimento" data-placement="left" class="mr-2 hover:text-info" @click="toggle; openModalEditHistoricoAtendimento(\'' . $_POST['param_0'] . '\', \'' . $row['prh_codigo'] . '\');">
                                         '.file_get_contents('application/icons/edit.svg').'
@@ -82,5 +92,25 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>  
+    
+    <!-- Modal funil -->
+    <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="openDelete && '!block'">
+        <div class="flex items-start justify-center min-h-screen px-4"  @click.self="openDelete = false">
+            <div x-show="openDelete" x-transition x-transition.duration.300
+                class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">
+                <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                    <h5 class="font-bold text-lg">Funil</h5>
+                    <button type="button" class="text-white-dark hover:text-dark" @click="toggleDelete">
+                        <?php echo file_get_contents('application/icons/close.svg'); ?>
+                    </button>
+                </div>
+                <div class="p-5">
+                    <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">                    
+                        trello...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

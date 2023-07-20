@@ -228,10 +228,13 @@
                 <span class="text-white-dark relative checked:bg-none">Atendimento Plantão</span>
             </label>
         </div>
-        <div class="sm:col-span-2 md:col-span-4">
-            <label for="web">Observações</label>
-            <textarea name="prw_obs" class="form-input w-full" cols="4"><?php echo $result[0]['prw_obs']; ?></textarea>
-        </div>
+    </div>
+</div>
+
+<div class="flex-1 mt-5">
+    <div>
+        <label for="web">Observações</label>
+        <textarea name="prw_obs" class="form-input w-full" cols="4"><?php echo $result[0]['prw_obs']; ?></textarea>
     </div>
 </div>
     
