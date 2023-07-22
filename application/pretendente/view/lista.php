@@ -182,7 +182,7 @@ if(isset($_GET['res'])){
             <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="open2 && '!block'">
                 <div class="flex items-start justify-center min-h-screen px-4"  @click.self="open2 = false">
                     <div x-show="open2" x-transition x-transition.duration.300
-                        class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">
+                        class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[50%] my-10">
                         <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                             <h5 class="font-bold text-lg">Status do Pretendente</h5>
                             <button type="button" class="text-white-dark hover:text-dark" @click="toggle2">
@@ -195,19 +195,12 @@ if(isset($_GET['res'])){
                                 <div class="relative pt-5">
                                     <div class="perfect-scrollbar h-full -mx-2">
                                         <div class="overflow-x-auto flex items-start flex-nowrap gap-5 pb-2 px-2">
-                                            <template x-for="project in projectList" :key="project.id">
-                                                <div class="panel w-80 flex-none">
+                                            <!-- Status -->
+                                            <template x-for="project in projectList" :key="project.id" >
+                                                <div class="panel w-80 flex-none border border-dark">
                                                     <div class="flex justify-between mb-5">
-                                                        <h4 x-text="project.title" class="text-base font-semibold"> </h4>
-
+                                                        <h4 x-text="project.title" class="text-primary font-bold "> </h4>
                                                         <div class="flex items-center">
-                                                            <button type="button" class="hover:text-primary ltr:mr-2 rtl:ml-2" @click="addEditTask(project.id)">
-
-                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                                                                    <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                                </svg>
-                                                            </button>
                                                             <div x-data="dropdown" @click.outside="open = false" class="dropdown">
                                                                 <button type="button" class="hover:text-primary" @click="toggle">
 
@@ -230,10 +223,12 @@ if(isset($_GET['res'])){
                                                     <div class="sortable-list min-h-[150px]" :data-id="project.id">
                                                         <template x-for="task in project.tasks">
                                                             <div :key="project.id + '' + task.id" :data-id="project.id + '' + task.id" class="shadow bg-[#f4f4f4] dark:bg-[#262e40] p-3 pb-5 rounded-md mb-5 space-y-3 cursor-move">
-                                                                <template x-if="task.image">
-                                                                    <img src="<?php echo BASE_THEME_URL; ?>/assets/images/carousel1.jpeg" alt="images" class="h-32 w-full object-cover rounded-md" />
-                                                                </template>
-                                                                <div class="text-base font-medium" x-text="task.title"></div>
+                                                                
+                                                                <div class="flex items-center w-max">
+                                                                    <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-3.jpeg" />
+                                                                    <div class="hover:text-primary" x-text="task.title"></div>
+                                                                </div>
+
                                                                 <p class="break-all" x-text="task.description"></p>
                                                                 <div class="flex gap-2 items-center flex-wrap">
                                                                     <template x-if="task.tags?.length">
@@ -270,7 +265,7 @@ if(isset($_GET['res'])){
                                                                         </svg>
                                                                         <span x-text="task.date"></span>
                                                                     </div>
-                                                                    <div class="flex items-center">
+                                                                    <!-- <div class="flex items-center">
                                                                         <button type="button" class="hover:text-info" @click="addEditTask(project.id, task)">
 
                                                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-3 rtl:ml-3">
@@ -289,21 +284,10 @@ if(isset($_GET['res'])){
                                                                                 <path opacity="0.5" d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
                                                                             </svg>
                                                                         </button>
-                                                                    </div>
+                                                                    </div> -->
                                                                 </div>
                                                             </div>
                                                         </template>
-                                                    </div>
-
-                                                    <div class="pt-3">
-                                                        <button type="button" class="btn btn-primary mx-auto" @click="addEditTask(project.id)">
-
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                            </svg>
-                                                            Add Task
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </template>
@@ -535,7 +519,7 @@ if(isset($_GET['res'])){
             isAddTaskModal: false,
             isDeleteModal: false,
             projectList: [],
-
+            
             init() {
                 this.updateData(null);
                 this.initializeSortable();
@@ -544,6 +528,11 @@ if(isset($_GET['res'])){
             updateData(scrumBoardData){
                 this.projectList = scrumBoardData;
                 this.initializeSortable();
+            },
+
+            // Função pra ser chamada após arrastar e soltar
+            afterDrag() {
+                console.log('afterDrag: ', this.projectList);
             },
 
             initializeSortable() {
@@ -556,6 +545,9 @@ if(isset($_GET['res'])){
                             group: 'name',
                             ghostClass: "sortable-ghost",
                             dragClass: "sortable-drag",
+                            onEnd: () => {
+                                this.afterDrag(); // Call the afterDrag function after a drag and drop operation
+                            },
                         })
                     }
                 });
@@ -702,8 +694,6 @@ if(isset($_GET['res'])){
             },
 
             getStatusScrumBoard(id){
-                console.log("🚀 ~ getStatusScrumBoard ~ id:", id)
-                // faz requisição ajax para pegar os dados do scrumboard
                 fetch('application/pretendente/view/getStatusScrumBoard.php', {
                     method: 'POST',
                     body: JSON.stringify({id: id})
@@ -711,74 +701,14 @@ if(isset($_GET['res'])){
                     .then(response => response.json())
                     .then(data => {
                         // Atualiza os dados da tabela com os dados filtrados
-                        console.log('Dados retornados do ajax getStatusScrumBoard: ', data)
+                        console.log('Dados retornados do ajax: ', data)
                         this.updateData(data);
                     })
                     .catch(error => {
                         console.error('Erro ao enviar o formulário:', error);
                     });
-
-                // const scrumboardData = [
-                //     {
-                //         id: 1,
-                //         title: 'In Progress',
-                //         tasks: [{
-                //                 projectId: 1,
-                //                 id: 1,
-                //                 title: 'Creating a new Portfolio on Dribble',
-                //                 description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                //                 image: true,
-                //                 date: ' 08 Aug, 2020',
-                //                 tags: ['designing'],
-                //             },
-                //             {
-                //                 projectId: 1,
-                //                 id: 2,
-                //                 title: 'Singapore Team Meet',
-                //                 description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                //                 date: ' 09 Aug, 2020',
-                //                 tags: ['meeting'],
-                //             },
-                //         ],
-                //     },
-                //     {
-                //         id: 2,
-                //         title: 'Pending',
-                //         tasks: [{
-                //             projectId: 2,
-                //             id: 1,
-                //             title: 'Plan a trip to another country',
-                //             description: '',
-                //             date: ' 10 Sep, 2020'
-                //         }],
-                //     },
-                //     {
-                //         id: 3,
-                //         title: 'Complete',
-                //         tasks: [{
-                //                 projectId: 3,
-                //                 id: 1,
-                //                 title: 'Dinner with Kelly Young',
-                //                 description: '',
-                //                 date: ' 08 Aug, 2020'
-                //             },
-                //             {
-                //                 projectId: 3,
-                //                 id: 2,
-                //                 title: 'Launch New SEO Wordpress Theme ',
-                //                 description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                //                 date: ' 09 Aug, 2020',
-                //             },
-                //         ],
-                //     },
-                //     {
-                //         id: 4,
-                //         title: 'Working',
-                //         tasks: [],
-                //     }
-                // ];
-                // this.updateData(scrumboardData)
             }
         }));
+
     });
 </script>

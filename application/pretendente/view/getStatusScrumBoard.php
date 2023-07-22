@@ -9,49 +9,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $value = json_decode(file_get_contents('php://input'), true); // Recebendo os dados do corpo da requisição
     if (isset($value['id']) && $value['id'] > 0) {
 
-        $result[0] = array(
-            'id' => 1,
-            'title' => 'In Progress',
-            'tasks' =>  array(
-                'projectId' => 1,
-                'id' => 1,
-                'title' => 'Creating a new Portfolio on Dribble',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                'image' => true,
-                'date' => ' 08 Aug, 2020',
-                'tags' => ['designing'],
+        // SQL buscar o pretendente
+        $sql = '
+        SELECT p.prw_codigo, p.prw_nome, p.prw_status, p.prw_email
+        FROM pretendentes AS p 
+        WHERE p.prw_codigo = '.$value['id'];
+        $result = $data->find('dynamic', $sql);
 
-            ),
-        );           
-        $result[1] = array(
-            'id' => 2,
-            'title' => 'Pending',
-            'tasks' =>  array(
-                'projectId' => 2,
+        // Cards com todas as etapas
+        $cards = [
+            array(
                 'id' => 1,
-                'title' => 'Creating a new Portfolio on Dribble',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                'image' => true,
-                'date' => ' 08 Aug, 2020',
-                'tags' => ['designing'],
+                'title' => 'Primeiro contato',
+                'tasks' =>  []
             ),
-        );           
-        $result[2] = array(
-            'id' => 3,
-            'title' => 'Complete',
-            'tasks' =>  array(
-                'projectId' => 3,
-                'id' => 1,
-                'title' => 'Creating a new Portfolio on Dribble',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                'image' => true,
-                'date' => ' 08 Aug, 2020',
-                'tags' => ['designing'],
+            array(
+                'id' => 2,
+                'title' => 'Visita',
+                'tasks' =>  []
             ),
-        );           
+            array(
+                'id' => 3,
+                'title' => 'Negociação',
+                'tasks' =>  []
+            ),
+            array(
+                'id' => 4,
+                'title' => 'Proposta',
+                'tasks' =>  []
+            ),
+            array(
+                'id' => 5,
+                'title' => 'Fechamento',
+                'tasks' =>  []
+            ),
+        ];
+
+        foreach($cards as $key => $card) {
+            if($result[0]['prw_status'] == $card['id']) {
+                $cards[$key]['tasks'] = [
+                    array(
+                        'projectId' => $card['id'],
+                        'id' => 1,
+                        'title' => $result[0]['prw_nome'],
+                        'description' => $result[0]['prw_email'],
+                        'image' => true,
+                        'date' => date('d/m/Y H:i'),
+                        'tags' => ['designing'],    
+                    )
+                ];
+            }
+        }       
 
         // Retorna resposta
-        echo json_encode($result);
+        echo json_encode($cards);
         exit;
     }
 }
