@@ -174,6 +174,26 @@ if(isset($_GET['res'])){
         </div>
     </div>
 
+    <!-- Modal Status do Pretendente -->
+    <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="open2 && '!block'">
+        <div class="flex items-start justify-center min-h-screen px-4"  @click.self="open2 = false">
+            <div x-show="open2" x-transition x-transition.duration.300
+                class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">
+                <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                    <h5 class="font-bold text-lg">Status do Pretendente</h5>
+                    <button type="button" class="text-white-dark hover:text-dark" @click="toggle2">
+                        <?php echo file_get_contents('application/icons/close.svg'); ?>
+                    </button>
+                </div>
+                <div class="p-5">
+                    <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">                    
+                        <!-- Dados vindos do ajax -->
+                        <div id="resultStatusScrumBoard"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
@@ -199,7 +219,7 @@ if(isset($_GET['res'])){
 
                 this.datatable2 = new simpleDatatables.DataTable('#myTable2', {
                     data: {
-                        headings: ['Name', 'Progress', 'Company', 'Start Date', 'Email', 'Phone No.', 'Action'],
+                        headings: ['Name', 'Status', 'Company', 'Start Date', 'Email', 'Phone No.', 'Action'],
                         data: data
                     },
                     searchable: false,
@@ -220,7 +240,8 @@ if(isset($_GET['res'])){
                             select: 1,
                             sortable: false,
                             render: (data, cell, row) => {
-                                return `<div class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex"> <div class="bg-${this.randomColor()} h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:${data}%"></div> </div>`;
+                                const id = row.cells[6].data
+                                return `<div @click="toggle2; getStatusScrumBoard('${id}');" x-tooltip="Alterar o status do pretendente" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer"> <div class="bg-${this.randomColor()} h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:${data}%"></div> </div>`;
                             },
                         },
                         {
@@ -319,6 +340,24 @@ if(isset($_GET['res'])){
                     .catch(error => {
                         console.error('Erro ao enviar o formulário:', error);
                     });
+            },
+
+            getStatusScrumBoard(id){
+                // Faz a requisição AJAX para o arquivo PHP
+                fetch('application/pretendente/view/statusScrumBoard.php', {
+                    method: 'POST',
+                    body: id
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Atualiza os dados da tabela com os dados filtrados
+                        console.log('Dados retornados do ajax: ', data)
+                        document.getElementById('resultStatusScrumBoard').innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error('Erro ao enviar o formulário:', error);
+                    });
+
             },
 
             setFormValues(formData) {

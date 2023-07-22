@@ -57,16 +57,64 @@
                 this.open = !this.open;
             },
         }));
-        Alpine.data('modal', (initialOpenState = false, initialOpenDeleteState = false) => ({
-            open: initialOpenState,
-            openDelete: initialOpenDeleteState,
 
-            toggleDelete() {
-                this.openDelete = !this.openDelete;
-            },
+        Alpine.data('modal', (
+            initialOpenState = false, 
+            initialOpenState2 = false, 
+            initialOpenState3 = false, 
+            initialOpenState4 = false, 
+            initialOpenState5 = false, 
+            initialOpenState6 = false, 
+            initialOpenState7 = false, 
+            initialOpenState8 = false, 
+            initialOpenState9 = false, 
+            initialOpenState10 = false, 
+            initialOpenDeleteState = false
+            ) => ({
+            open: initialOpenState,
+            open2: initialOpenState2,
+            open3: initialOpenState3,
+            open4: initialOpenState4,
+            open5: initialOpenState5,
+            open6: initialOpenState6,
+            open7: initialOpenState7,
+            open8: initialOpenState8,
+            open9: initialOpenState9,
+            open10: initialOpenState10,
+            openDelete: initialOpenDeleteState,
 
             toggle() {
                 this.open = !this.open;
+            },            
+            toggle2() {
+                this.open2 = !this.open2;
+            },
+            toggle3() {
+                this.open3 = !this.open3;
+            },
+            toggle4() {
+                this.open4 = !this.open4;
+            },
+            toggle5() {
+                this.open5 = !this.open5;
+            },
+            toggle6() {
+                this.open6 = !this.open6;
+            },
+            toggle7() {
+                this.open7 = !this.open7;
+            },
+            toggle8() {
+                this.open8 = !this.open8;
+            },
+            toggle9() {
+                this.open9 = !this.open9;
+            },
+            toggle10() {
+                this.open10 = !this.open10;
+            },
+            toggleDelete() {
+                this.openDelete = !this.openDelete;
             },
         }));
 

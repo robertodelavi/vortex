@@ -71,7 +71,7 @@ if(isset($_GET['tab'])){
                             class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'pretendente'}" @click="tab='pretendente'">
         
-                            <?php echo file_get_contents('application/icons/pessoa.svg'); ?>
+                            <?php echo file_get_contents('application/icons/pessoa2.svg'); ?>
                             Dados do Pretendente
                         </a>
                     </li>

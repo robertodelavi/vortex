@@ -28,7 +28,6 @@
                         <th>Profissional</th>
                         <th>Forma de Atendimento</th>
                         <th>Avisar</th>
-                        <th>Funil</th>
                         <th class="text-center">Ação</th>
                     </tr>
                 </thead>
@@ -49,14 +48,6 @@
                                     '<span class="badge whitespace-nowrap badge-outline-danger">Não avisar</span>'
                                     ) . 
                                 '</td>
-
-                                <!-- Funil -->
-                                <td>
-                                    <div @click="toggleDelete;" x-tooltip="Alterar funil" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer"> 
-                                        <div class="'.$funilColor.' h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.(100 - ($key * 20)).'%"></div> 
-                                    </div>
-                                </td>
-
                                 <td>     
                                     <button type="button" x-tooltip="Editar Histórico de Atendimento" data-placement="left" class="mr-2 hover:text-info" @click="toggle; openModalEditHistoricoAtendimento(\'' . $_POST['param_0'] . '\', \'' . $row['prh_codigo'] . '\');">
                                         '.file_get_contents('application/icons/edit.svg').'
@@ -93,24 +84,4 @@
             </div>
         </div>
     </div>  
-    
-    <!-- Modal funil -->
-    <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="openDelete && '!block'">
-        <div class="flex items-start justify-center min-h-screen px-4"  @click.self="openDelete = false">
-            <div x-show="openDelete" x-transition x-transition.duration.300
-                class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">
-                <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
-                    <h5 class="font-bold text-lg">Funil</h5>
-                    <button type="button" class="text-white-dark hover:text-dark" @click="toggleDelete">
-                        <?php echo file_get_contents('application/icons/close.svg'); ?>
-                    </button>
-                </div>
-                <div class="p-5">
-                    <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">                    
-                        trello...
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
