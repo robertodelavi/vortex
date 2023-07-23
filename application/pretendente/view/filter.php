@@ -15,12 +15,13 @@ $name = $values['name'];
 $sql = "SELECT prw_codigo, prw_nome FROM pretendentes WHERE prw_nome LIKE '%".$name."%' LIMIT 100 ";
 $result = $bd->executeQuery($sql, false);
 
+
 $filteredData = [];
 if ($bd->countLines($result) > 0){
     for ($i=0; $i< $bd->countLines($result); $i++){
         $arrRow = [];
         array_push($arrRow, trim($bd->result($result, $i, 'prw_nome')));
-        array_push($arrRow, trim($bd->result($result, $i, 'prw_codigo') + 60));
+        array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:40%; background-color: red; "></div>');
         array_push($arrRow, 'Tozzo');
         array_push($arrRow, '2023-01-08');
         array_push($arrRow, 'r@gmail.com');

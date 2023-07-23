@@ -1,7 +1,18 @@
 <?php
 
-$sql = "SELECT prw_codigo, prw_nome FROM pretendentes LIMIT 100";
+$sql = '
+SELECT p.prw_codigo, p.prw_nome, p.prw_status, ps.prs_nome AS statusNome, ps.prs_cor
+FROM pretendentes AS p
+    JOIN pretendentesstatus AS ps ON (p.prw_status = ps.prs_codigo)
+LIMIT 100';
 $result = $data->find('dynamic', $sql);
+
+// Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
+$sql = '
+SELECT COUNT(*) AS qtd
+FROM pretendentesstatus
+WHERE prs_ativo = "s" ';
+$totalEtapas = $data->find('dynamic', $sql);
 
 // echo '---> '.$_SESSION['database'];
 // echo '---> '.$_SESSION['unidade'];
@@ -11,8 +22,8 @@ $result = $data->find('dynamic', $sql);
 $tableResult = [];
 foreach ($result as $row) {
     $arrRow = [];
-    array_push($arrRow, trim($row['prw_nome']));
-    array_push($arrRow, trim($row['prw_codigo'] + 60));
+    array_push($arrRow, trim($row['prw_nome']));    
+    array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['prs_cor'].'; "></div>');
     array_push($arrRow, 'Tozzo');
     array_push($arrRow, '2023-01-08');
     array_push($arrRow, 'r@gmail.com');
@@ -20,6 +31,12 @@ foreach ($result as $row) {
     array_push($arrRow, $row['prw_codigo']);
     //
     array_push($tableResult, $arrRow);
+}
+
+function getProgressPercent($totalEtapas, $row){
+    if(!$totalEtapas) $totalEtapas = 1;
+    $percent = ($row['prw_status'] * 100)/$totalEtapas;
+    return $percent;
 }
 
 // TOASTS
@@ -222,7 +239,7 @@ if(isset($_GET['res'])){
                                                     <!-- task list -->
                                                     <div class="sortable-list min-h-[150px]" :data-id="project.id">
                                                         <template x-for="task in project.tasks">
-                                                            <div :key="project.id + '' + task.id" :data-id="project.id + '' + task.id" class="shadow bg-[#f4f4f4] dark:bg-[#262e40] p-3 pb-5 rounded-md mb-5 space-y-3 cursor-move">
+                                                            <div :key="project.id" :data-id="project.id" class="shadow bg-[#f4f4f4] dark:bg-[#262e40] p-3 pb-5 rounded-md mb-5 space-y-3 cursor-move">
                                                                 
                                                                 <div class="flex items-center w-max">
                                                                     <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-3.jpeg" />
@@ -308,8 +325,7 @@ if(isset($_GET['res'])){
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
     const arrData = <?php echo json_encode($tableResult); ?>;
-    console.log("🚀 ~ arrData:", arrData);
-
+    
     document.addEventListener("alpine:init", () => {
         Alpine.data("multipleTable", () => ({
             datatable2: null,
@@ -350,7 +366,11 @@ if(isset($_GET['res'])){
                             sortable: false,
                             render: (data, cell, row) => {
                                 const id = row.cells[6].data
-                                return `<div @click="toggle2; getStatusScrumBoard('${id}');" x-tooltip="Alterar o status do pretendente" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer"> <div class="bg-${this.randomColor()} h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:${data}%"></div> </div>`;
+                                // const color = row.cells[1].data.cor
+                                // console.log("🚀 ~ updateTableData ~ color:", color)
+
+                                
+                                return `<div @click="toggle2; getStatusScrumBoard('${id}');" x-tooltip="Alterar o status do pretendente" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer" >${data}</div>`;
                             },
                         },
                         {
@@ -503,6 +523,7 @@ if(isset($_GET['res'])){
 
         // ScrumBoard 
         Alpine.data("scrumboard", () => ({
+            pretendenteID: null,
             params: {
                 id: null,
                 title: ''
@@ -529,10 +550,38 @@ if(isset($_GET['res'])){
                 this.projectList = scrumBoardData;
                 this.initializeSortable();
             },
-
+            
             // Função pra ser chamada após arrastar e soltar
-            afterDrag() {
-                console.log('afterDrag: ', this.projectList);
+            afterDrag(event) {
+                const draggedCard = event.to;
+                const projectId = draggedCard.getAttribute('data-id');
+                if(projectId && projectId > 0 && this.pretendenteID && this.pretendenteID > 0){
+                    // Atualiza status enviando projectId pro arquivo ajax do php 
+                    fetch('application/pretendente/view/status/updateStatus.php', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            id: this.pretendenteID,
+                            status: projectId
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Atualiza os dados da tabela com os dados filtrados
+                            console.log('Dados retornados do ajax: ', data)
+                            if(data.status == 'success'){
+                                toast(data.message, "success", 3000);
+
+                                // Atualizar datatable multipleTable 
+                                
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao enviar o formulário:', error);
+                        });
+
+                }
+                console.log("🚀 ~ afterDrag ~ draggedCard:", projectId)
+
             },
 
             initializeSortable() {
@@ -545,8 +594,8 @@ if(isset($_GET['res'])){
                             group: 'name',
                             ghostClass: "sortable-ghost",
                             dragClass: "sortable-drag",
-                            onEnd: () => {
-                                this.afterDrag(); // Call the afterDrag function after a drag and drop operation
+                            onEnd: (event) => {
+                                this.afterDrag(event); // Call the afterDrag function after a drag and drop operation
                             },
                         })
                     }
@@ -694,7 +743,8 @@ if(isset($_GET['res'])){
             },
 
             getStatusScrumBoard(id){
-                fetch('application/pretendente/view/getStatusScrumBoard.php', {
+                this.pretendenteID = id;
+                fetch('application/pretendente/view/status/getStatus.php', {
                     method: 'POST',
                     body: JSON.stringify({id: id})
                 })

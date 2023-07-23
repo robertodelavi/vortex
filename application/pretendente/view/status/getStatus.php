@@ -1,8 +1,8 @@
 <?php
 // Header default
 session_start();
-require_once('../../../library/DataManipulation.php');
-require_once('../../script/php/functions.php');
+require_once('../../../../library/DataManipulation.php');
+require_once('../../../script/php/functions.php');
 $data = new DataManipulation();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,34 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         WHERE p.prw_codigo = '.$value['id'];
         $result = $data->find('dynamic', $sql);
 
+        // SQL buscar as etapas/status 
+        $sql = '
+        SELECT prs_codigo, prs_nome
+        FROM pretendentesstatus
+        WHERE prs_ativo = "s"
+        ORDER BY prs_ordem ASC';
+        $status = $data->find('dynamic', $sql);
+
         // Cards com todas as etapas
-        $cards = [
-            array(
-                'id' => 1,
-                'title' => 'Primeiro contato',
+        $cards = [];
+        foreach($status as $key => $value) {
+            $cards[] = array(
+                'id' => $value['prs_codigo'],
+                'title' => $value['prs_nome'],
                 'tasks' =>  []
-            ),
-            array(
-                'id' => 2,
-                'title' => 'Visita',
-                'tasks' =>  []
-            ),
-            array(
-                'id' => 3,
-                'title' => 'Negociação',
-                'tasks' =>  []
-            ),
-            array(
-                'id' => 4,
-                'title' => 'Proposta',
-                'tasks' =>  []
-            ),
-            array(
-                'id' => 5,
-                'title' => 'Fechamento',
-                'tasks' =>  []
-            ),
-        ];
+            );
+        }
 
         foreach($cards as $key => $card) {
             if($result[0]['prw_status'] == $card['id']) {
