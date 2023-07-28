@@ -576,9 +576,7 @@ if(isset($_GET['res'])){
                             if(etapa.prs_codigo == projectId){
                                 const percent = (etapa.prs_ordem * 100)/etapas.length;
                                 item[1] = `
-                                <div @click="getStatusScrumBoard('${this.pretendenteID}');" x-tooltip="Alterar o status do pretendente" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer" >
-                                    <div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:${percent}%; background-color: ${etapa.prs_cor}; "></div>
-                                </div>`;
+                                <div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:${percent}%; background-color: ${etapa.prs_cor}; "></div>`;
                             }
                         })
 
