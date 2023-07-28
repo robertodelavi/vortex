@@ -2,7 +2,7 @@
 <?php
 	switch($_GET['acao']){
 
-		// DADOS DO PRETENDENTE
+		//* DADOS DO PRETENDENTE
 		case 'gravadados_pretendente':
 			$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 			$data->tabela = 'pretendentes';
@@ -51,7 +51,7 @@
 			
 		break;
 
-		// PERFIS DE BUSCA
+		//* PERFIS DE BUSCA
 		case 'grava_pretendente':
 			if(isset($_POST['ppf_pretendente']) && $_POST['ppf_pretendente'] > 0){
 				// Converte moeda pra float
@@ -75,8 +75,12 @@
 								
 				$data->tabela = 'pretendentesperfil';
 				$data->update($_POST);
-				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
-				exit;
+
+                //? Atualiza os imóveis indicados pro pretendente de acordo com os seus perfis de busca
+                setaImoveis($_POST, $data);
+
+				// echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
+				// exit;
 
 			}else{
 				// Erro post..
@@ -90,7 +94,7 @@
 			echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['param_0'].'\' )"></body>';
 		break;
 
-		// HISTÓRICO DE ATENDIMENTOS 
+		//* HISTÓRICO DE ATENDIMENTOS 
 		case 'gravahistorico_pretendente':
 			if(isset($_POST['prh_pretendente'])){
 				// Converter data
@@ -124,4 +128,66 @@
 			}
 		break;
 	}
+
+    //? Função que seta os imóveis indicados pro pretendente baseado nos perfis de busca
+    function setaImoveis($values, $data){
+        $filters = getFilters($values['ppf_pretendente'], $values['ppf_codigo'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
+        
+        if($filters){
+            // Monta SQL com imoveis que atendem os filtros
+            $sql = 'SELECT * FROM imoveis WHERE ';
+            $filters = json_decode($filters);
+            foreach($filters as $key => $value){
+                if($value->campo != 'ppf_valorini' && $value->campo != 'ppf_valorfim'){
+                    $sql .= $value->campo_.' = '.$value->valor.' AND ';
+                }
+            }
+            $sql = substr($sql, 0, -4);
+            $sql .= ' ORDER BY imo_codigo DESC';
+
+            echo $sql;
+
+        }
+        
+    }
+
+    //? Extrai os filtros relevantes do perfil (que possuem valor)
+    function getFilters($ppf_pretendente, $ppf_codigo, $data){
+        if($ppf_pretendente == '' || $ppf_codigo == ''){
+            return false;
+        }
+
+        // Busca perfil
+        $sql = 'SELECT * FROM pretendentesperfil WHERE ppf_pretendente = '.$ppf_pretendente.' AND ppf_codigo = '.$ppf_codigo;
+        $result = $data->find('dynamic', $sql);    
+
+        // Busca filtros 
+        $filtros = array();
+        foreach($result as $key => $value){            
+            foreach($value as $k => $v){
+                if($v != '' && $v != 0 && $k != 'ppf_nome' && $k != 'ppf_pretendente' && $k != 'ppf_codigo'){
+                    $filtros[] = array(
+                        'campo' => $k,
+                        'campo_' => getCampoTabelaImoveis($k),
+                        'valor' => $v
+                    );
+                }
+            }
+        }
+
+        return json_encode($filtros);        
+    }
+
+    function getCampoTabelaImoveis($field){
+        $arrayFields = array(
+            'ppf_tipoimovel' => 'imo_tipoimovel',
+            'ppf_quartosini' => 'imo_quartos',
+            'ppf_quartosfim' => 'imo_quartos',
+            'ppf_garagem' => 'imo_garagem',
+            // 'ppf_valorini' => '??',
+            // 'ppf_valorfim' => '??',
+        );
+
+        return $arrayFields[$field];
+    }
 ?>
