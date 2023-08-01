@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         WHERE p.pwi_pretendente = ' . $value['pretendente'] . ' AND p.pwi_favorito = 0
         GROUP BY i.imo_codigo';
         $resultImoveis = $data->find('dynamic', $sql);
-
+        
         //* FAVORITOS
         $html = '
         <div>
