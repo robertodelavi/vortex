@@ -62,7 +62,7 @@ if(isset($_GET['res'])){
         <!-- Tela com filtro e tabela de listagem -->
         <div class="flex h-screen gap-6">
             <!-- Filtros -->
-            <div class="w-1/3">
+            <div class="w-1/5">
                 <!-- Bloco dos filtros -->
                 <div class="panel h-full">
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
@@ -106,11 +106,10 @@ if(isset($_GET['res'])){
         
                             <div class="flex gap-2 mt-4">
                                 <div class="">
-                                    <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                                    <button type="submit" class="btn btn-primary">Aplicar</button>
                                 </div>
                                 <div class="">
-                                    <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar
-                                        Filtros</button>
+                                    <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar</button>
                                 </div>
                             </div>
                         </form>
@@ -118,7 +117,7 @@ if(isset($_GET['res'])){
                 </div>
             </div>
 
-            <div class="w-2/3 ">
+            <div class="w-full">
                 <div class="panel h-full mt-0">
                     <!-- Listagem -->
                     <div class="flex justify-between items-center ">

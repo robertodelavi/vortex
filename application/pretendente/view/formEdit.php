@@ -10,7 +10,6 @@ $result = $data->find('dynamic', $sql);
 //? Busca imóveis do pretentende (separar em outro arquivo)
 $filters = getFilters($_POST['param_0'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
 
-
 $sql = 'SELECT * 
         FROM imoveis 
         WHERE ';
@@ -35,7 +34,7 @@ $sql = 'SELECT *
         $sql = substr($sql, 0, -5);
         $sql .= ' ORDER BY imo_codigo DESC';
 
-        echo '<br/><br/>'.$sql;
+        // echo '<br/><br/>'.$sql;
 
 
 // print_r($filters);

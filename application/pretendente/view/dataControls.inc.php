@@ -76,11 +76,8 @@
 				$data->tabela = 'pretendentesperfil';
 				$data->update($_POST);
 
-                //? Atualiza os imóveis indicados pro pretendente de acordo com os seus perfis de busca
-                setaImoveis($_POST, $data);
-
-				// echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
-				// exit;
+                echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
+				exit;
 
 			}else{
 				// Erro post..
@@ -128,103 +125,4 @@
 			}
 		break;
 	}
-
-    //? Função que seta os imóveis indicados pro pretendente baseado nos perfis de busca
-    function setaImoveis($values, $data){
-        $filters = getFilters($values['ppf_pretendente'], $values['ppf_codigo'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
-		echo $filters;
-        
-        // if($filters){
-        //     // Monta SQL com imoveis que atendem os filtros
-        //     $sql = 'SELECT * FROM imoveis WHERE ';
-        //     $filters = json_decode($filters);
-        //     foreach($filters as $key => $value){
-		// 		if($value->tipo == 'igual'){
-		// 			$sql .= $value->campo_.' = '.$value->valor.' AND ';
-		// 		} else if($value->tipo == 'intervalo'){
-		// 			$sql .= $value->campo_.' = '.$value->valor.' AND ';					
-		// 		}
-
-
-        //         if($value->campo != 'ppf_valorini' && $value->campo != 'ppf_valorfim'){
-        //         }
-        //     }
-        //     $sql = substr($sql, 0, -4);
-        //     $sql .= ' ORDER BY imo_codigo DESC';
-
-        //     echo '<br/><br/>'.$sql;
-
-        // }
-        
-    }
-
-    //? Extrai os filtros relevantes do perfil (que possuem valor)
-    function getFilters($ppf_pretendente, $ppf_codigo, $data){
-        if($ppf_pretendente == '' || $ppf_codigo == ''){
-            return false;
-        }
-
-        // Busca perfil
-        $sql = 'SELECT * FROM pretendentesperfil WHERE ppf_pretendente = '.$ppf_pretendente.' AND ppf_codigo = '.$ppf_codigo;
-        $result = $data->find('dynamic', $sql);    
-
-        // Busca filtros 
-        $filtros = array();
-        foreach($result as $key => $value){            
-            foreach($value as $k => $v){
-                if($v != '' && $v != 0 && $k != 'ppf_nome' && $k != 'ppf_pretendente' && $k != 'ppf_codigo'){
-                    $filtros[] = array(
-						'tipo' => getTipoCampo($k),
-                        'campo' => getCampoTabelaImoveis($k),
-                        'valor' => $v
-                    );
-                }
-            }
-        }
-
-        return json_encode($filtros);        
-    }
-
-	function getTipoCampo($field){
-		$arrayFields = array(
-			'ppf_tipoimovel' => 'igual',
-			'ppf_utilizacao' => 'igual',
-			'ppf_garagem' => 'igual',
-			'ppf_empreendimento' => 'igual',
-			'ppf_quartosini' => 'intervalo',
-			'ppf_quartosfim' => 'intervalo',
-			'ppf_suitesini' => 'intervalo',
-			'ppf_suitesfim' => 'intervalo',
-			'ppf_areaterrenoini' => 'intervalo',
-			'ppf_areaterrenofim' => 'intervalo',
-			'ppf_areaconstruidaini' => 'intervalo',
-			'ppf_areaconstruidafim' => 'intervalo',
-		);
-		return $arrayFields[$field];
-	}
-
-    function getCampoTabelaImoveis($field){
-        $arrayFields = array(
-			// Fixos
-            'ppf_tipoimovel' => 'imo_tipoimovel',
-            'ppf_utilizacao' => 'imo_utilizacao',
-            'ppf_garagem' => 'imo_garagem',
-			'ppf_empreendimento' => 'imo_empreendimento',
-			// Intervalos
-            'ppf_quartosini' => 'imo_quartos',
-            // 'ppf_quartosfim' => 'imo_quartos',
-			'ppf_suitesini' => 'imo_suites',
-			// 'ppf_suitesfim' => 'imo_suites',
-			'ppf_areaterrenoini' => 'imo_areaterreno',
-			// 'ppf_areaterrenofim' => 'imo_areaterreno',
-			'ppf_areaconstruidaini' => 'imo_areaconstruida',
-			// 'ppf_areaconstruidafim' => 'imo_areaconstruida',
-			// ??
-			// 'ppf_permuta' => '??',
-            // 'ppf_valorini' => '??',
-            // 'ppf_valorfim' => '??',
-        );
-
-        return $arrayFields[$field];
-    }
 ?>
