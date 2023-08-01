@@ -8,27 +8,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $value = json_decode(file_get_contents('php://input'), true);
     if (isset($value['pretendente']) && $value['pretendente'] > 0) {
 
-        $sql = '
-        SELECT i.imo_codigo, ti.tpi_descricao, i.imo_rua, b.bai_descricao, i.imo_areaconstruida, i.imo_quartos, i.imo_banheiros, i.imo_garagem, ft.imf_arquivo
+        $filters = getFilters($value['pretendente'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
+        $sql1 = createScriptImoveis($filters); //? Cria e configura o script (sql) para buscar os imóveis
+        $resultImoveis = $data->find('dynamic', $sql1);
+
+        $sql2 = '
+        SELECT 
+            i.imo_codigo, 
+            ti.tpi_descricao, 
+            i.imo_rua, 
+            b.bai_descricao, 
+            i.imo_areaconstruida, 
+            i.imo_quartos, 
+            i.imo_banheiros, 
+            i.imo_garagem, 
+            ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
+            ft.imf_arquivo
         FROM pretendentesimoveis AS p 
             LEFT JOIN imoveis AS i ON (p.pwi_imovel = i.imo_codigo)
+            INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+            LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
+
             LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
             LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
             LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
         WHERE p.pwi_pretendente = ' . $value['pretendente'] . ' AND p.pwi_favorito = 1
         GROUP BY i.imo_codigo';
-        $resultFavoritos = $data->find('dynamic', $sql);
+        $resultFavoritos = $data->find('dynamic', $sql2);
 
-        $sql = '
-        SELECT i.imo_codigo, ti.tpi_descricao, i.imo_rua, b.bai_descricao, i.imo_areaconstruida, i.imo_quartos, i.imo_banheiros, i.imo_garagem, ft.imf_arquivo
-        FROM pretendentesimoveis AS p 
-            LEFT JOIN imoveis AS i ON (p.pwi_imovel = i.imo_codigo)
-            LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
-            LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
-            LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
-        WHERE p.pwi_pretendente = ' . $value['pretendente'] . ' AND p.pwi_favorito = 0
-        GROUP BY i.imo_codigo';
-        $resultImoveis = $data->find('dynamic', $sql);
+        // $sql = '
+        // SELECT i.imo_codigo, ti.tpi_descricao, i.imo_rua, b.bai_descricao, i.imo_areaconstruida, i.imo_quartos, i.imo_banheiros, i.imo_garagem, ft.imf_arquivo
+        // FROM pretendentesimoveis AS p 
+        //     LEFT JOIN imoveis AS i ON (p.pwi_imovel = i.imo_codigo)
+        //     LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
+        //     LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
+        //     LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
+        // WHERE p.pwi_pretendente = ' . $value['pretendente'] . ' AND p.pwi_favorito = 0
+        // GROUP BY i.imo_codigo';
+        // $resultImoveis = $data->find('dynamic', $sql);
         
         //* FAVORITOS
         $html = '
@@ -65,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div class="text-right">
                                     <p class="text-lg font-bold text-success">
-                                        R$ 500.000,00
+                                        R$ '.number_format(($imovel['imv_valor']/100), 2, ',', '.').'
                                     </p>
                                     <p class="text-xs">
                                         Código: ' . $imovel['imo_codigo'] . '
@@ -137,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div class="text-right">
                                     <p class="text-lg font-bold text-success">
-                                        R$ 500.000,00
+                                        R$ '.number_format(($imovel['imv_valor']/100), 2, ',', '.').'
                                     </p>
                                     <p class="text-xs">
                                         Código: ' . $imovel['imo_codigo'] . '
@@ -178,4 +195,157 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($html);
         exit;
     }
+}
+
+//? Função que cria e configura o script (sql) para buscar os imóveis
+function createScriptImoveis($filters){
+    $sql = '
+    SELECT 
+        i.imo_codigo, 
+        ti.tpi_descricao, 
+        i.imo_rua, 
+        b.bai_descricao, 
+        i.imo_areaconstruida, 
+        i.imo_quartos, 
+        i.imo_banheiros, 
+        i.imo_garagem, 
+        ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
+        ft.imf_arquivo
+    FROM imoveis AS i 
+        INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+        LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
+        LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
+        LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
+        LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
+    WHERE ';
+    $filters = json_decode($filters);
+    foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
+        $sql .= '(';
+        foreach($valuePerfil as $keyCampo => $valueCampo){ // cada campo do perfil
+            //? Com intervalo de valores
+            if($valueCampo->intervalo && $valueCampo->inicio != '' && $valueCampo->fim != ''){
+                if($keyCampo == 'ppf_valor'){ //? Valor faz join com tabela imovelvenda
+                    $sql .= '(((iv.'.convertField($keyCampo).'*m.moe_valor)/100)/100) BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
+                }else{
+                    $sql .= 'i.'.convertField($keyCampo) .' BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
+                }
+            }else 
+            //? Com valores únicos
+            if(!$valueCampo->intervalo && $valueCampo->valor != ''){
+                $sql .= 'i.'.convertField($keyCampo) .' = "'.$valueCampo->valor.'" AND ';
+            }
+        }
+        $sql = substr($sql, 0, -4);
+        $sql .= ') OR ';
+    }
+    $sql = substr($sql, 0, -4);
+    $sql .= ' 
+    GROUP BY i.imo_codigo
+    ORDER BY i.imo_codigo DESC
+    LIMIT 100';
+    return $sql;
+}
+
+//? Converte nome da coluna da tabela pretendentesperfil pra nome da coluna da tabela imoveis
+function convertField($field){
+    switch($field){
+        case 'ppf_tipoimovel':
+            return 'imo_tipoimovel';
+        break;
+        case 'ppf_utilizacao':
+            return 'imo_utilizacao';
+        break;
+        case 'ppf_quartos':
+            return 'imo_quartos';
+        break;
+        case 'ppf_suites':
+            return 'imo_suites';
+        break;
+        case 'ppf_garagem':
+            return 'imo_garagem';
+        break;
+        case 'ppf_valor':
+            return 'imv_valor'; //* tabela imovelvenda
+        break;
+        case 'ppf_areaterreno':
+            return 'imo_areaterreno';
+        break;
+        case 'ppf_areaconstruida':
+            return 'imo_areaconstruida';
+        break;
+        case 'ppf_empreendimento':
+            return 'imo_empreendimento';
+        break;
+    }
+}
+
+//? Extrai os filtros relevantes do perfil (que possuem valor)
+function getFilters($prw_codigo, $data){
+    if(!$prw_codigo){
+        return false;
+    }
+
+    // Busca perfis
+    $sql = 'SELECT * FROM pretendentesperfil WHERE ppf_pretendente = '.$prw_codigo;
+    $result = $data->find('dynamic', $sql);    
+
+    // Busca filtros 
+    $filtros = array();
+    foreach($result as $key => $value){ // cada perfil  
+        $perfil = array();
+        foreach($value as $k => $v){
+            if($v != '' && $v != 0 && $k != 'ppf_nome' && $k != 'ppf_pretendente' && $k != 'ppf_codigo' && $k != 'ppf_permuta'){            
+                switch($k){
+                    //? Campos com intervalo de valores
+                    case 'ppf_quartosini':
+                        $perfil['ppf_quartos']['inicio'] = $v;
+                        $perfil['ppf_quartos']['intervalo'] = true;                        
+                    break;
+                    case 'ppf_quartosfim':
+                        $perfil['ppf_quartos']['fim'] = $v;
+                        $perfil['ppf_quartos']['intervalo'] = true;
+                    break;
+                    case 'ppf_suitesini':
+                        $perfil['ppf_suites']['inicio'] = $v;
+                        $perfil['ppf_suites']['intervalo'] = true;
+                    break;
+                    case 'ppf_suitesfim':
+                        $perfil['ppf_suites']['fim'] = $v;
+                        $perfil['ppf_suites']['intervalo'] = true;
+                    break;
+                    case 'ppf_valorini':
+                        $perfil['ppf_valor']['inicio'] = $v;
+                        $perfil['ppf_valor']['intervalo'] = true;
+                    break;
+                    case 'ppf_valorfim':
+                        $perfil['ppf_valor']['fim'] = $v;
+                        $perfil['ppf_valor']['intervalo'] = true;
+                    break;
+                    case 'ppf_areaterrenoini':
+                        $perfil['ppf_areaterreno']['inicio'] = $v;
+                        $perfil['ppf_areaterreno']['intervalo'] = true;
+                    break;
+                    case 'ppf_areaterrenofim':
+                        $perfil['ppf_areaterreno']['fim'] = $v;
+                        $perfil['ppf_areaterreno']['intervalo'] = true;
+                    break;
+                    case 'ppf_areaconstruidaini':
+                        $perfil['ppf_areaconstruida']['inicio'] = $v;
+                        $perfil['ppf_areaconstruida']['intervalo'] = true;
+                    break;
+                    case 'ppf_areaconstruidafim':
+                        $perfil['ppf_areaconstruida']['fim'] = $v;  
+                        $perfil['ppf_areaconstruida']['intervalo'] = true;
+                    break;
+                    //? Campos com valores únicos
+                    default:
+                        $perfil[$k]['valor'] = $v;                              
+                        $perfil[$k]['intervalo'] = false;
+                    break;
+                }              
+            }
+        }
+        $filtros[] = $perfil;
+    }
+    return json_encode($filtros);        
 }

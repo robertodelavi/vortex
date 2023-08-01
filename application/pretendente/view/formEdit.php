@@ -6,69 +6,6 @@ FROM pretendentes AS p
 WHERE p.prw_codigo = ' . $_POST['param_0'];
 $result = $data->find('dynamic', $sql);
 
-//!
-//? Busca imóveis do pretentende (separar em outro arquivo)
-$filters = getFilters($_POST['param_0'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
-
-$sql = 'SELECT * 
-        FROM imoveis 
-        WHERE ';
-        $filters = json_decode($filters);
-        foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
-            $sql .= '(';
-            foreach($valuePerfil as $keyCampo => $valueCampo){ // cada campo do perfil
-                switch($valueCampo->campo){
-                    case 'ppf_tipoimovel':
-                        $sql .= ' imo_tipoimovel = '.$valueCampo->valor.' AND ';
-                    break;
-                    case 'ppf_utilizacao':
-                        $sql .= ' imo_utilizacao = '.$valueCampo->valor.' AND ';
-                    break;     
-                    // case 'ppf_quartosini':
-                    //     $sql .= ' imo_quartos BETWEEN '..' AND '.$valueCampo->valor.' AND ';               
-                }
-            }
-            $sql = substr($sql, 0, -4);
-            $sql .= ') OR ';
-        }
-        $sql = substr($sql, 0, -5);
-        $sql .= ' ORDER BY imo_codigo DESC';
-
-        // echo '<br/><br/>'.$sql;
-
-
-// print_r($filters);
-
-//? Extrai os filtros relevantes do perfil (que possuem valor)
-function getFilters($prw_codigo, $data){
-    if($prw_codigo == ''){
-        return false;
-    }
-
-    // Busca perfis
-    $sql = 'SELECT * FROM pretendentesperfil WHERE ppf_pretendente = '.$prw_codigo;
-    $result = $data->find('dynamic', $sql);    
-
-    // Busca filtros 
-    $filtros = array();
-    foreach($result as $key => $value){ // cada perfil  
-        $perfil = array();
-        foreach($value as $k => $v){
-            if($v != '' && $v != 0 && $k != 'ppf_nome' && $k != 'ppf_pretendente' && $k != 'ppf_codigo'){
-                $perfil[] = array(
-                    'campo' => $k,
-                    'valor' => $v
-                );
-            }
-        }
-        $filtros[] = $perfil;
-    }
-
-    return json_encode($filtros);        
-}
-
-//!
-
 // TOASTS
 $currentTab = 'pretendente';
 if(isset($_GET['tab'])){
@@ -198,9 +135,9 @@ if(isset($_GET['tab'])){
                 </template>
         
                 <!-- IMÓVEIS -->
-                <template x-if="tab === 'imoveis'">
+                <template x-if="tab === 'imoveis'"> 
                     <!-- Imóveis vindo do ajax -->
-                    <div id="resulAjaxImoveis"></div>
+                    <div id="resulAjaxImoveis"></div>                    
                 </template>
             </div>
         </div>
@@ -219,7 +156,7 @@ if(isset($_GET['tab'])){
                     <div class="p-5">
                         <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">                    
                             <!-- Imóveis vindo do ajax -->
-                            <div id="resultAjaxGetImovel"></div>           
+                            <div id="resultAjaxGetImovel"></div>                            
                         </div>
                     </div>
                 </div>
@@ -235,6 +172,11 @@ if(isset($_GET['tab'])){
         var data = {
             pretendente: <?php echo $_POST['param_0']; ?>
         };
+
+        //? Loading
+        setTimeout(() => {
+            document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex items-center justify-center"><div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 order-primary"></div><p class="ml-2">Buscando os imóveis de acordo com seu perfil...</p></div>'
+        }, 30);
 
         fetch('application/pretendente/view/imoveis/getImoveis.php', {
             method: 'POST',
