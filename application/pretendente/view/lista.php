@@ -299,7 +299,8 @@ if(isset($_GET['res'])){
             </div>
         </div>
     </div>    
-</div>
+
+
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
