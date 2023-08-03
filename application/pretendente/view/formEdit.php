@@ -175,7 +175,7 @@ if(isset($_GET['tab'])){
 
         //? Loading
         setTimeout(() => {
-            document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex justify-center items-center h-screen"><div class="flex flex-col items-center"><span class="animate-spin border-4 border-primary border-l-transparent rounded-full w-12 h-12 mb-5"></span><p class="text-white-dark">Buscando imóveis pro seu perfil...</p></div></div>'
+            document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex justify-center items-start min-h-screen mt-4"><div class="flex flex-col items-center"><span class="animate-spin border-4 border-primary border-l-transparent rounded-full w-12 h-12 mb-5"></span><p class="text-white-dark">Buscando imóveis pro seu perfil...</p></div></div>'
         }, 30);
 
         fetch('application/pretendente/view/imoveis/getImoveis.php', {
