@@ -11,8 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values = json_decode($formData['values'], true);
     
     $sql = '
-    SELECT p.prw_codigo, p.prw_nome, p.prw_status, ps.prs_nome AS statusNome, ps.prs_cor
+    SELECT p.prw_codigo, p.prw_nome, p.prw_email, p.prw_status, u.usu_nome, p.prw_telefones, DATE_FORMAT(p.prw_datacad, "%d/%m/%Y") AS primeiroCadastro, ps.prs_nome AS statusNome, ps.prs_cor,
+        (SELECT DATE_FORMAT(ph.prh_datacad, "%d/%m/%Y")
+        FROM pretendenteshistorico AS ph 
+        WHERE ph.prh_pretendente = p.prw_codigo
+        ORDER BY ph.prh_datacad DESC
+        LIMIT 1) AS ultimoCadastro
     FROM pretendentes AS p
+        LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
         JOIN pretendentesstatus AS ps ON (p.prw_status = ps.prs_codigo)
     WHERE p.prw_nome LIKE "%'.$values['name'].'%" 
     LIMIT 100 ';
@@ -35,12 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($result) > 0){
         foreach($result as $row){
             $arrRow = [];
-            array_push($arrRow, trim($row['prw_nome']));
+            array_push($arrRow, trim($row['prw_nome']));    
             array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['prs_cor'].'; "></div>');
-            array_push($arrRow, 'Tozzo');
-            array_push($arrRow, '2023-01-08');
-            array_push($arrRow, 'r@gmail.com');
-            array_push($arrRow, '3352-4671');
+            array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
+            array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
+            array_push($arrRow, trim($row['primeiroCadastro']).' a '.trim($row['ultimoCadastro']));
+            array_push($arrRow, trim($row['prw_email'] ? $row['prw_email'] : '--'));   
             array_push($arrRow, $row['prw_codigo']);
             //
             array_push($filteredData, $arrRow);

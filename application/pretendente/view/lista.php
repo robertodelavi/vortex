@@ -1,8 +1,14 @@
 <?php
 
 $sql = '
-SELECT p.prw_codigo, p.prw_nome, p.prw_status, ps.prs_nome AS statusNome, ps.prs_cor
+SELECT p.prw_codigo, p.prw_nome, p.prw_email, p.prw_status, u.usu_nome, p.prw_telefones, DATE_FORMAT(p.prw_datacad, "%d/%m/%Y") AS primeiroCadastro, ps.prs_nome AS statusNome, ps.prs_cor,
+    (SELECT DATE_FORMAT(ph.prh_datacad, "%d/%m/%Y")
+    FROM pretendenteshistorico AS ph 
+    WHERE ph.prh_pretendente = p.prw_codigo
+    ORDER BY ph.prh_datacad DESC
+    LIMIT 1) AS ultimoCadastro
 FROM pretendentes AS p
+    LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
     JOIN pretendentesstatus AS ps ON (p.prw_status = ps.prs_codigo)
 LIMIT 100';
 $result = $data->find('dynamic', $sql);
@@ -26,10 +32,10 @@ foreach ($result as $row) {
     $arrRow = [];
     array_push($arrRow, trim($row['prw_nome']));    
     array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['prs_cor'].'; "></div>');
-    array_push($arrRow, 'Tozzo');
-    array_push($arrRow, '2023-01-08');
-    array_push($arrRow, 'r@gmail.com');
-    array_push($arrRow, '3352-4671');
+    array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
+    array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
+    array_push($arrRow, trim($row['primeiroCadastro']).' a '.trim($row['ultimoCadastro']));
+    array_push($arrRow, trim($row['prw_email'] ? $row['prw_email'] : '--'));   
     array_push($arrRow, $row['prw_codigo']);
     //
     array_push($tableResult, $arrRow);
@@ -300,8 +306,6 @@ if(isset($_GET['res'])){
         </div>
     </div>    
 
-
-
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
     const arrData = <?php echo json_encode($tableResult); ?>;
@@ -333,20 +337,20 @@ if(isset($_GET['res'])){
 
                 this.datatable2 = new simpleDatatables.DataTable('#myTable2', {
                     data: {
-                        headings: ['Name', 'Status', 'Company', 'Start Date', 'Email', 'Phone No.', 'Action'],
+                        headings: ['Nome do Pretendente', 'Status', 'Atendido por', 'Telefones', 'Atendimento', 'E-mail', 'Ações'],
                         data: data
                     },
                     searchable: false,
-                    perPage: 10,
+                    perPage: 30,
                     perPageSelect: [10, 20, 30, 50, 100],
                     columns: [
                         {
                             select: 0,
                             render: (data, cell, row) => {
                                 const id = row.cells[6].data
+                                console.log("🚀 ~ updateTableData ~ id:", id)
                                 return `<div class="flex items-center w-max">
-                                            <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-${row.dataIndex + 1}.jpeg" />
-                                            <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}');" class="hover:text-primary">${id} - ${data}</a>
+                                            <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}');" class="hover:text-primary">${data}</a>
                                         </div>`;
                             }
                         },
@@ -356,12 +360,6 @@ if(isset($_GET['res'])){
                             render: (data, cell, row) => {
                                 const id = row.cells[6].data
                                 return `<div @click="toggle2; getStatusScrumBoard('${id}');" x-tooltip="Alterar o status do pretendente" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer" >${data}</div>`;
-                            },
-                        },
-                        {
-                            select: 3,
-                            render: (data, cell, row) => {
-                                return this.formatDate(data);
                             },
                         },
                         {
@@ -489,9 +487,9 @@ if(isset($_GET['res'])){
             },
 
             limpaFiltros() {
-                // document.getElementById("formFilter").reset();
-                // this.updateTableData(arrData);
-                location.reload() 
+                document.getElementById("formFilter").reset();
+                this.updateTableData(arrData);
+                // location.reload() 
             },
 
             confirmDelete(id, nome) {

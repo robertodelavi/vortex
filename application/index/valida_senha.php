@@ -51,32 +51,8 @@ class Valida_SenhaCommand implements Command
                 ), $idSession);
                 
             if ($result['login'] == 'Logado') {
-                // echo 'Entrouuuu: '.$result['nome']; exit;
-    
-                echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                // switch ($_SESSION['wf_userPermissao']) {
-                //     case 1: //administrador
-                //         break;
-                //     case 2: //Vendas
-                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                //         break;
-                //     case 3: //Aux. ADM
-                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                //         break;
-                //     case 4: //Produtção
-                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                //         break;
-                //     case 5: //Almoxarifado
-                //     case 6:
-                //     case 7:
-                //     case 8:
-                //     case 10:
-                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=lista_principal'>";
-                //         break;
-                //     case 9:
-                //         echo "<meta http-equiv='refresh' content='1;URL=?module=principal&acao=listacliente_principal'>";
-                //         break;
-                // }
+                //* Logado com sucesso    
+                echo "<meta http-equiv='refresh' content='1;URL=?module=home'>";
             } else {
                 echo "<meta http-equiv='refresh' content='0;URL=?module=index&erro=2'>";
             }

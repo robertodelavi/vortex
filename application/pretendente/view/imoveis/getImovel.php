@@ -9,8 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($value['id']) && $value['id'] > 0) {
 
         $sql = '
-        SELECT i.imo_codigo, ti.tpi_descricao, i.imo_rua, b.bai_descricao, i.imo_areaconstruida, i.imo_quartos, i.imo_banheiros, i.imo_garagem
+        SELECT 
+            i.imo_codigo, 
+            ti.tpi_descricao,
+            i.imo_rua, 
+            b.bai_descricao, 
+            i.imo_areaconstruida, 
+            i.imo_quartos, 
+            i.imo_banheiros, 
+            i.imo_garagem,
+            ((iv.imv_valor*m.moe_valor)/100) AS imv_valor
         FROM imoveis AS i
+            INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+            LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
             LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
             LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
         WHERE i.imo_codigo = ' . $value['id'];
@@ -56,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div>
                             <p class="text-lg font-bold text-success">
-                                R$ 500.000,00
+                                R$ '.number_format(($result[0]['imv_valor']/100), 2, ',', '.').'
                             </p>
                             <p class="text-xs mb-2">
                                 Código: ' . $result[0]['imo_codigo'] . '

@@ -101,6 +101,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
 
+                        <!-- Faixa de valor -->
+                        <div class="sm:col-span-2">
+                            <label class="text-success" for="faixaValor">Faixa de Valor (R$)</label>
+                            <div class="flex w-full">
+                                <div class="flex items-center w-full">
+                                    <div class="w-full">
+                                        <input name="ppf_valorini" id="valorIni" type="text" value="'.floatToMoney($result[0]['ppf_valorini']).'" onkeyup="formatCurrency(this)"
+                                            placeholder="R$ 0,00" class="form-input" />
+                                    </div>
+                                    <div class="px-3">até</div>
+                                    <div class="w-full">
+                                        <input name="ppf_valorfim" id="valorFim" type="text" value="'.floatToMoney($result[0]['ppf_valorfim']).'" onkeyup="formatCurrency(this)"
+                                            placeholder="R$ 0,00" class="form-input" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Empreendimento -->
                         <div>
                             <label for="empreendimento">Empreendimento</label>
@@ -150,24 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div>
                             <label for="garagem">Garagem</label>
                             <input name="ppf_garagem" id="garagem" type="text" value="'.$result[0]['ppf_garagem'].'" placeholder="0" class="form-input" />
-                        </div>
-
-                        <!-- Faixa de valor -->
-                        <div>
-                            <label for="faixaValor">Faixa de Valor</label>
-                            <div class="flex w-full">
-                                <div class="flex items-center w-full">
-                                    <div class="w-full">
-                                        <input name="ppf_valorini" id="valorIni" type="text" value="'.floatToMoney($result[0]['ppf_valorini']).'" onkeyup="formatCurrency(this)"
-                                            placeholder="R$ 0,00" class="form-input" />
-                                    </div>
-                                    <div class="px-3">até</div>
-                                    <div class="w-full">
-                                        <input name="ppf_valorfim" id="valorFim" type="text" value="'.floatToMoney($result[0]['ppf_valorfim']).'" onkeyup="formatCurrency(this)"
-                                            placeholder="R$ 0,00" class="form-input" />
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Área Terreno m² -->

@@ -219,7 +219,7 @@
             </select>
         </div>
         <div>
-            <label for="phone">Valor de Prospecção</label>
+            <label for="phone" class="text-success" >Valor de Prospecção</label>
             <input name="prw_valorprospeccao" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['prw_valorprospeccao']); ?>" onkeyup="formatCurrency(this)" />
         </div>                
         <div class="flex items-center">

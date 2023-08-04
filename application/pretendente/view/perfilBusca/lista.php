@@ -24,7 +24,7 @@
                         <th>Name</th>
                         <th>Bairro</th>
                         <th>Tipo de Imóvel</th>
-                        <th>Faixa de valor</th>
+                        <th class="text-success">Faixa de valor (R$)</th>
                         <th class="text-center">Ação</th>
                     </tr>
                 </thead>
@@ -37,7 +37,7 @@
                                 <td>' . $row['ppf_nome'] . '</td>
                                 <td>' . ($row['ppf_bairro'] ? $row['ppf_bairro'] : '--') . '</td>
                                 <td>' . $row['tpi_descricao'] . '</td>
-                                <td>' . number_format(($row['ppf_valorini'] / 100), 2, ',', '.') . ' a ' . number_format(($row['ppf_valorfim'] / 100), 2, ',', '.') . '</td>
+                                <td>' . number_format($row['ppf_valorini'], 2, ',', '.') . ' a ' . number_format($row['ppf_valorfim'], 2, ',', '.') . '</td>
                                 <td>     
                                     <button type="button" x-tooltip="Editar Perfil de Busca" data-placement="left" class="mr-2 hover:text-info" @click="toggle; openModalEditPerfil(\'' . $row['ppf_pretendente'] . '\', \'' . $row['ppf_codigo'] . '\');">
                                         '.file_get_contents('application/icons/edit.svg').'
@@ -46,7 +46,6 @@
                                     <button type="button" x-tooltip="Excluir Perfil de Busca" data-placement="left" class="ml-2 hover:text-danger" @click="toggleDelete; setDeleteId(\'' . $row['ppf_pretendente'] . '\', \'' . $row['ppf_codigo'] . '\');" >
                                         '.file_get_contents('application/icons/delete.svg').'
                                     </button>
-
                                 </td>
                             </tr>';
                         }
