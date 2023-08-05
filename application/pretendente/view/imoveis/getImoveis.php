@@ -7,10 +7,14 @@ $data = new DataManipulation();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $value = json_decode(file_get_contents('php://input'), true);
     if (isset($value['pretendente']) && $value['pretendente'] > 0) {
-
+        
+        //* Filtro da lateral da listagem dos imóveis 
+        $sideFilters = $value['filters'];
+        
         $filters = getFilters($value['pretendente'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
-        $sql1 = createScriptImoveis($filters); //? Cria e configura o script (sql) para buscar os imóveis
+        $sql1 = createScriptImoveis($filters, $sideFilters); //? Cria e configura o script (sql) para buscar os imóveis
         $resultImoveis = $data->find('dynamic', $sql1);
+
 
         $sql2 = '
         SELECT 
@@ -36,23 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         GROUP BY i.imo_codigo';
         $resultFavoritos = $data->find('dynamic', $sql2);
 
-        // $sql = '
-        // SELECT i.imo_codigo, ti.tpi_descricao, i.imo_rua, b.bai_descricao, i.imo_areaconstruida, i.imo_quartos, i.imo_banheiros, i.imo_garagem, ft.imf_arquivo
-        // FROM pretendentesimoveis AS p 
-        //     LEFT JOIN imoveis AS i ON (p.pwi_imovel = i.imo_codigo)
-        //     LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
-        //     LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
-        //     LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
-        // WHERE p.pwi_pretendente = ' . $value['pretendente'] . ' AND p.pwi_favorito = 0
-        // GROUP BY i.imo_codigo';
-        // $resultImoveis = $data->find('dynamic', $sql);
-        
         //* FAVORITOS
-        $html = '
-        <div>
-            <h5 class="font-bold text-3xl text-warning my-6">Favoritos</h5>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
-                if ($resultFavoritos && count($resultFavoritos) > 0) {
+        if ($resultFavoritos && count($resultFavoritos) > 0) {
+            $html = '
+            <div>            
+                <h5 class="font-bold text-3xl text-warning my-6">Favoritos</h5>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">';                    
                     foreach ($resultFavoritos as $i => $imovel) {
                         $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
                         $html .= '
@@ -111,22 +104,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                             </div>
                         </div>';
-                    }
-                } else {
-                    $html .= '<p>Nenhum imóvel favoritado!</p>';
-                }
+                    }                    
                 $html .= ' 
-            </div>
-        </div>';
+                </div>
+            </div>';
+        }
 
         //* IMÓVEIS SUGERIDOS
         $html .= '
-        <div class="mt-3">
-            <h5 class="font-bold text-3xl my-6">Imóveis</h5>
+        <div>     
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
                 if ($resultImoveis && count($resultImoveis) > 0) {
                     foreach ($resultImoveis as $i => $imovel) {
-                        $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                        // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                        $foto = $imovel['imf_arquivo'] ? 'http://vegax.com.br/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
                         $html .= '
                         <div @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');"" id="imoveis-container" class="cursor-pointer border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary rounded-md hover:transition-colors duration-300 bg-white dark:bg-[#0e1726] p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),_0px_12px_24px_-4px_rgba(145,158,171,0.12)]">
                             <div class="rounded-md overflow-hidden mb-5 shadow-[0_6px_10px_0_rgba(0,0,0,0.14),_0_1px_18px_0_rgba(0,0,0,0.12),_0_3px_5px_-1px_rgba(0,0,0,0.20)]">  
@@ -198,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 //? Função que cria e configura o script (sql) para buscar os imóveis
-function createScriptImoveis($filters){
+function createScriptImoveis($filters, $sideFilters){
     $sql = '
     SELECT 
         i.imo_codigo, 
@@ -218,27 +209,34 @@ function createScriptImoveis($filters){
         LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
         LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
     WHERE ';
-    $filters = json_decode($filters);
-    foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
-        $sql .= '(';
-        foreach($valuePerfil as $keyCampo => $valueCampo){ // cada campo do perfil
-            //? Com intervalo de valores
-            if($valueCampo->intervalo && $valueCampo->inicio != '' && $valueCampo->fim != ''){
-                if($keyCampo == 'ppf_valor'){ //? Valor faz join com tabela imovelvenda
-                    $sql .= '(((iv.'.convertField($keyCampo).'*m.moe_valor)/100)/100) BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
-                }else{
-                    $sql .= 'i.'.convertField($keyCampo) .' BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
+
+    //? Filtros da barra lateral     
+    if($sideFilters->name != ''){ // TEMP
+        $sql .= ' i.imo_codigo = "'.$sideFilters->name.'" ';
+    }else{
+        $filters = json_decode($filters);
+        foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
+            $sql .= '(';
+            foreach($valuePerfil as $keyCampo => $valueCampo){ // cada campo do perfil
+                //? Com intervalo de valores
+                if($valueCampo->intervalo && $valueCampo->inicio != '' && $valueCampo->fim != ''){
+                    if($keyCampo == 'ppf_valor'){ //? Valor faz join com tabela imovelvenda
+                        $sql .= '(((iv.'.convertField($keyCampo).'*m.moe_valor)/100)/100) BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
+                    }else{
+                        $sql .= 'i.'.convertField($keyCampo) .' BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
+                    }
+                }else 
+                //? Com valores únicos
+                if(!$valueCampo->intervalo && $valueCampo->valor != ''){
+                    $sql .= 'i.'.convertField($keyCampo) .' = "'.$valueCampo->valor.'" AND ';
                 }
-            }else 
-            //? Com valores únicos
-            if(!$valueCampo->intervalo && $valueCampo->valor != ''){
-                $sql .= 'i.'.convertField($keyCampo) .' = "'.$valueCampo->valor.'" AND ';
             }
+            $sql = substr($sql, 0, -4);
+            $sql .= ') OR ';
         }
         $sql = substr($sql, 0, -4);
-        $sql .= ') OR ';
     }
-    $sql = substr($sql, 0, -4);
+
     $sql .= ' 
     GROUP BY i.imo_codigo
     ORDER BY i.imo_codigo DESC

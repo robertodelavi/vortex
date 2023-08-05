@@ -136,8 +136,67 @@ if(isset($_GET['tab'])){
         
                 <!-- IMÓVEIS -->
                 <template x-if="tab === 'imoveis'"> 
-                    <!-- Imóveis vindo do ajax -->
-                    <div id="resulAjaxImoveis"></div>                    
+                    <div class="flex h-screen gap-6">                
+                        <div class="w-1/5">
+                            <!-- Bloco dos filtros -->
+                            <div class="panel h-full">
+                                <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
+                                    Filtros
+                                </h5>
+                                <div class="flex-1 "> <!-- Da acesso aos dados da tabela -->
+                                    <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
+                                        <div>
+                                            <label for="name">Nome</label>
+                                            <input id="name" name="name" type="text" placeholder="Ed. Fiorentin" class="form-input" />
+                                        </div>
+                                        <div>
+                                            <label for="profession">Profession</label>
+                                            <input id="profession" name="profissao" type="text" placeholder="Web Developer" class="form-input" />
+                                        </div>
+                                        <div>
+                                            <label for="country">Country</label>
+                                            <select id="country" class="form-select text-white-dark">
+                                                <option>All Countries</option>
+                                                <option selected="">United States</option>
+                                                <option>India</option>
+                                                <option>Japan</option>
+                                                <option>China</option>
+                                                <option>Brazil</option>
+                                                <option>Norway</option>
+                                                <option>Canada</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="address">Address</label>
+                                            <input id="address" type="text" placeholder="New York" class="form-input" />
+                                        </div>
+                                        <div>
+                                            <label for="profession">Profession</label>
+                                            <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
+                                        </div>
+                                        <div>
+                                            <label for="profession">Profession</label>
+                                            <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
+                                        </div>
+                    
+                                        <div class="flex gap-2 mt-4">
+                                            <div class="">
+                                                <button type="submit" class="btn btn-primary">Aplicar</button>
+                                            </div>
+                                            <div class="">
+                                                <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <!-- Imóveis vindo do ajax -->
+                            <div id="resulAjaxImoveis"></div>    
+                        </div>
+                    </div>
+                                    
                 </template>
             </div>
         </div>
@@ -154,9 +213,9 @@ if(isset($_GET['tab'])){
                         </button>
                     </div>
                     <div class="p-5">
-                        <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">                    
+                        <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]"> 
                             <!-- Imóveis vindo do ajax -->
-                            <div id="resultAjaxGetImovel"></div>                            
+                            <div id="resultAjaxGetImovel"></div>      
                         </div>
                     </div>
                 </div>
@@ -165,12 +224,20 @@ if(isset($_GET['tab'])){
     </div>
 </div>
 
+<div>
+    <form action="" method="post">
+        <input type="text" name="filtro" placeholder="Buscar..." class="form-input" >
+    </form>
+</div>
+
 <script>
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
-    const getImoveis = () => {
+    const getImoveis = (filters = null) => {
+        console.log('no getImoveis: ', filters)
         var data = {
-            pretendente: <?php echo $_POST['param_0']; ?>
+            pretendente: <?php echo $_POST['param_0']; ?>,
+            filters: filters
         };
 
         //? Loading
@@ -322,7 +389,55 @@ if(isset($_GET['tab'])){
                         closeButton: "top",
                     });
                 }
-            }
+            },
+
+            submitForm(event) {
+                event.preventDefault();
+
+                // Receber os dados do formulário e enviar pra funçao getImoveis 
+                const formData = new FormData(event.target);
+                const filters = {};
+                for (let [key, value] of formData.entries()) {
+                    filters[key] = value;
+                }
+                
+                
+                console.log("🚀 ~ submitForm ~ filters:", filters)
+                getImoveis(filters)
+
+                // Faz a requisição AJAX para o arquivo PHP
+                // fetch('application/pretendente/view/filter.php', {
+                //     method: 'POST',
+                //     body: formData
+                // })
+                //     .then(response => response.json())
+                //     .then(data => {
+                //         // Atualiza os dados da tabela com os dados filtrados
+                //         console.log('Dados retornados do ajax: ', data)
+                //         this.currentData = data;
+                //         this.updateTableData(data);
+                //     })
+                //     .catch(error => {
+                //         console.error('Erro ao enviar o formulário:', error);
+                //     });
+            },
+
+            setFormValues(formData) {
+                const formValues = {};
+                const result = [];
+                for (let [key, value] of formData.entries()) {
+                    formValues[key] = value;
+                    console.log('======>>>')
+                }
+                // Adiciona os valores extras ao formData
+                // console.log("🚀 ~ setFormValues ~ formValues:", formValues)
+                
+                console.log("🚀 ~~~~~ setFormValues ~ formData:", result)
+
+
+
+                return formData;
+            },
         }));
     }); 
 
