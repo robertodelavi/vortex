@@ -348,7 +348,6 @@ if(isset($_GET['res'])){
                             select: 0,
                             render: (data, cell, row) => {
                                 const id = row.cells[6].data
-                                console.log("🚀 ~ updateTableData ~ id:", id)
                                 return `<div class="flex items-center w-max">
                                             <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}');" class="hover:text-primary">${data}</a>
                                         </div>`;
@@ -549,7 +548,9 @@ if(isset($_GET['res'])){
 
                                 // Atualiza updateTableData 
                                 const updatedDataStatus = this.updateDataStatus(projectId)
-                                this.updateTableData(updatedDataStatus);                                                           
+                                this.updateTableData(updatedDataStatus);   
+
+                                this.getStatusScrumBoard(this.pretendenteID)                                                        
                             }
                         })
                         .catch(error => {
@@ -742,6 +743,7 @@ if(isset($_GET['res'])){
             },
 
             getStatusScrumBoard(id){
+                console.log("🚀 ~ getStatusScrumBoard id:", id)
                 this.pretendenteID = id;
                 fetch('application/pretendente/view/status/getStatus.php', {
                     method: 'POST',

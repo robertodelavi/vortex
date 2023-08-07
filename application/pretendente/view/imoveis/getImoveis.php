@@ -211,8 +211,8 @@ function createScriptImoveis($filters, $sideFilters){
     WHERE ';
 
     //? Filtros da barra lateral     
-    if($sideFilters->name != ''){ // TEMP
-        $sql .= ' i.imo_codigo = "'.$sideFilters->name.'" ';
+    if($sideFilters['codigo'] != ''){ // TEMP
+        $sql .= ' i.imo_codigo = "'.$sideFilters['codigo'].'" ';
     }else{
         $filters = json_decode($filters);
         foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
