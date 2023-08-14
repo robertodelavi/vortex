@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values = json_decode($formData['values'], true);
     
     $sql = '
-    SELECT p.prw_codigo, p.prw_nome, p.prw_email, p.prw_status, u.usu_nome, p.prw_telefones, DATE_FORMAT(p.prw_datacad, "%d/%m/%Y") AS primeiroCadastro, ps.prs_nome AS statusNome, ps.prs_cor,
+    SELECT p.prw_codigo, p.prw_nome, p.prw_email, p.prw_psa_codigo, u.usu_nome, p.prw_telefones, DATE_FORMAT(p.prw_datacad, "%d/%m/%Y") AS primeiroCadastro, ps.psa_descricao AS statusNome, ps.psa_cor,
         (SELECT DATE_FORMAT(ph.prh_datacad, "%d/%m/%Y")
         FROM pretendenteshistorico AS ph 
         WHERE ph.prh_pretendente = p.prw_codigo
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         LIMIT 1) AS ultimoCadastro
     FROM pretendentes AS p
         LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
-        JOIN pretendentesstatus AS ps ON (p.prw_status = ps.prs_codigo)
+        LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
     WHERE p.prw_nome LIKE "%'.$values['name'].'%" 
     LIMIT 100 ';
     $result = $data->find('dynamic', $sql);    
@@ -27,13 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
     $sql = '
     SELECT COUNT(*) AS qtd
-    FROM pretendentesstatus
-    WHERE prs_ativo = "s" ';
+    FROM pretendentesstatusatendimento';
     $totalEtapas = $data->find('dynamic', $sql);
 
     function getProgressPercent($totalEtapas, $row){
         if(!$totalEtapas) $totalEtapas = 1;
-        $percent = ($row['prw_status'] * 100)/$totalEtapas;
+        $percent = ($row['prw_psa_codigo'] * 100)/$totalEtapas;
         return $percent;
     }
     
@@ -42,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach($result as $row){
             $arrRow = [];
             array_push($arrRow, trim($row['prw_nome']));    
-            array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['prs_cor'].'; "></div>');
+            array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['psa_cor'].'; "></div>');
             array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
             array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
             array_push($arrRow, trim($row['primeiroCadastro']).' a '.trim($row['ultimoCadastro']));

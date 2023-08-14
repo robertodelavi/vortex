@@ -9,20 +9,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $value = json_decode(file_get_contents('php://input'), true); // Recebendo os dados do corpo da requisição
     if (isset($value['id']) && $value['id'] > 0 && isset($value['status']) && $value['status'] > 0) {
        
-        $sql = 'UPDATE pretendentes SET prw_status = '.$value['status'].' WHERE prw_codigo = '.$value['id'];
+        $sql = 'UPDATE pretendentes SET prw_psa_codigo = '.$value['status'].' WHERE prw_codigo = '.$value['id'];
         $data->executaSQL($sql);
 
         // SQL buscar as etapas/status 
         $sql = '
-        SELECT prs_nome
-        FROM pretendentesstatus
-        WHERE prs_codigo = '.$value['status'];
+        SELECT psa_descricao
+        FROM pretendentesstatusatendimento
+        WHERE psa_codigo = '.$value['status'];
         $status = $data->find('dynamic', $sql);
 
         // Retorna resposta
         echo json_encode(array(
             'status' => 'success', 
-            'message' => 'Status atualizado para '.$status[0]['prs_nome'].'!'
+            'message' => 'Status atualizado para '.$status[0]['psa_descricao'].'!'
         ));
         exit;
     }

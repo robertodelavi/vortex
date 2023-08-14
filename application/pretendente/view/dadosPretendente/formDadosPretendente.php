@@ -15,6 +15,12 @@
 
     $sql = '
     SELECT * 
+    FROM pretendentesstatusatendimento
+    ORDER BY psa_ordem ASC';
+    $statusAtendimento = $data->find('dynamic', $sql);
+
+    $sql = '
+    SELECT * 
     FROM pretendentescontato
     ORDER BY pco_descricao ASC';
     $formaContato = $data->find('dynamic', $sql);
@@ -66,6 +72,22 @@
             <label for="name">Nome do Pretendente</label>
             <input name="prw_nome" type="text" placeholder="João da Silva" class="form-input" value="<?php echo $result[0]['prw_nome']; ?>" />
         </div>
+
+        <div>
+            <label for="country">Status Atendimento</label>
+            <select name="prw_psa_codigo" class="form-select text-white-dark">
+                <?php 
+                    foreach($statusAtendimento as $row){
+                        $selected = $result[0]['prw_psa_codigo'] == $row['psa_codigo'] ? 'selected' : '';
+                        echo '
+                        <option value="'.$row['psa_codigo'].'" '.$selected.' >
+                            '.$row['psa_descricao'].'
+                        </option>';
+                    }
+                ?>
+            </select>
+        </div>
+
         <div>
             <label for="country">Sexo</label>
             <select name="prw_sexo" class="form-select text-white-dark">
