@@ -34,15 +34,55 @@
     //* Banco de dados do cliente
     $conn->connOpen($emp_host, $emp_bd, $emp_user, $emp_pass);
 
-    $sql = 'SELECT * FROM imoveis WHERE imo_codigo = '.$_GET['id'];
+    $sql = '
+    SELECT 
+        i.imo_codigo, 
+        ti.tpi_descricao, 
+        i.imo_rua, 
+        b.bai_descricao, 
+        i.imo_areaconstruida, 
+        i.imo_quartos, 
+        i.imo_banheiros, 
+        i.imo_garagem,
+        i.imo_rua,
+        b.bai_descricao,
+        c.cid_descricao,
+        c.cid_uf,
+        
+        ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
+        ft.imf_arquivo
+    FROM imoveis AS i 
+        INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+        LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
+        LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
+        LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
+        LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
+        LEFT JOIN cidades AS c ON (i.imo_cidade = c.cid_codigo)
+    WHERE i.imo_codigo = '.$_GET['id'];
     $result = $conn->executeQuery($sql);
+
+    // echo $sql.'<br/><br/>';
 
     $res = [];
     if ($conn->countLines($result) > 0){
         for ($i=0; $i< $conn->countLines($result); $i++){
             $res[] = array(
+                'codigo' => $conn->result($result, $i, 'imo_codigo'),
+                'tipo' => $conn->result($result, $i, 'tpi_descricao'),
                 'rua' => $conn->result($result, $i, 'imo_rua'),
-                'numero' => $conn->result($result, $i, 'imo_numero')
+                'bairro' => $conn->result($result, $i, 'bai_descricao'),
+                'area' => $conn->result($result, $i, 'imo_areaconstruida'),
+                'quartos' => $conn->result($result, $i, 'imo_quartos'),
+                'banheiros' => $conn->result($result, $i, 'imo_banheiros'),
+                'garagem' => $conn->result($result, $i, 'imo_garagem'),
+                'bairro' => $conn->result($result, $i, 'bai_descricao'),
+                'cidade' => $conn->result($result, $i, 'cid_descricao'),
+                'uf' => $conn->result($result, $i, 'cid_uf'),
+                'valor' => $conn->result($result, $i, 'imv_valor'),
+                'foto' => array(
+                    'url' => 'http://vegax.com.br/clientes/'.$_GET['emp'].'/imoveis/',
+                    'arquivo' => $conn->result($result, $i, 'imf_arquivo')                
+                ),
             );
             
         }

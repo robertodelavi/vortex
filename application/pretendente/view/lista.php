@@ -80,7 +80,7 @@ if(isset($_GET['res'])){
 <div x-data="modal">
     <div x-data="multipleTable"> 
         <!-- Tela com filtro e tabela de listagem -->
-        <div class="flex h-screen gap-6">
+        <div class="flex h-screen gap-4">
             <!-- Filtros -->
             <div class="w-1/5">
                 <!-- Bloco dos filtros -->
@@ -137,7 +137,7 @@ if(isset($_GET['res'])){
                 </div>
             </div>
 
-            <div class="w-full">
+            <div class="w-full overflow-x-auto">
                 <div class="panel h-full mt-0 sticky-header">
                     <!-- Listagem -->
                     <div class="flex justify-between items-center ">
