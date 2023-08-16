@@ -2,7 +2,7 @@
 include '../header-main.php';
 ?>
 
-<script src="/assets/js/simple-datatables.js"></script>
+<script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 
 <div x-data="custom">
     <div class="space-y-6">
@@ -272,4 +272,5 @@ include '../header-main.php';
         }));
     });
 </script>
+
 <?php include '../footer-main.php'; ?>

@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //* IMÓVEIS SUGERIDOS
         $html .= '
         <div>     
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">';
                 if ($resultImoveis && count($resultImoveis) > 0) {
                     foreach ($resultImoveis as $i => $imovel) {
                         // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';

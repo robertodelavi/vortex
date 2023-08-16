@@ -1,8 +1,23 @@
 <?php
 
 $sql = '
-SELECT p.prw_codigo, p.prw_nome, p.prw_email, p.prw_psa_codigo, u.usu_nome, p.prw_telefones, DATE_FORMAT(p.prw_datacad, "%d/%m/%Y") AS primeiroCadastro, ps.psa_descricao AS statusNome, ps.psa_cor,
-    (SELECT DATE_FORMAT(ph.prh_datacad, "%d/%m/%Y")
+SELECT 
+    p.prw_codigo, 
+    p.prw_nome, 
+    p.prw_email,     
+    p.prw_psa_codigo, 
+    u.usu_nome, 
+    p.prw_telefones, 
+    ps.psa_descricao AS statusNome, 
+    ps.psa_cor,
+    
+    (SELECT IF(ph.prh_datacad <> "", DATE_FORMAT(ph.prh_datacad, "%d/%m/%y"), "--")
+    FROM pretendenteshistorico AS ph 
+    WHERE ph.prh_pretendente = p.prw_codigo
+    ORDER BY ph.prh_datacad ASC
+    LIMIT 1) AS primeiroCadastro,
+
+    (SELECT IF(ph.prh_datacad <> "", DATE_FORMAT(ph.prh_datacad, "%d/%m/%y"), "--")
     FROM pretendenteshistorico AS ph 
     WHERE ph.prh_pretendente = p.prw_codigo
     ORDER BY ph.prh_datacad DESC
@@ -32,7 +47,8 @@ foreach ($result as $row) {
     array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['psa_cor'].'; "></div>');
     array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
     array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
-    array_push($arrRow, trim($row['primeiroCadastro']).' a '.trim($row['ultimoCadastro']));
+    array_push($arrRow, trim($row['primeiroCadastro']));
+    array_push($arrRow, trim($row['ultimoCadastro']));
     array_push($arrRow, trim($row['prw_email'] ? $row['prw_email'] : '--'));   
     array_push($arrRow, $row['prw_codigo']);
     //
@@ -122,7 +138,7 @@ if(isset($_GET['res'])){
             </div>
 
             <div class="w-full">
-                <div class="panel h-full mt-0">
+                <div class="panel h-full mt-0 sticky-header">
                     <!-- Listagem -->
                     <div class="flex justify-between items-center ">
                         <h5 class="font-semibold text-lg dark:text-white-light">
@@ -133,7 +149,7 @@ if(isset($_GET['res'])){
                         </div>
                     </div>            
                     <!-- Tabela -->
-                    <table id="myTable2" class="whitespace-nowrap"></table>            
+                    <table id="myTable2" class="tabela whitespace-nowrap"></table>            
                 </div>
             </div>
         </div>    
@@ -335,17 +351,17 @@ if(isset($_GET['res'])){
 
                 this.datatable2 = new simpleDatatables.DataTable('#myTable2', {
                     data: {
-                        headings: ['Nome do Pretendente', 'Status', 'Atendido por', 'Telefones', 'Atendimento', 'E-mail', 'Ações'],
+                        headings: ['Nome do Pretendente', 'Status', 'Atendido por', 'Telefones', 'P. Atendimento', 'U. Atendimento', 'E-mail', 'Ações'],
                         data: data
                     },
                     searchable: false,
-                    perPage: 30,
+                    perPage: 50,
                     perPageSelect: [10, 20, 30, 50, 100],
                     columns: [
                         {
                             select: 0,
                             render: (data, cell, row) => {
-                                const id = row.cells[6].data
+                                const id = row.cells[7].data
                                 return `<div class="flex items-center w-max">
                                             <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}');" class="hover:text-primary">${data}</a>
                                         </div>`;
@@ -355,15 +371,15 @@ if(isset($_GET['res'])){
                             select: 1,
                             sortable: false,
                             render: (data, cell, row) => {
-                                const id = row.cells[6].data
+                                const id = row.cells[7].data
                                 return `<div @click="toggle2; getStatusScrumBoard('${id}');" x-tooltip="Alterar o status do pretendente" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer" >${data}</div>`;
                             },
                         },
                         {
-                            select: 6,
+                            select: 7,
                             sortable: false,
                             render: (data, cell, row) => {
-                                const id = row.cells[6].data
+                                const id = row.cells[7].data
                                 const nome = row.cells[0].data
                                 
                                 return `<div class="flex gap-4 items-center" >
@@ -564,7 +580,7 @@ if(isset($_GET['res'])){
                 }
                 
                 this.currentData.map((item) => { // varre pretendentes
-                    if(item[6] == this.pretendenteID){
+                    if(item[7] == this.pretendenteID){
                         if(etapas.length == 0){
                             return this.currentData
                         }
@@ -761,3 +777,12 @@ if(isset($_GET['res'])){
 
     });
 </script>
+
+<style>
+    /* Fixar coluna 7 da tabela */
+    .tabela td:nth-child(8) {
+        position: sticky;
+        left: 0; /* Define a posição de sticky na borda esquerda da coluna */
+        /* background-color: #f0f0f0; */
+    }
+</style>
