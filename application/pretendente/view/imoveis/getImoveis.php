@@ -124,13 +124,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="rounded-md overflow-hidden relative" style="height: 300px;">
                                     <div class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url('.$foto.');"></div>
                                     
-                                    <!-- FAVORITAR -->
-                                    <div class="absolute top-2 right-2 bg-white dark:bg-dark rounded p-2 flex">
-                                        <button type="button" class="text-warning group" data-imovel-id="6" x-tooltip="Favoritar Imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')">
-                                            ' . file_get_contents('../../../icons/star.svg') . '
-                                        </button>
-                                    </div>
+                                    <!-- AÇÕES -->
+                                    <div class="absolute top-2 w-full flex justify-end gap-2">
 
+                                        <!-- MARCAR VISITA -->
+                                        <div class="bg-white dark:bg-dark rounded p-2 flex">
+                                            <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')">
+                                                ' . file_get_contents('../../../icons/flag.svg') . '
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- FAVORITAR -->
+                                        <div class="bg-white dark:bg-dark rounded p-2 flex">
+                                            <button type="button" class="text-warning group" data-imovel-id="6" x-tooltip="Favoritar imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')">
+                                                ' . file_get_contents('../../../icons/star.svg') . '
+                                            </button>
+                                        </div>                                    
+                                    </div>
                                 </div>    
                             </div>
                             
