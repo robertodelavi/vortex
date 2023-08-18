@@ -1,7 +1,12 @@
 <?php 
-
     header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
+
+    // Verifica se os parametros foram informados e se sao inteiros positivos evitando sql injection
+    if(!isset($_GET['emp']) || !isset($_GET['id']) || !is_numeric($_GET['emp']) || !is_numeric($_GET['id']) || $_GET['emp'] <= 0 || $_GET['id'] <= 0){
+        echo json_encode(array('status' => false, 'message' => 'Parametros invalidos!'));
+        exit;
+    }    
 
     // Header default
     session_start();
@@ -11,7 +16,8 @@
     $conn = new MySql();
 
     //* Autenticação
-	$conn->connOpen('localhost','vortex__autenticacao','root', '');
+	// $conn->connOpen('localhost','vortex__autenticacao','root', '');
+    $conn->connOpen('brs36.brs.com.br','vegacscom_vortex','vegacscom_vortex', 'vortex@54741');
 
     $sql = 'SELECT * FROM sisempresas WHERE emp_codigo = '.$_GET['emp'].' AND emp_ativado = "s"';
     $resultAuth = $conn->executeQuery($sql);
@@ -27,7 +33,7 @@
     }
 
     if(!$emp_bd){
-        echo json_encode(array('error' => 'Empresa não encontrada'));
+        echo json_encode(array('status' => false, 'message' => 'Empresa nao encontrada!'));
         exit;
     }
 
@@ -61,7 +67,10 @@
     WHERE i.imo_codigo = '.$_GET['id'];
     $result = $conn->executeQuery($sql);
 
-    // echo $sql.'<br/><br/>';
+    if(!$result || $conn->countLines($result) == 0){
+        echo json_encode(array('status' => false, 'message' => 'Imovel nao encontrado!'));
+        exit;
+    }
 
     $res = [];
     if ($conn->countLines($result) > 0){
@@ -80,12 +89,13 @@
                 'uf' => $conn->result($result, $i, 'cid_uf'),
                 'valor' => $conn->result($result, $i, 'imv_valor'),
                 'foto' => array(
-                    'url' => 'http://vegax.com.br/clientes/'.$_GET['emp'].'/imoveis/',
-                    'arquivo' => $conn->result($result, $i, 'imf_arquivo')                
+                    'base_url' => 'http://vegax.com.br/clientes/'.$_GET['emp'].'/imoveis/',
+                    'arquivo' => $conn->result($result, $i, 'imf_arquivo'), 
+                    'url' => 'http://vegax.com.br/clientes/'.$_GET['emp'].'/imoveis/'.$conn->result($result, $i, 'imf_arquivo')
                 ),
             );
             
         }
     }
 
-    echo json_encode($res);
+    echo json_encode(array('status' => true, 'data' => $res));

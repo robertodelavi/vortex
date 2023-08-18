@@ -7,8 +7,19 @@
 			$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 			$data->tabela = 'pretendentes';
 			$data->add($_POST);
-
 			$prw_codigo = $data->MaxValue('prw_codigo', 'pretendentes');
+
+            //? Grava o histórico
+            $historico['prh_pretendente'] = $prw_codigo;
+            $historico['prh_data'] = date('Ymd');
+            $historico['prh_contato'] = $_POST['prw_contato'];
+            $historico['prh_descricao'] = addslashes($_POST['prw_obs']);
+            $historico['prh_datacad'] = date('Ymd');
+            $historico['prh_horacad'] = date('Hi');
+            $historico['prh_usuario'] = $_SESSION['v_usu_codigo'];
+            $historico['prh_avisar'] = 'n';                       
+            $data->tabela = 'pretendenteshistorico';
+            $data->add($historico);
 
 			echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=1\', \''.$prw_codigo.'\' )"></body>';
 		break;
