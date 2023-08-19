@@ -22,6 +22,7 @@
 		
 		case 'grava':
 		case 'gravahistorico':
+		case 'gravavisita':
 		case 'gravadados':
 		
 		case 'update':
