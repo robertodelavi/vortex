@@ -277,7 +277,7 @@ if(isset($_GET['tab'])){
                         <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]"> 
                             <form method="POST" action="?module=pretendente&acao=gravavisita_pretendente">
                                 <input type="hidden" name="prv_pretendente" value="<?php echo $_POST['param_0']; ?>" />
-                                <input type="hidden" name="prv_imovel" value="69" />
+                                <input type="hidden" name="prv_imovel" id="prv_imovel" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
                                 <input type="hidden" name="prv_empresa" value="1" />
 
                                 <!-- Mensagem -->
@@ -415,6 +415,11 @@ if(isset($_GET['tab'])){
         })
     }
     
+    //* Seta id do imóvel pra visita 
+    const setVisit = (id) => {
+        document.getElementById('prv_imovel').value = id
+    }
+
     //* Favoritar
     const setFavorite = (action, id) => {
         var data = {

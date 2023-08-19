@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                         <!-- MARCAR VISITA -->
                                         <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
-                                            <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary">
+                                            <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(' . $imovel['imo_codigo'] . ')">
                                                 ' . file_get_contents('../../../icons/flag.svg') . '
                                             </button>
                                         </div>
