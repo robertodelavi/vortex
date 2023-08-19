@@ -29,6 +29,7 @@ class Login{
 
 		$sql = "SELECT 
 					ue.uem_codigo, 
+					e.emp_codigo,
 					e.emp_bd, 
 					e.emp_bd_host, 
 					e.emp_bd_user, 
@@ -95,6 +96,7 @@ class Login{
 		if ($db->countLines($result) > 0){
 			for ($i=0;$i<$db->countLines($result);$i++){
 				$_SESSION['v_usu_codigo'] 		= $db->result($result, $i,'usu_codigo');
+				$_SESSION['v_emp_codigo'] 		= $db->result($result, $i,'emp_codigo');
 				$_SESSION['database'] 			= $authData['emp_bd'];
 				$_SESSION['database_host'] 		= $authData['emp_bd_host'];
 				$_SESSION['database_user'] 		= $authData['emp_bd_user'];
@@ -117,6 +119,7 @@ class Login{
 				// Cria um cookie com o usu�rio
 				$tempo_cookie = strtotime("+2 day", time());
 				setcookie('v_usu_codigo', $_SESSION['v_usu_codigo'], $tempo_cookie, "/");
+				setcookie('v_emp_codigo', $_SESSION['v_emp_codigo'], $tempo_cookie, "/");
 				setcookie('database', $_SESSION['database'], $tempo_cookie, "/");
 				setcookie('database_host', $_SESSION['database'], $tempo_cookie, "/");
 				setcookie('database_user', $_SESSION['database'], $tempo_cookie, "/");

@@ -18,7 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $res = array();
         if($result && count($result) > 0){
             foreach ($result as $key => $value) {
-                $foto = $value['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$value['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                // $foto = $value['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$value['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                $foto = $value['imf_arquivo'] ? 'http://vegax.com.br/clientes/1/imoveis/'.$value['imf_arquivo'] : 'application/images/no-image-transparent.png';
                 $res[] = array(
                     'src' => $foto,
                     'title' => $value['imf_descricao'] ? $value['imf_descricao'] : 'Imagem '.($key+1), 

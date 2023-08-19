@@ -276,9 +276,10 @@ if(isset($_GET['tab'])){
                     <div class="p-5">
                         <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]"> 
                             <form method="POST" action="?module=pretendente&acao=gravavisita_pretendente">
+                                <!-- Parâmetros -->
                                 <input type="hidden" name="prv_pretendente" value="<?php echo $_POST['param_0']; ?>" />
                                 <input type="hidden" name="prv_imovel" id="prv_imovel" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
-                                <input type="hidden" name="prv_empresa" value="1" />
+                                <input type="hidden" name="prv_empresa" value="<?php echo $_SESSION['v_emp_codigo']; ?>" />
 
                                 <!-- Mensagem -->
                                 <div class="flex items-center p-3.5 rounded text-info bg-info-light dark:bg-info-dark-light">
@@ -379,11 +380,11 @@ if(isset($_GET['tab'])){
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
     const getImoveis = (filters = null) => {
-        console.log('no getImoveis: ', filters)
         var data = {
             pretendente: <?php echo $_POST['param_0']; ?>,
             filters: filters
         };
+        console.log("🚀 ~ getImoveis ~ data:", data)
 
         //? Loading
         setTimeout(() => {
@@ -427,17 +428,24 @@ if(isset($_GET['tab'])){
             id: id,
             pretendente: <?php echo $_POST['param_0']; ?>
         };
-
-        fetch('application/pretendente/view/imoveis/setFavorite.php', {
-            method: 'POST',
-            body: JSON.stringify(data) // Converte o objeto em uma string JSON
-        }).then(response => response.json()).then(data => {
-            console.log('Dados retornados do ajax: ', data)
-            getImoveis(); // Atualiza listagem dos imóveis
-            action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
-        }).catch(error => {
-            console.error('Erro ao enviar dados:', error);
-        });
+        if(data){
+            console.log("🚀 ~ setFavorite ~ data:", data)
+            fetch('application/pretendente/view/imoveis/setFavorite.php', {
+                method: 'POST',
+                body: JSON.stringify(data) // Converte o objeto em uma string JSON
+            }).then(response => response.json()).then(data => {
+                console.log('Dados retornados do ajax: ', data)
+    
+                setTimeout(() => {
+                    getImoveis() // Atualiza listagem dos imóveis
+                }, 300);
+    
+                action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
+            }).catch(error => {
+                console.error('Erro ao enviar dados:', error);
+            });
+        }
+        
     }
 
     //* Perfil de busca
