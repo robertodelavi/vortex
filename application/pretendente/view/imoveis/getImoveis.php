@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');" class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url('.$foto.');"></div>
 
                                 <!-- AÇÕES -->
-                                <div class="absolute top-2 w-full flex justify-end gap-2">
+                                <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
                                     <!-- MARCAR VISITA -->
                                     <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
                                         <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(' . $imovel['imo_codigo'] . ')">
@@ -134,8 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <div @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');" class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url('.$foto.');"></div>
                                     
                                     <!-- AÇÕES -->
-                                    <div class="absolute top-2 w-full flex justify-end gap-2">
-
+                                    <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
                                         <!-- MARCAR VISITA -->
                                         <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
                                             <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(' . $imovel['imo_codigo'] . ')">
