@@ -2,6 +2,7 @@
 // Header default
 session_start();
 require_once('../../../../library/DataManipulation.php');
+require_once('../../../script/php/functions.php');
 $data = new DataManipulation();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -205,6 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Retorna resposta
         echo json_encode($html);
+        // echo json_encode($sql1);
         exit;
     }
 }
@@ -235,8 +237,27 @@ function createScriptImoveis($value, $filters, $sideFilters){
     $sql .= ' i.imo_codigo NOT IN (SELECT pwi_imovel FROM pretendentesimoveis WHERE pwi_pretendente = '.$value['pretendente'].' AND pwi_favorito = 1) AND ';
 
     //? Filtros da barra lateral     
-    if($sideFilters['codigo'] != ''){ // TEMP
-        $sql .= ' i.imo_codigo = "'.$sideFilters['codigo'].'" ';
+    if($sideFilters){ 
+        //? Código
+        if($sideFilters['codigo']) $sql .= ' i.imo_codigo = "'.$sideFilters['codigo'].'" ';
+        //? Faixa de valor 
+        if($sideFilters['valorIni'] && $sideFilters['valorFin']) {
+            $sql .= ' (((iv.imv_valor*m.moe_valor)/100)/100) BETWEEN "'.moneyToFloat($sideFilters['valorIni']).'" AND "'.moneyToFloat($sideFilters['valorFin']).'" ';
+        }
+        //? Bairro 
+        if($sideFilters['bairro'] != '') $sql .= ' b.bai_descricao LIKE "%'.$sideFilters['bairro'].'%" ';
+        //? Dormitórios (between)
+        if($sideFilters['dormitoriosIni'] && $sideFilters['dormitoriosFin']) {
+            $sql .= ' i.imo_quartos BETWEEN "'.$sideFilters['dormitoriosIni'].'" AND "'.$sideFilters['dormitoriosFin'].'" ';
+        }
+        //? Suítes (between)
+        if($sideFilters['suitesIni'] && $sideFilters['suitesFin']) {
+            $sql .= ' i.imo_suites BETWEEN "'.$sideFilters['suitesIni'].'" AND "'.$sideFilters['suitesFin'].'" ';
+        }
+        //? Garagem 
+        if($sideFilters['garagem'] != '') $sql .= ' i.imo_garagem = "'.$sideFilters['garagem'].'" ';
+        //? Tipo de imóvel 
+        if($sideFilters['tipoImovel'] != '') $sql .= ' i.imo_tipoimovel = "'.$sideFilters['tipoImovel'].'" ';
     }else{
         $filters = json_decode($filters);
         foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
@@ -265,6 +286,7 @@ function createScriptImoveis($value, $filters, $sideFilters){
     GROUP BY i.imo_codigo
     ORDER BY i.imo_codigo DESC
     LIMIT 100';
+
     return $sql;
 }
 

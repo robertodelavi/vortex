@@ -1,5 +1,4 @@
 <?php
-
 $sql = '
 SELECT p.prw_codigo, p.prw_nome
 FROM pretendentes AS p 
@@ -163,52 +162,7 @@ if(isset($_GET['tab'])){
                                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                                         Filtros
                                     </h5>
-                                    <div class="flex-1 "> <!-- Da acesso aos dados da tabela -->
-                                        <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
-                                            <div>
-                                                <label for="name">Código</label>
-                                                <input id="name" name="codigo" type="text" placeholder="Código" class="form-input" />
-                                            </div>
-                                            <div>
-                                                <label for="profession">Profession</label>
-                                                <input id="profession" name="profissao" type="text" placeholder="Web Developer" class="form-input" />
-                                            </div>
-                                            <div>
-                                                <label for="country">Country</label>
-                                                <select id="country" class="form-select text-white-dark">
-                                                    <option>All Countries</option>
-                                                    <option selected="">United States</option>
-                                                    <option>India</option>
-                                                    <option>Japan</option>
-                                                    <option>China</option>
-                                                    <option>Brazil</option>
-                                                    <option>Norway</option>
-                                                    <option>Canada</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label for="address">Address</label>
-                                                <input id="address" type="text" placeholder="New York" class="form-input" />
-                                            </div>
-                                            <div>
-                                                <label for="profession">Profession</label>
-                                                <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                                            </div>
-                                            <div>
-                                                <label for="profession">Profession</label>
-                                                <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                                            </div>
-                        
-                                            <div class="flex gap-2 mt-4">
-                                                <div class="">
-                                                    <button type="submit" class="btn btn-primary">Aplicar</button>
-                                                </div>
-                                                <div class="">
-                                                    <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
+                                    <?php require_once('application/pretendente/view/imoveis/formFilter.php'); ?>
                                 </div>
                             </div>
                             <div class="w-full">
@@ -396,6 +350,7 @@ if(isset($_GET['tab'])){
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
             // Seta resultado do ajax na div
+            console.log('🚀 ~ getImoveis ~ data', data)
             document.getElementById('resulAjaxImoveis').innerHTML = data;
         })
     }
@@ -558,6 +513,7 @@ if(isset($_GET['tab'])){
                 const filters = {};
                 for (let [key, value] of formData.entries()) {
                     filters[key] = value;
+                    console.log('===> ', key, value);
                 }                
                 
                 getImoveis(filters)
