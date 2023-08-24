@@ -88,52 +88,7 @@ if(isset($_GET['res'])){
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                         Filtros
                     </h5>
-                    <div class="flex-1 "> <!-- Da acesso aos dados da tabela -->
-                        <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
-                            <div>
-                                <label for="name">Nome</label>
-                                <input id="name" name="name" type="text" placeholder="Ed. Fiorentin" class="form-input" />
-                            </div>
-                            <div>
-                                <label for="profession">Profession</label>
-                                <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                            </div>
-                            <div>
-                                <label for="country">Country</label>
-                                <select id="country" class="form-select text-white-dark">
-                                    <option>All Countries</option>
-                                    <option selected="">United States</option>
-                                    <option>India</option>
-                                    <option>Japan</option>
-                                    <option>China</option>
-                                    <option>Brazil</option>
-                                    <option>Norway</option>
-                                    <option>Canada</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="address">Address</label>
-                                <input id="address" type="text" placeholder="New York" class="form-input" />
-                            </div>
-                            <div>
-                                <label for="profession">Profession</label>
-                                <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                            </div>
-                            <div>
-                                <label for="profession">Profession</label>
-                                <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-                            </div>
-        
-                            <div class="flex gap-2 mt-4">
-                                <div class="">
-                                    <button type="submit" class="btn btn-primary">Aplicar</button>
-                                </div>
-                                <div class="">
-                                    <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    <?php include_once('application/pretendente/view/list/formFilter.php'); ?>
                 </div>
             </div>
 
@@ -450,7 +405,7 @@ if(isset($_GET['res'])){
                 // Obtém os valores do formulário
                 const formData = new FormData(event.target);
                 this.setFormValues(formData);
-
+                
                 // Faz a requisição AJAX para o arquivo PHP
                 fetch('application/pretendente/view/filter.php', {
                     method: 'POST',
@@ -471,6 +426,7 @@ if(isset($_GET['res'])){
             setFormValues(formData) {
                 const formValues = {};
                 for (let [key, value] of formData.entries()) {
+                    console.log('==> ', key, value)
                     formValues[key] = value;
                 }
                 // Adiciona os valores extras ao formData

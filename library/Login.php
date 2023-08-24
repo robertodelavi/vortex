@@ -90,7 +90,7 @@ class Login{
 			}  
 		}
 
-		$sql = "SELECT * FROM ".$this->table." WHERE usu_ativado = 's' AND ".$conditions;
+		$sql = "SELECT * FROM ".$this->table." WHERE usu_ativado = 's' AND ".$conditions;		
 		$result = $db->executeQuery($sql,false);
 
 		if ($db->countLines($result) > 0){

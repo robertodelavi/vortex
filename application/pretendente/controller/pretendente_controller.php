@@ -5,7 +5,7 @@
 
 	switch ($action) {
 		case 'lista':
-			require_once 'application/'.$module.'/view/lista.php';
+			require_once 'application/'.$module.'/view/list/index.php';
 		break;
 		
 		// case 'novo':

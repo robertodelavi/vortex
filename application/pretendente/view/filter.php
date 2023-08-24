@@ -35,7 +35,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     FROM pretendentes AS p
         LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
         LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
-    WHERE p.prw_nome LIKE "%'.$values['name'].'%" 
+    WHERE prw_codigo > 0 ';
+    
+    if($values){
+        //? Nome
+        if($values['nome']) $sql .= ' AND p.prw_nome LIKE "%'.$values['nome'].'%" ';
+        //? E-mail
+        if($values['email']) $sql .= ' AND p.prw_email LIKE "%'.$values['email'].'%" ';
+        //? Telefones
+        if($values['telefones']) $sql .= ' AND p.prw_telefones LIKE "%'.$values['telefones'].'%" ';
+        //? Status do negócio
+        if($values['prw_psn_codigo']) $sql .= ' AND p.prw_psn_codigo = "'.$values['prw_psn_codigo'].'" ';
+        //? Perfil do cliente 
+        if($values['prw_perfilcliente']) $sql .= ' AND p.prw_perfilcliente = "'.$values['prw_perfilcliente'].'" ';
+        //? Observação 
+        if($values['prw_obs']) $sql .= ' AND p.prw_obs LIKE "%'.$values['prw_obs'].'%" ';
+        //? Status do atendimento
+        if($values['prw_psa_codigo']) $sql .= ' AND p.prw_psa_codigo = "'.$values['prw_psa_codigo'].'" ';
+        //? Objetivo
+        if($values['prw_objetivo']) $sql .= ' AND p.prw_objetivo = "'.$values['prw_objetivo'].'" ';
+        //? Origem 
+        if($values['prw_origem']) $sql .= ' AND p.prw_origem = "'.$values['prw_origem'].'" ';
+        //? Usuário
+        if($values['prw_usuario']) $sql .= ' AND p.prw_usuario = "'.$values['prw_usuario'].'" ';
+    }
+    
+    $sql .= '
     LIMIT 100';
     $result = $data->find('dynamic', $sql);    
 
