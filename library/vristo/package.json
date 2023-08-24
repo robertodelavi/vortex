@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "animate.css": "^4.1.1",
+        "nouislider": "^15.7.1",
         "perfect-scrollbar": "^1.5.5"
     }
 }
