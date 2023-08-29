@@ -3,36 +3,44 @@
 	$action = $temp[0];
 	$module = $temp[1];
 
-	switch ($action) {
-		case 'lista':
-			require_once 'application/'.$module.'/view/list/index.php';
+	switch ($_GET['acao']) {
+        //* PRETENDENTE
+		case 'lista_pretendente':
+			require_once 'application/pretendente/view/list/index.php';
+		break;		
+		case 'edita_pretendente':
+			require_once 'application/pretendente/view/formEdit.php';
+		break;		
+		case 'visualiza_pretendente':
+			require_once 'application/pretendente/view/formView.php';
 		break;
-		
-		// case 'novo':
-		case 'edita':
-			require_once 'application/'.$module.'/view/formEdit.php';
-		break;
-		
-		case 'visualiza':
-			require_once 'application/'.$module.'/view/formView.php';
+		case 'deleta_pretendente':
+		case 'deletadados_pretendente':		
+		case 'grava_pretendente':
+		case 'gravahistorico_pretendente':
+		case 'gravavisita_pretendente':
+		case 'gravadados_pretendente':		
+		case 'update_pretendente':
+		case 'updatehistorico_pretendente':
+		case 'updatedados_pretendente':		
+		case 'ativar_pretendente':
+		case 'inativar_pretendente':
+		case 'excluir_pretendente':
+			require_once 'application/pretendente/view/dataControls.inc.php';
 		break;
 
-		case 'deleta':
-		case 'deletadados':
-		
-		case 'grava':
-		case 'gravahistorico':
-		case 'gravavisita':
-		case 'gravadados':
-		
-		case 'update':
-		case 'updatehistorico':
-		case 'updatedados':
-		
-		case 'ativar':
-		case 'inativar':
-		case 'excluir':
-			require_once 'application/'.$module.'/view/dataControls.inc.php';
-		break;
+        //* AGENDA
+
+        //* VISITA
+        case 'lista_visitas':
+            require_once 'application/pretendente/view/visita/list/index.php';
+        break;
+        case 'edita_visitas':
+            require_once 'application/pretendente/view/visita/view/index.php';
+        break;
+        case 'grava_visitas':
+        case 'update_visitas':
+            require_once 'application/pretendente/view/visita/dataControls.inc.php';
+        break;
 	}
 ?>

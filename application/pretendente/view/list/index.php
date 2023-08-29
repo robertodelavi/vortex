@@ -83,7 +83,6 @@ if(isset($_GET['res'])){
         <div class="flex h-screen gap-4">
             <!-- Filtros -->
             <div class="w-1/5">
-                <!-- Bloco dos filtros -->
                 <div class="panel h-full">
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                         Filtros
@@ -92,9 +91,9 @@ if(isset($_GET['res'])){
                 </div>
             </div>
 
+            <!-- Listagem -->
             <div class="w-full overflow-x-auto">
-                <div class="panel h-full mt-0 sticky-header">
-                    <!-- Listagem -->
+                <div class="panel h-full mt-0">
                     <div class="flex justify-between items-center ">
                         <h5 class="font-semibold text-lg dark:text-white-light">
                             Pretendentes
@@ -102,8 +101,7 @@ if(isset($_GET['res'])){
                         <div>                    
                             <button id="searchButton" class="btn btn-primary" @click="toggle;" >Novo</button>                    
                         </div>
-                    </div>            
-                    <!-- Tabela -->
+                    </div>                        
                     <table id="myTable2" class="tabela whitespace-nowrap"></table>            
                 </div>
             </div>
@@ -310,7 +308,7 @@ if(isset($_GET['res'])){
                         data: data
                     },
                     searchable: false,
-                    perPage: 50,
+                    perPage: 30,
                     perPageSelect: [10, 20, 30, 50, 100],
                     columns: [
                         {
@@ -472,7 +470,7 @@ if(isset($_GET['res'])){
                 nextPage('?module=pretendente&acao=deletadados_pretendente', this.idDelete)
             },
 
-            // SCRUMBOARD
+            //? SCRUMBOARD
             pretendenteID: null,
             params: {
                 id: null,
@@ -733,12 +731,3 @@ if(isset($_GET['res'])){
 
     });
 </script>
-
-<style>
-    /* Fixar coluna 7 da tabela */
-    .tabela td:nth-child(8) {
-        position: sticky;
-        left: 0; /* Define a posição de sticky na borda esquerda da coluna */
-        /* background-color: #f0f0f0; */
-    }
-</style>

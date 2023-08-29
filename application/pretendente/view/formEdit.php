@@ -12,7 +12,7 @@ FROM pretendentesperfil
 WHERE ppf_pretendente = ' . $_POST['param_0'];
 $resultPerfilBusca = $data->find('dynamic', $sql);
 
-// TOASTS
+//? TOASTS
 $currentTab = 'pretendente';
 if(isset($_GET['tab'])){
     switch($_GET['tab']){
@@ -229,93 +229,15 @@ if(isset($_GET['tab'])){
                     </div>
                     <div class="p-5">
                         <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]"> 
-                            <form method="POST" action="?module=pretendente&acao=gravavisita_pretendente">
+                            <form method="POST" action="?module=pretendente&acao=grava_visitas">
                                 <!-- Parâmetros -->
                                 <input type="hidden" name="prv_pretendente" value="<?php echo $_POST['param_0']; ?>" />
                                 <input type="hidden" name="prv_imovel" id="prv_imovel" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
                                 <input type="hidden" name="prv_empresa" value="<?php echo $_SESSION['v_emp_codigo']; ?>" />
 
-                                <!-- Mensagem -->
-                                <div class="flex items-center p-3.5 rounded text-info bg-info-light dark:bg-info-dark-light">
-                                    <span class="ltr:pr-2 rtl:pl-2">Marcar uma visita para este imóvel.</span>
-                                </div>
-
-                                <div class="mt-5" >
-                                    <div class="flex flex-col sm:flex-row">
-                                        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div>
-                                                <label for="nome">Acompanhante do pretendente</label>
-                                                <input name="prv_acompanhantepretendente" type="text" class="form-input" />
-                                            </div>
-
-                                            <div>
-                                                <label for="formaContato">Acompanhante da empresa</label>
-                                                <select name="prv_acompanhante" class="form-select">
-                                                    <option>-- Selecione --</option>
-                                                    <?php 
-                                                        $sql = '
-                                                        SELECT * 
-                                                        FROM sisusuarios
-                                                        WHERE usu_ativado = "s"
-                                                        ORDER BY usu_nome ASC';
-                                                        $profissionais = $data->find('dynamic', $sql);
-                                                        // Percorre os profissionais
-                                                        foreach ($profissionais as $key => $value) {
-                                                            echo '<option value="' . $value['usu_codigo'] . '" '.$selected.' >' . $value['usu_nome'] . '</option>';
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-
-                                            <div>
-                                                <label for="nome">Início da visita</label>
-                                                <div class="flex gap-4 ">
-                                                    <input name="prv_dataini" type="date" class="form-input" value="<?php echo date('Y-m-d'); ?>" />
-                                                    <input name="prv_horaini" type="time" class="form-input" /> 
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <label for="formaContato">Chave entregue por</label>
-                                                <select name="prv_entreguepor" class="form-select">
-                                                    <option>-- Selecione --</option>
-                                                    <?php 
-                                                        foreach ($profissionais as $key => $value) {
-                                                            echo '<option value="' . $value['usu_codigo'] . '" '.$selected.' >' . $value['usu_nome'] . '</option>';
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-
-                                            <div>
-                                                <label for="nome">Fim da visita (entrega da chave)</label>
-                                                <div class="flex gap-4 ">
-                                                    <input name="prv_datafim" type="date" class="form-input" value="<?php echo date('Y-m-d'); ?>" />
-                                                    <input name="prv_horafim" type="time" class="form-input" /> 
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <label for="formaContato">Chave devolvida por</label>
-                                                <select name="prv_devolvidopor" class="form-select">
-                                                    <option>-- Selecione --</option>
-                                                    <?php 
-                                                        foreach ($profissionais as $key => $value) {
-                                                            echo '<option value="' . $value['usu_codigo'] . '" '.$selected.' >' . $value['usu_nome'] . '</option>';
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex-1 mt-5">
-                                        <div>
-                                            <label for="nome">Observação</label>
-                                            <textarea name="prv_obs" class="form-input" rows="3"></textarea>                    
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php 
+                                    require_once('application/pretendente/view/visita/view/formVisita.php');
+                                ?>
 
                                 <div class="flex justify-end items-center mt-8">
                                     <button type="button" class="btn btn-outline-dark" @click="toggle2">Cancelar</button>
