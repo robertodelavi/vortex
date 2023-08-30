@@ -1,5 +1,5 @@
 <?php  
-    require_once('validaMenu.php');
+    require_once('validaMenu.php');   
 ?>
 
 <ul class="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-[#0e1726] text-black dark:text-white-dark">
@@ -8,7 +8,7 @@
         foreach($menuAvo as $keyAvo => $rowAvo){            
             if(hasMenuPermission($result, $rowAvo['men_modulo'], $menuPai, $menuNeto)){
                 echo '
-                <li class="menu nav-item relative  bg-menulight dark:bg-menudark">
+                <li class="menu nav-item relative  bg-menulight dark:menudark">
                     <a href="javascript:;" class="nav-link">
                         <div class="flex items-center">
                             '.file_get_contents($rowAvo['men_icone']).'
@@ -73,7 +73,7 @@
 
 <style>
     .selected {
-        background-color: #999; /* Substitua pelo código de cor desejado */
+        background-color: #F00; /* Substitua pelo código de cor desejado */
         border-radius: 10px;
     }
 </style>

@@ -24,8 +24,7 @@
     FROM sispermissoes AS per 
         JOIN sisprogramas AS pro ON per.per_programa = pro.pro_codigo
     WHERE per_usuario = '.$_SESSION['v_usu_codigo'].' AND per_empresa = 1';
-    $result = $data->find('dynamic', $sql);
-    
+    $result = $data->find('dynamic', $sql);    
 
     function hasMenuPermission($result, $modulo, $mpai, $mneto){
         if($result && count($result) > 0){
