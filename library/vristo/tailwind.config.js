@@ -1,11 +1,17 @@
 module.exports = {
-    content: ['./**/*.{html,php}'],
+    content: ['./**/*.{html,js,php}'],
     darkMode: 'class',
     theme: {
         container: {
             center: true,
         },
         extend: {
+            textColor: {
+                primary: '#4361ee',
+                secondary: '#805dca',
+                success: '#00ab55',
+                danger: '#e7515a',
+            },
             colors: {
                 primary: {
                     DEFAULT: '#4361ee',
@@ -24,6 +30,11 @@ module.exports = {
                 },
                 danger: {
                     DEFAULT: '#e7515a',
+                    light: '#fff5f5',
+                    'dark-light': 'rgba(231,81,90,.15)',
+                },
+                myDanger: {
+                    DEFAULT: '#F00',
                     light: '#fff5f5',
                     'dark-light': 'rgba(231,81,90,.15)',
                 },

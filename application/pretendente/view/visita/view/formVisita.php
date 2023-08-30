@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="<?php echo BASE_THEME_URL; ?>/assets/css/nice-select2.css">
-
 <?php 
     //? pretendente-visita
     list($prv_pretendente, $prv_codigo) = explode('-', $_POST['param_0']);
@@ -22,13 +20,6 @@
         WHERE p.prw_codigo = '.$prv_pretendente;
         $pretendente = $data->find('dynamic', $sql);
     }
-    
-    $sql = '
-    SELECT * 
-    FROM pretendentes 
-    ORDER BY prw_nome ASC
-    LIMIT 400';
-    $pretendentes = $data->find('dynamic', $sql);
     
     $sql = '
     SELECT * 
@@ -57,17 +48,10 @@
             <input type="hidden" name="prv_empresa" value="<?php echo $_SESSION['v_emp_codigo']; ?>" />
 
             <div>
-                <label>Pretendente</label>
-                <select id="select-pretendente">
+                <label>Imóvel</label>
+                <select name="prv_imovel" id="select-imovel" >
                     <option value="">-- Selecione --</option>
-                    <?php 
-                        foreach ($pretendentes as $key => $value) {
-                            $selected = $result[0]['prv_pretendente'] == $value['prw_codigo'] ? 'selected' : '';
-                            echo '<option value="' . $value['prw_codigo'] . '" '.$selected.' >' . $value['prw_nome'] . '</option>';
-                        }
-                    ?>                    
                 </select>
-                <!-- <input type="text" class="form-input" value="<?php echo $result[0]['prw_nome']; ?>" disabled /> -->
             </div>
 
             <div>
@@ -156,17 +140,84 @@
     </div>
 </div>
     
-<!-- start hightlight js -->
-<link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/assets/css/highlight.min.css">
-<script src="<?php echo BASE_THEME_URL; ?>/assets/js/highlight.min.js"></script>
-<!-- end hightlight js -->
-<script src="<?php echo BASE_THEME_URL; ?>/assets/js/nice-select2.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function(e) {
-        // seachable 
         var options = {
-            searchable: true
+            searchable: true,
         };
-        NiceSelect.bind(document.getElementById("select-pretendente"), options);
+        NiceSelect.bind(document.getElementById("select-imovel"), options);
+        // Mantenha uma referência ao elemento select original
+        var selectImovel = document.getElementById("select-imovel");
+                        
+        // Adicione um ouvinte de eventos para o evento de digitação no input do niceSelect
+        document.querySelector(".nice-select-search").addEventListener("input", function() {
+            const filtro = this.value.toLowerCase();
+            
+            fetch('application/pretendente/view/visita/ajax/filterImovel.php', {
+                method: 'POST',
+                body: JSON.stringify(filtro) // Converte o objeto em uma string JSON
+            }).then(response => response.json()).then(data => {
+                console.log("🚀 ~ resposta ajax:", data)
+
+                // atualizar options do select
+                selectImovel.innerHTML = '<option value="">-- Selecione --</option>';
+                data.forEach(function(item) {
+                    selectImovel.innerHTML += '<option value="' + item.value + '">' + item.text + '</option>';
+                });
+
+                // Cria novo select
+                NiceSelect.bind(document.getElementById("select-imovel"), options);
+                
+            }).catch(error => console.error(error));
+        });
     });
+
+    // document.addEventListener("DOMContentLoaded", function(e) {
+    //     // seachable 
+    //     var options = {
+    //         searchable: true,
+    //     };
+    //     NiceSelect.bind(document.getElementById("select-imovel"), options);
+    //     var selectImovel = document.getElementById("select-imovel");
+    //     // copia options do select
+    //     var optionsImovel = selectImovel.innerHTML;
+
+    //     console.log('cria..')
+
+    //     // Adicione um ouvinte de eventos para o evento de digitação no input do niceSelect
+    //     document.querySelector(".nice-select-search").addEventListener("input", function() {
+    //         console.log('atualiza...')
+    //         // Obtenha o valor do filtro digitado
+    //         const filtro = this.value.toLowerCase();
+            
+    //         // Faça uma solicitação AJAX para buscar opções com base no filtro
+    //         // Substitua a URL pela URL do seu arquivo AJAX
+    //         // A resposta deve ser um array de objetos com as opções (por exemplo, [{ value: "3", text: "Condomínio" }])
+    //         // Certifique-se de que a resposta seja tratada como JSON no seu arquivo AJAX.
+    //         fetch('application/pretendente/view/visita/ajax/filterImovel.php', {
+    //             method: 'POST',
+    //             body: JSON.stringify(filtro) // Converte o objeto em uma string JSON
+    //         }).then(response => response.json()).then(data => {
+    //             console.log("🚀 ~ resposta ajax:", data)
+
+    //             // apagar select com id select-imovel
+    //             selectImovel.innerHTML = '';
+
+    //             // Atualizar options do select 
+    //             selectImovel.innerHTML = '<option value="">-- Selecione --</option>';
+    //             data.forEach(function(item) {
+    //                 selectImovel.innerHTML += '<option value="' + item.value + '">' + item.text + '</option>';
+    //             });
+
+    //             // Cria novo select
+    //             NiceSelect.bind(document.getElementById("select-imovel"), options);
+
+                
+                
+
+                
+    //         }).catch(error => console.error(error));
+    //     });
+    // });
 </script>

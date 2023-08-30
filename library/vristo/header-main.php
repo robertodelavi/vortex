@@ -9,15 +9,15 @@
 <head>
     <meta charset='utf-8' />
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-    <title>VRISTO - Multipurpose Tailwind Dashboard Template upp</title>
+    <title>VORTEX</title>
     <meta name='viewport' content='width=device-width, initial-scale=1' />
-    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <link rel="icon" type="image/x-icon" href="<?php echo BASE_THEME_URL; ?>/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel='stylesheet' type='text/css' media='screen' href='<?php echo BASE_THEME_URL; ?>/assets/css/perfect-scrollbar.min.css' />
     <link rel='stylesheet' type='text/css' media='screen' href='<?php echo BASE_THEME_URL; ?>/assets/css/style.css' />
-    <link defer rel='stylesheet' type='text/css' media='screen' href='<?php echo BASE_THEME_URL; ?>/assets/css/animate.css' />
+    <link defer rel='stylesheet' type='text/css' media='screen' href='<?php echo BASE_THEME_URL; ?>/assets/css/animate.css' />    
     <script src="<?php echo BASE_THEME_URL; ?>/assets/js/perfect-scrollbar.min.js"></script>
     <script defer src="<?php echo BASE_THEME_URL; ?>/assets/js/popper.min.js"></script>
     <script defer src="<?php echo BASE_THEME_URL; ?>/assets/js/tippy-bundle.umd.min.js"></script>
@@ -25,9 +25,11 @@
     <script src="<?php echo BASE_THEME_URL; ?>/assets/js/alpine-mask.min.js"></script>    
     <script src="<?php echo BASE_THEME_URL; ?>/assets/js/customMasks/money.js"></script>     
     <script src="<?php echo BASE_THEME_URL; ?>/assets/js/customFunctions/functions.js"></script> 
+    <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/assets/css/tailwind.css" /> <!-- Tailwind -->
+    <link rel="stylesheet" type="text/css" href="<?php echo BASE_THEME_URL; ?>/assets/css/nice-select2.css">
 </head>
 
-<body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden horizontal" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme, $store.app.menu, $store.app.layout,$store.app.rtlClass]">
+<body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden overflow-y-auto horizontal" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme, $store.app.menu, $store.app.layout,$store.app.rtlClass]">
 
     <!-- sidebar menu overlay -->
     <div x-cloak class="fixed inset-0 bg-[black]/60 z-50 lg:hidden" :class="{'hidden' : !$store.app.sidebar}" @click="$store.app.toggleSidebar()"></div>

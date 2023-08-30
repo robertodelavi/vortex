@@ -25,7 +25,7 @@ SELECT
 FROM pretendentes AS p
     LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
     LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
-LIMIT 100';
+LIMIT 60';
 $result = $data->find('dynamic', $sql);
 
 // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
@@ -80,20 +80,20 @@ if(isset($_GET['res'])){
 <div x-data="modal">
     <div x-data="multipleTable"> 
         <!-- Tela com filtro e tabela de listagem -->
-        <div class="flex h-screen gap-4">
-            <!-- Filtros -->
-            <div class="w-1/5">
-                <div class="panel h-full">
+        <div class="flex gap-4" style="height: 77vh;" >            
+            <!-- Filtros -->   
+            <div class="overflow-y-auto" >
+                <div class="panel  " >
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                         Filtros
                     </h5>
                     <?php include_once('application/pretendente/view/list/formFilter.php'); ?>
-                </div>
-            </div>
+                </div>        
+            </div>         
 
             <!-- Listagem -->
             <div class="w-full overflow-x-auto">
-                <div class="panel h-full mt-0">
+                <div class="panel mt-0">
                     <div class="flex justify-between items-center ">
                         <h5 class="font-semibold text-lg dark:text-white-light">
                             Pretendentes
@@ -308,7 +308,7 @@ if(isset($_GET['res'])){
                         data: data
                     },
                     searchable: false,
-                    perPage: 30,
+                    perPage: 20,
                     perPageSelect: [10, 20, 30, 50, 100],
                     columns: [
                         {

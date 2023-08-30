@@ -60,7 +60,7 @@ if(isset($_GET['tab'])){
 <link rel='stylesheet' type='text/css' media='screen' href='<?php echo BASE_THEME_URL; ?>/assets/css/fancybox.css'>
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/fancybox.umd.js"></script>
 
-<div x-data="lightbox">
+<div class="overflow-y-auto" x-data="lightbox">
     <div x-data="modal" >
         <div class="pt-0">
             <div class="flex items-center justify-between mb-5">

@@ -39,25 +39,22 @@
 
 <div x-data="multipleTable">
     <div x-data="modal">
-        <!-- Tela com filtro e tabela de listagem -->
-        <div class="flex h-screen gap-4">
-            <!-- Filtros -->
-            <div class="w-1/5">
-                <div class="panel h-full">
+        <div class="flex gap-4" style="height: 77vh;" >            
+            <!-- Filtros -->   
+            <div class="overflow-y-auto" >
+                <div class="panel  " >
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                         Filtros
                     </h5>
                     <?php include_once('application/pretendente/view/visita/list/formFilter.php'); ?>
-                </div>
-            </div>
+                </div>        
+            </div>         
 
             <!-- Listagem -->
             <div class="w-full overflow-x-auto">
-                <div class="panel h-full mt-0">
+                <div class="panel mt-0">
                     <div class="flex justify-between items-center ">
-                        <h5 class="font-semibold text-lg dark:text-white-light">
-                            Visitas
-                        </h5>
+                        <h5 class="font-semibold text-lg dark:text-white-light">Visitas</h5>
                         <div>                    
                             <button id="searchButton" class="btn btn-primary" @click="toggle;" >Novo</button>                    
                         </div>
@@ -65,8 +62,8 @@
                     <table id="myTable2" class="tabela whitespace-nowrap"></table>            
                 </div>
             </div>
-        </div>  
-
+        </div>    
+        
         <!-- Modal marcar visita no imóvel -->
         <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="open2 && '!block'">
             <div class="flex items-start justify-center min-h-screen px-4" @click.self="open2 = false">
@@ -163,7 +160,7 @@
                         data: data
                     },
                     searchable: false,
-                    perPage: 30,
+                    perPage: 20,
                     perPageSelect: [10, 20, 30, 50, 100],
                     columns: [
                         {

@@ -15,7 +15,7 @@
         <div class="grid xl:grid-cols-3 gap-6 mb-6">
             <div class="panel h-full xl:col-span-2">
                 <div class="flex items-center dark:text-white-light mb-5">
-                    <h5 class="text-lg text-green-500 font-bold">Revenue</h5>
+                    <h5 class="text-lg text-green-300 font-bold">Revenue</h5>
                     <div x-data="dropdown" @click.outside="open = false" class="dropdown ltr:ml-auto rtl:mr-auto">
                         <a href="javascript:;" @click="toggle">
                             <svg class="w-5 h-5 text-black/70 dark:text-white/70 hover:!text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
