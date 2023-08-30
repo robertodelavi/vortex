@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_THEME_URL; ?>/assets/css/nice-select2.css">
+
 <?php 
     //? pretendente-visita
     list($prv_pretendente, $prv_codigo) = explode('-', $_POST['param_0']);
@@ -19,8 +21,14 @@
         FROM pretendentes AS p
         WHERE p.prw_codigo = '.$prv_pretendente;
         $pretendente = $data->find('dynamic', $sql);
-        $result[0]['prw_nome'] = $pretendente[0]['prw_nome'];
     }
+    
+    $sql = '
+    SELECT * 
+    FROM pretendentes 
+    ORDER BY prw_nome ASC
+    LIMIT 400';
+    $pretendentes = $data->find('dynamic', $sql);
     
     $sql = '
     SELECT * 
@@ -38,15 +46,28 @@
 
 <!-- Mensagem -->
 <div class="flex items-center p-3.5 rounded text-info bg-info-light dark:bg-info-dark-light">
-    <span class="ltr:pr-2 rtl:pl-2">Marcar uma visita para este imóvel.</span>
+    <span class="ltr:pr-2 rtl:pl-2">Pretendente:</span>
+    <span id="pretendenteNome"></span>
+    <?php echo $result[0]['prw_nome']; ?>
 </div>
 
 <div class="mt-5" >
     <div class="flex flex-col sm:flex-row">
         <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <input type="hidden" name="prv_empresa" value="<?php echo $_SESSION['v_emp_codigo']; ?>" />
+
             <div>
                 <label>Pretendente</label>
-                <input type="text" class="form-input" value="<?php echo $result[0]['prw_nome']; ?>" disabled />
+                <select id="select-pretendente">
+                    <option value="">-- Selecione --</option>
+                    <?php 
+                        foreach ($pretendentes as $key => $value) {
+                            $selected = $result[0]['prv_pretendente'] == $value['prw_codigo'] ? 'selected' : '';
+                            echo '<option value="' . $value['prw_codigo'] . '" '.$selected.' >' . $value['prw_nome'] . '</option>';
+                        }
+                    ?>                    
+                </select>
+                <!-- <input type="text" class="form-input" value="<?php echo $result[0]['prw_nome']; ?>" disabled /> -->
             </div>
 
             <div>
@@ -135,3 +156,17 @@
     </div>
 </div>
     
+<!-- start hightlight js -->
+<link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/assets/css/highlight.min.css">
+<script src="<?php echo BASE_THEME_URL; ?>/assets/js/highlight.min.js"></script>
+<!-- end hightlight js -->
+<script src="<?php echo BASE_THEME_URL; ?>/assets/js/nice-select2.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(e) {
+        // seachable 
+        var options = {
+            searchable: true
+        };
+        NiceSelect.bind(document.getElementById("select-pretendente"), options);
+    });
+</script>

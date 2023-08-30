@@ -28,7 +28,7 @@
                 <button type="submit" class="btn btn-primary">Salvar</button>
             </div>            
         </div>   
-        
+
         <?php include_once('application/pretendente/view/visita/view/formVisita.php'); ?>
     </form>
 </div>

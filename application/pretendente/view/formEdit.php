@@ -233,11 +233,8 @@ if(isset($_GET['tab'])){
                                 <!-- Parâmetros -->
                                 <input type="hidden" name="prv_pretendente" value="<?php echo $_POST['param_0']; ?>" />
                                 <input type="hidden" name="prv_imovel" id="prv_imovel" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
-                                <input type="hidden" name="prv_empresa" value="<?php echo $_SESSION['v_emp_codigo']; ?>" />
-
-                                <?php 
-                                    require_once('application/pretendente/view/visita/view/formVisita.php');
-                                ?>
+                                
+                                <?php require_once('application/pretendente/view/visita/view/formVisita.php'); ?>
 
                                 <div class="flex justify-end items-center mt-8">
                                     <button type="button" class="btn btn-outline-dark" @click="toggle2">Cancelar</button>
