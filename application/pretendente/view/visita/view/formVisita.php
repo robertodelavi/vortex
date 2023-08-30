@@ -49,9 +49,15 @@
 
             <div>
                 <label>Imóvel</label>
-                <select name="prv_imovel" id="select-imovel" >
-                    <option value="">-- Selecione --</option>
-                </select>
+                <!-- Input com filtro -->
+                <div class="relative" >
+                    <!-- ID do imóvel pra ser enviado via POST -->
+                    <input type="hidden" id="select-imovel-id" name="prv_imovel" value="<?php echo $result[0]['prv_imovel']; ?>" />
+                    <!-- Input com filtro pra buscar imóveis -->
+                    <input id="select-imovel" type="text" class="form-input" placeholder="Digite o nome do imóvel" />
+                    <!-- Options do select -->
+                    <div id="options-imovel"></div>
+                </div>               
             </div>
 
             <div>
@@ -142,69 +148,60 @@
     
 
 <script>
+
+    const setValue = (value, text) => {
+        console.log('setValue: ', value, text)
+        document.querySelector("#select-imovel-id").value = value;
+        document.querySelector("#select-imovel").value = text;
+        document.querySelector("#options-imovel").innerHTML = ''; //? Limpa options
+    }
+
+    // obter valor do input id "select-imovel"
     document.addEventListener("DOMContentLoaded", function(e) {
-        var options = {
-            searchable: true,
-        };
-        NiceSelect.bind(document.getElementById("select-imovel"), options);
-        // Mantenha uma referência ao elemento select original
-        var selectImovel = document.getElementById("select-imovel");
-                        
-        // Adicione um ouvinte de eventos para o evento de digitação no input do niceSelect
-        document.querySelector(".nice-select-search").addEventListener("input", function() {
+        
+        document.querySelector("#select-imovel").addEventListener("input", function() {
             const filtro = this.value.toLowerCase();
+            console.log("🚀 ~ filtro:", filtro)
             
-            fetch('application/pretendente/view/visita/ajax/filterImovel.php', {
-                method: 'POST',
-                body: JSON.stringify(filtro) // Converte o objeto em uma string JSON
-            }).then(response => response.json()).then(data => {
-                console.log("🚀 ~ resposta ajax:", data)
-
-                // atualizar options do select
-                selectImovel.innerHTML = '<option value="">-- Selecione --</option>';
-                data.forEach(function(item) {
-                    selectImovel.innerHTML += '<option value="' + item.value + '">' + item.text + '</option>';
-                });
-
-                // Cria novo select
-                NiceSelect.bind(document.getElementById("select-imovel"), options);
-                
-            }).catch(error => console.error(error));
-        });
+            if(filtro && filtro != ''){
+                fetch('application/pretendente/view/visita/ajax/filterImovel.php', {
+                    method: 'POST',
+                    body: JSON.stringify(filtro) // Converte o objeto em uma string JSON
+                }).then(response => response.json()).then(data => {
+                    console.log("🚀 ~ resposta ajax:", data)
+                    
+                    // Insere essa estrutura no innerHTML do elemento com id "options-imovel"
+                    let options = '<ul class="w-full bg-white-light rounded-lg absolute flex flex-col gap-2 cursor-pointer">';
+                    data.forEach(function(item) {
+                        options += '<li data-value="' + item.value + '" data-text="' + item.text + '" onclick="setValue('+item.value+', \''+item.text+'\')" class="px-2 py-1 hover:bg-primary hover:text-white rounded-lg" >' + item.text + '</li>';
+                    });
+                    options += '</ul>';
+                    document.querySelector("#options-imovel").innerHTML = options;                    
+                    
+                }).catch(error => console.error(error));
+            }            
+        });        
     });
 
     // document.addEventListener("DOMContentLoaded", function(e) {
-    //     // seachable 
     //     var options = {
     //         searchable: true,
     //     };
     //     NiceSelect.bind(document.getElementById("select-imovel"), options);
+    //     // Mantenha uma referência ao elemento select original
     //     var selectImovel = document.getElementById("select-imovel");
-    //     // copia options do select
-    //     var optionsImovel = selectImovel.innerHTML;
-
-    //     console.log('cria..')
-
+                        
     //     // Adicione um ouvinte de eventos para o evento de digitação no input do niceSelect
     //     document.querySelector(".nice-select-search").addEventListener("input", function() {
-    //         console.log('atualiza...')
-    //         // Obtenha o valor do filtro digitado
     //         const filtro = this.value.toLowerCase();
             
-    //         // Faça uma solicitação AJAX para buscar opções com base no filtro
-    //         // Substitua a URL pela URL do seu arquivo AJAX
-    //         // A resposta deve ser um array de objetos com as opções (por exemplo, [{ value: "3", text: "Condomínio" }])
-    //         // Certifique-se de que a resposta seja tratada como JSON no seu arquivo AJAX.
     //         fetch('application/pretendente/view/visita/ajax/filterImovel.php', {
     //             method: 'POST',
     //             body: JSON.stringify(filtro) // Converte o objeto em uma string JSON
     //         }).then(response => response.json()).then(data => {
     //             console.log("🚀 ~ resposta ajax:", data)
 
-    //             // apagar select com id select-imovel
-    //             selectImovel.innerHTML = '';
-
-    //             // Atualizar options do select 
+    //             // atualizar options do select
     //             selectImovel.innerHTML = '<option value="">-- Selecione --</option>';
     //             data.forEach(function(item) {
     //                 selectImovel.innerHTML += '<option value="' + item.value + '">' + item.text + '</option>';
@@ -212,10 +209,6 @@
 
     //             // Cria novo select
     //             NiceSelect.bind(document.getElementById("select-imovel"), options);
-
-                
-                
-
                 
     //         }).catch(error => console.error(error));
     //     });
