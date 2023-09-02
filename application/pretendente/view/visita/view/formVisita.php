@@ -171,7 +171,7 @@
                     console.log("🚀 ~ resposta ajax:", data)
                     
                     // Insere essa estrutura no innerHTML do elemento com id "options-imovel"
-                    let options = '<ul class="w-full bg-white-light rounded-lg absolute flex flex-col gap-2 cursor-pointer">';
+                    let options = '<ul class="w-full bg-white dark:bg-gray-900 light:border border-gray-900 dark:border-success rounded-lg absolute flex flex-col gap-1 text-xs cursor-pointer">';
                     data.forEach(function(item) {
                         options += '<li data-value="' + item.value + '" data-text="' + item.text + '" onclick="setValue('+item.value+', \''+item.text+'\')" class="px-2 py-1 hover:bg-primary hover:text-white rounded-lg" >' + item.text + '</li>';
                     });

@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         i.imo_pontoreferencia LIKE "%' . $value . '%"
     )
     ORDER BY i.imo_codigo DESC
-    LIMIT 20';
+    LIMIT 10';
     $result = $data->find('dynamic', $sql);
 
     $res = [];
