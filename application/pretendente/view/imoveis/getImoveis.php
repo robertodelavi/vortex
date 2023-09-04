@@ -43,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //* FAVORITOS
         if ($resultFavoritos && count($resultFavoritos) > 0) {
             $html = '                                    
+            <h3 class="font-semibold text-lg dark:text-white-light">Meus imóveis favoritos</h3>
+            <br />
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">';                    
                 foreach ($resultFavoritos as $i => $imovel) {
                     // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
@@ -122,6 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //* IMÓVEIS SUGERIDOS
         $html .= '
+        <br />
+        <h3 class="font-semibold text-lg dark:text-white-light">Outros imóveis</h3>
+            <br />
         <div>     
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">';
                 if ($resultImoveis && count($resultImoveis) > 0) {
