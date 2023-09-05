@@ -118,6 +118,14 @@ if(isset($_GET['tab'])){
                             Imóveis
                         </a>
                     </li>
+                    <li class="inline-block">
+                        <a href="javascript:;"
+                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                            :class="{'!border-primary text-primary' : tab == 'visita'}" @click="tab='visita'" >
+                            <?php echo file_get_contents('application/icons/flag.svg'); ?>
+                            Visita
+                        </a>
+                    </li>
                 </ul>
         
                 <!-- DADOS DO PRETENDENTE -->
@@ -192,6 +200,11 @@ if(isset($_GET['tab'])){
                     }
                     ?>
                 </template>
+
+                <!-- VISITA -->        
+                <template x-if="tab === 'visita'"> 
+                    <?php include_once('application/pretendente/view/visita/lista.php'); ?>
+                </template>
             </div>
         </div>
 
@@ -222,7 +235,7 @@ if(isset($_GET['tab'])){
                 <div x-show="open2" x-transition x-transition.duration.300
                     class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">
                     <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
-                        <h5 class="font-bold text-lg">Marcar visita</h5>
+                        <h5 class="font-bold text-lg">Marcar visita (formEdit)</h5>
                         <button type="button" class="text-white-dark hover:text-dark" @click="toggle2">
                             <?php echo file_get_contents('application/icons/close.svg'); ?>
                         </button>
@@ -231,11 +244,11 @@ if(isset($_GET['tab'])){
                         <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]"> 
                             <form method="POST" action="?module=pretendente&acao=grava_visitas">
                                 <!-- Parâmetros -->
-                                <input type="hidden" name="prv_pretendente" value="<?php echo $_POST['param_0']; ?>" />
+                                <input type="hidden" name="prv_codigo" id="prv_codigo" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
                                 <input type="hidden" name="prv_imovel" id="prv_imovel" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
-                                
-                                <?php require_once('application/pretendente/view/visita/view/formVisita.php'); ?>
-
+                                <input type="hidden" name="prv_pretendente" value="<?php echo $_POST['param_0']; ?>" />
+                                <input type="hidden" name="prv_empresa" value="<?php echo $_SESSION['v_emp_codigo']; ?>" />                                
+                                <?php require_once('application/pretendente/view/visita/formVisita.php'); ?>
                                 <div class="flex justify-end items-center mt-8">
                                     <button type="button" class="btn btn-outline-dark" @click="toggle2">Cancelar</button>
                                     <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" @click="toggle2">Salvar</button>
@@ -291,8 +304,10 @@ if(isset($_GET['tab'])){
     }
     
     //* Seta id do imóvel pra visita 
-    const setVisit = (id) => {
-        document.getElementById('prv_imovel').value = id
+    const setVisit = (prv_codigo, prv_imovel, imovelNome) => {
+        document.getElementById('prv_codigo').value = prv_codigo
+        document.getElementById('prv_imovel').value = prv_imovel
+        document.getElementById('imovelNome').value = imovelNome
     }
 
     //* Favoritar
@@ -358,6 +373,26 @@ if(isset($_GET['tab'])){
             }).then(response => response.json()).then(data => {
                 // Seta resultado do ajax na div
                 document.getElementById('resulAjaxHistoricoAtendimento').innerHTML = data;
+            });
+        }        
+    }
+
+    //* Visita 
+    const openModalFormVisita = (prv_pretendente, prv_codigo) => {
+        if(prv_pretendente && prv_imovel){
+            fetch('application/pretendente/view/visita/formVisita.php', {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    action: '?module=pretendente&acao=grava_visitas', 
+                    prv_pretendente: prv_pretendente, 
+                    prv_codigo: prv_codigo 
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json()).then(data => {
+                // Seta resultado do ajax na div
+                document.getElementById('resulAjaxFormVisita').innerHTML = data;
             });
         }        
     }

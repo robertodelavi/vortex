@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
                                     <!-- MARCAR VISITA -->
                                     <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
-                                        <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(' . $imovel['imo_codigo'] . ')">
+                                        <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(null, ' . $imovel['imo_codigo'] . ', \''.($imovel['tpi_descricao'].' - '.$imovel['bai_descricao']).'\')">
                                             ' . file_get_contents('../../../icons/flag.svg') . '
                                         </button>
                                     </div>
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
                                         <!-- MARCAR VISITA -->
                                         <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
-                                            <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(' . $imovel['imo_codigo'] . ')">
+                                            <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(null, ' . $imovel['imo_codigo'] . ', \''.($imovel['tpi_descricao'].' - '.$imovel['bai_descricao']).'\')">
                                                 ' . file_get_contents('../../../icons/flag.svg') . '
                                             </button>
                                         </div>
