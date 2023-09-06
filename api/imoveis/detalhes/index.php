@@ -177,6 +177,13 @@
         }
     }
 
+    // Empresa 
+    $sql = '
+    SELECT * 
+    FROM sisempresas 
+    WHERE emp_codigo = '.$_GET['emp'];
+    $resultEmpresa = $conn->executeQuery($sql);    
+
     // Resultado
     $res = [];
     if ($conn->countLines($result) > 0){
@@ -271,6 +278,11 @@
                     ),
                     'galeria' => $galeria
                 ),
+                'empresa' => array(
+                    'logomarca' => 'http://vegax.com.br/clientes/'.$_GET['emp'].'/empresa/'.$conn->result($resultEmpresa, 0, 'emp_logomarca'),
+                    'telefone' => '',
+                    'endereco' => '',
+                )
             );            
         }
     }
