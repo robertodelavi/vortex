@@ -16,8 +16,8 @@
     $conn = new MySql();
 
     //* Autenticação
-	$conn->connOpen('localhost','vortex__autenticacao','root', '');
-    // $conn->connOpen('brs36.brs.com.br','vegacscom_vortex','vegacscom_vortex', 'vortex@54741');
+	// $conn->connOpen('localhost','vortex__autenticacao','root', '');
+    $conn->connOpen('brs36.brs.com.br','vegacscom_vortex','vegacscom_vortex', 'vortex@54741');
 
     $sql = 'SELECT * FROM sisempresas WHERE emp_codigo = '.$_GET['emp'].' AND emp_ativado = "s"';
     $resultAuth = $conn->executeQuery($sql);

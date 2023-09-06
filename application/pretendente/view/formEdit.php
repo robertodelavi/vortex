@@ -96,7 +96,7 @@ if(isset($_GET['tab'])){
                             :class="{'!border-primary text-primary' : tab == 'pretendente'}" @click="tab='pretendente'">
         
                             <?php echo file_get_contents('application/icons/pessoa2.svg'); ?>
-                            Dados do Pretendente
+                            <span class="hiddenMobile">Dados Gerais</span>
                         </a>
                     </li>
                     <li class="inline-block">

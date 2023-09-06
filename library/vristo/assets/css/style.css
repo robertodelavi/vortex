@@ -26,3 +26,14 @@
 ::-moz-scrollbar-thumb {
   background-color: #888; /* Cor da thumb (o "pegador" do scroll) */
 }
+
+/* Media query pra ocultar em mobile */
+.hiddenMobile {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .hiddenMobile {
+        display: none;
+    }
+}
