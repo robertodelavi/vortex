@@ -96,7 +96,7 @@ if(isset($_GET['tab'])){
                             :class="{'!border-primary text-primary' : tab == 'pretendente'}" @click="tab='pretendente'">
         
                             <?php echo file_get_contents('application/icons/pessoa2.svg'); ?>
-                            <span class="hiddenMobile">Dados Gerais</span>
+                            <span class="hidden sm:block">Dados Gerais</span>
                         </a>
                     </li>
                     <li class="inline-block">
@@ -105,7 +105,7 @@ if(isset($_GET['tab'])){
                             :class="{'!border-primary text-primary' : tab == 'perfis'}" @click="tab='perfis'">
         
                             <?php echo file_get_contents('application/icons/perfis.svg'); ?>
-                            Perfis de Busca
+                            <span class="hidden sm:block">Perfis de Busca</span>
                         </a>
                     </li>
                     <li class="inline-block">
@@ -115,7 +115,7 @@ if(isset($_GET['tab'])){
                             @click="tab='historico-atendimentos'">
         
                             <?php echo file_get_contents('application/icons/historico.svg'); ?>
-                            Histórico de Atendimentos
+                            <span class="hidden sm:block">Histórico de Atendimentos</span>
                         </a>
                     </li>
                     <li class="inline-block">
@@ -124,7 +124,7 @@ if(isset($_GET['tab'])){
                             :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
                             onClick="getImoveis()">
                             <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
-                            Imóveis
+                            <span class="hidden sm:block">Imóveis</span>
                         </a>
                     </li>
                     <li class="inline-block">
@@ -132,7 +132,7 @@ if(isset($_GET['tab'])){
                             class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'visita'}" @click="tab='visita'" >
                             <?php echo file_get_contents('application/icons/flag.svg'); ?>
-                            Visita
+                            <span class="hidden sm:block">Visita</span>
                         </a>
                     </li>
                 </ul>

@@ -78,18 +78,36 @@ if(isset($_GET['res'])){
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/Sortable.min.js"></script>
 <div x-data="modal">
-    <div x-data="multipleTable"> 
+    <div x-data="multipleTable">
+
+        <!-- Filtros (mobile) -->   
+        <div class="block sm:hidden overflow-y-auto mb-4" >
+            <div class="panel" >
+                <div class="flex items-center justify-between mb-4">
+                    <p class="font-semibold text-lg dark:text-white-light">Filtros mobile</p>
+                    <button class="btn btn-sm btn-outline-primary" @click="toggleFilter">
+                        <?php echo file_get_contents('application/icons/filter.svg'); ?>
+                    </button>
+                </div>
+                <!-- montar filtros baseado no toggleFilter -->
+                <div x-show="openFilter" x-transition x-transition.duration.300>
+                    <p>Opaaa</p>
+                    <?php include('application/pretendente/view/list/formFilter.php'); ?>
+                </div>
+            </div>        
+        </div>  
+
         <!-- Tela com filtro e tabela de listagem -->
         <div class="flex gap-4" style="height: 77vh;" >            
-            <!-- Filtros -->   
-            <div class="overflow-y-auto" >
+            <!-- Filtros (desktop) -->   
+            <div class="hidden sm:block overflow-y-auto" >
                 <div class="panel  " >
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
-                        Filtros
+                        Filtros desktop
                     </h5>
-                    <?php include_once('application/pretendente/view/list/formFilter.php'); ?>
+                    <?php include('application/pretendente/view/list/formFilter.php'); ?>
                 </div>        
-            </div>         
+            </div>      
 
             <!-- Listagem -->
             <div class="w-full overflow-x-auto">
@@ -199,6 +217,11 @@ if(isset($_GET['res'])){
             nomeDelete: null,
             currentData: arrData,
             etapas: etapas,
+
+            toggleFilter() {
+                this.openFilter = !this.openFilter;
+                console.log("🚀 ~ toggleFilter: ", this.openFilter)
+            },
 
             init() {
                 this.updateTableData(arrData);
