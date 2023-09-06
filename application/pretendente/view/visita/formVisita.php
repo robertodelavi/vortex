@@ -82,9 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="formaContato">Acompanhante da empresa</label>
                             <select name="prv_acompanhante" class="form-select">
                                 <option value="">-- Selecione --</option>';                            
-                                foreach ($profissionais as $key => $value) {
-                                    $selected = $result[0]['prv_acompanhante'] == $value['usu_codigo'] ? 'selected' : '';
-                                    $html .= '<option value="' . $value['usu_codigo'] . '" '.$selected.' >' . $value['usu_nome'] . '</option>';
+                                foreach ($profissionais as $key => $row) {
+                                    $selected = $result[0]['prv_acompanhante'] == $row['usu_codigo'] ? 'selected' : '';
+                                    $html .= '<option value="' . $row['usu_codigo'] . '" '.$selected.' >' . $row['usu_nome'] . '</option>';
                                 }
                             $html .= '
                             </select>
@@ -109,9 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="formaContato">Chave entregue por</label>
                             <select name="prv_entreguepor" class="form-select">
                                 <option value="">-- Selecione --</option>';                                
-                                $selected = $result[0]['prv_entreguepor'] == $value['usu_codigo'] ? 'selected' : '';
-                                foreach ($profissionais as $key => $value) {
-                                    $html .= '<option value="' . $value['usu_codigo'] . '" '.$selected.' >' . $value['usu_nome'] . '</option>';
+                                foreach ($profissionais as $key => $row) {
+                                    $selected = $result[0]['prv_entreguepor'] == $row['usu_codigo'] ? 'selected' : '';
+                                    $html .= '<option value="' . $row['usu_codigo'] . '" '.$selected.' >' . $row['usu_nome'] . '</option>';
                                 }
                             $html .= '
                             </select>
@@ -136,9 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="formaContato">Chave devolvida por</label>
                             <select name="prv_devolvidopor" class="form-select">
                                 <option value="">-- Selecione --</option>';                            
-                                $selected = $result[0]['prv_devolvidopor'] == $value['usu_codigo'] ? 'selected' : '';
-                                foreach ($profissionais as $key => $value) {
-                                    $html .= '<option value="' . $value['usu_codigo'] . '" '.$selected.' >' . $value['usu_nome'] . '</option>';
+                                foreach ($profissionais as $key => $row) {
+                                    $selected = $result[0]['prv_devolvidopor'] == $row['usu_codigo'] ? 'selected' : '';
+                                    $html .= '<option value="' . $row['usu_codigo'] . '" '.$selected.' >' . $row['usu_nome'] . '</option>';
                                 }
                             $html .= '
                             </select>

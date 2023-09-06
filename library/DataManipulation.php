@@ -63,6 +63,7 @@ class DataManipulation{
         }
 
         $sql = "UPDATE " . $this->tabela . " SET " . $values . " WHERE " . $values_key;
+        // echo '<br/><br/>'.$sql;
         $dataset->executeRecord($sql);
     }
 

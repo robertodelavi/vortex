@@ -161,6 +161,8 @@
 
         case 'updatevisita_pretendente':
             if(isset($_POST['prv_pretendente']) && isset($_POST['prv_codigo'])){
+                echo var_dump($_POST);
+
                 $_POST['prv_acompanhantepretendente'] = addslashes($_POST['prv_acompanhantepretendente']);
 				// Converter data
 				$_POST['prv_dataini'] = str_replace('-', '', $_POST['prv_dataini']);
