@@ -52,6 +52,15 @@ if(isset($_GET['tab'])){
             </script>';
             $currentTab = 'imoveis';
         break;
+        case 5:
+            echo '
+            <script>
+                setTimeout(() => {
+                    toast("Visita atualizada com sucesso!", "success", 3000);
+                }, 300);
+            </script>';
+            $currentTab = 'visita';
+        break;
     }
 }
 
@@ -235,25 +244,14 @@ if(isset($_GET['tab'])){
                 <div x-show="open2" x-transition x-transition.duration.300
                     class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-10">
                     <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
-                        <h5 class="font-bold text-lg">Marcar visita (formEdit)</h5>
+                        <h5 class="font-bold text-lg">Marcar visita</h5>
                         <button type="button" class="text-white-dark hover:text-dark" @click="toggle2">
                             <?php echo file_get_contents('application/icons/close.svg'); ?>
                         </button>
                     </div>
                     <div class="p-5">
                         <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]"> 
-                            <form method="POST" action="?module=pretendente&acao=grava_visitas">
-                                <!-- Parâmetros -->
-                                <input type="hidden" name="prv_codigo" id="prv_codigo" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
-                                <input type="hidden" name="prv_imovel" id="prv_imovel" value="0" /> <!-- Seta id do imóvel na função JS setVisit  -->
-                                <input type="hidden" name="prv_pretendente" value="<?php echo $_POST['param_0']; ?>" />
-                                <input type="hidden" name="prv_empresa" value="<?php echo $_SESSION['v_emp_codigo']; ?>" />                                
-                                <?php require_once('application/pretendente/view/visita/formVisita.php'); ?>
-                                <div class="flex justify-end items-center mt-8">
-                                    <button type="button" class="btn btn-outline-dark" @click="toggle2">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" @click="toggle2">Salvar</button>
-                                </div>
-                            </form>
+                            <div id="resulAjaxFormVisita"></div>
                         </div>
                     </div>
                 </div>
@@ -303,13 +301,6 @@ if(isset($_GET['tab'])){
         })
     }
     
-    //* Seta id do imóvel pra visita 
-    const setVisit = (prv_codigo, prv_imovel, imovelNome) => {
-        document.getElementById('prv_codigo').value = prv_codigo
-        document.getElementById('prv_imovel').value = prv_imovel
-        document.getElementById('imovelNome').value = imovelNome
-    }
-
     //* Favoritar
     const setFavorite = (action, id) => {
         var data = {
@@ -378,14 +369,16 @@ if(isset($_GET['tab'])){
     }
 
     //* Visita 
-    const openModalFormVisita = (prv_pretendente, prv_codigo) => {
-        if(prv_pretendente && prv_imovel){
+    const openModalFormVisita = (prv_codigo, imo_codigo) => {
+        if(imo_codigo){
             fetch('application/pretendente/view/visita/formVisita.php', {
                 method: 'POST',
                 body: JSON.stringify({ 
-                    action: '?module=pretendente&acao=grava_visitas', 
-                    prv_pretendente: prv_pretendente, 
-                    prv_codigo: prv_codigo 
+                    action: prv_codigo ? '?module=pretendente&acao=updatevisita_pretendente' : '?module=pretendente&acao=gravavisita_pretendente', 
+                    prv_codigo: prv_codigo,
+                    imo_codigo: imo_codigo,
+                    prv_pretendente: '<?php echo $_POST['param_0']; ?>',
+                    prv_empresa: 1, //? temp (pegar da sessão ou localstorage) 
                 }),
                 headers: {
                     'Content-Type': 'application/json'

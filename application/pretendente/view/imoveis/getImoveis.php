@@ -43,8 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //* FAVORITOS
         if ($resultFavoritos && count($resultFavoritos) > 0) {
             $html = '                                    
-            <h3 class="font-semibold text-lg dark:text-white-light">Meus imóveis favoritos</h3>
-            <br />
+            <p class="font-semibold text-lg text-warning pb-2">Imóveis favoritos</p>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">';                    
                 foreach ($resultFavoritos as $i => $imovel) {
                     // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
@@ -60,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
                                     <!-- MARCAR VISITA -->
                                     <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
-                                        <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(null, ' . $imovel['imo_codigo'] . ', \''.($imovel['tpi_descricao'].' - '.$imovel['bai_descricao']).'\')">
+                                        <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
                                             ' . file_get_contents('../../../icons/flag.svg') . '
                                         </button>
                                     </div>
@@ -124,9 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //* IMÓVEIS SUGERIDOS
         $html .= '
-        <br />
-        <h3 class="font-semibold text-lg dark:text-white-light">Outros imóveis</h3>
-            <br />
+        <p class="font-semibold text-lg dark:text-white-light pb-2">Imóveis sugeridos</p>            
         <div>     
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">';
                 if ($resultImoveis && count($resultImoveis) > 0) {
@@ -143,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
                                         <!-- MARCAR VISITA -->
                                         <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
-                                            <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => setVisit(null, ' . $imovel['imo_codigo'] . ', \''.($imovel['tpi_descricao'].' - '.$imovel['bai_descricao']).'\')">
+                                            <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
                                                 ' . file_get_contents('../../../icons/flag.svg') . '
                                             </button>
                                         </div>

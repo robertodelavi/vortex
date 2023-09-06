@@ -19,6 +19,7 @@
 		case 'grava_pretendente':
 		case 'gravahistorico_pretendente':
 		case 'gravavisita_pretendente':
+		case 'updatevisita_pretendente':
 		case 'gravadados_pretendente':		
 		case 'update_pretendente':
 		case 'updatehistorico_pretendente':
@@ -28,19 +29,5 @@
 		case 'excluir_pretendente':
 			require_once 'application/pretendente/view/dataControls.inc.php';
 		break;
-
-        //* AGENDA
-
-        //* VISITA
-        case 'lista_visitas':
-            require_once 'application/pretendente/view/visita/list/index.php';
-        break;
-        case 'edita_visitas':
-            require_once 'application/pretendente/view/visita/view/index.php';
-        break;
-        case 'grava_visitas':
-        case 'update_visitas':
-            require_once 'application/pretendente/view/visita/dataControls.inc.php';
-        break;
 	}
 ?>
