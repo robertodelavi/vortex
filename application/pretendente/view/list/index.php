@@ -167,110 +167,22 @@ if(isset($_GET['res'])){
             </div>
         </div>
 
-        <!-- Modal Status do Pretendente -->
-        <div class="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto hidden" :class="open2 && '!block'">
-            <div class="flex items-start justify-center min-h-screen px-4"  @click.self="open2 = false">
+        <!-- Modal Status do Pretendente (scrumboard) -->
+        <div class="fixed inset-0 bg-[black]/60 z-[999] hidden" :class="open2 && '!block'">
+            <div class="flex items-start justify-center px-4"  @click.self="open2 = false">
                 <div x-show="open2" x-transition x-transition.duration.300
-                    class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[50%] my-10">
+                    class="panel border-0 p-0 rounded-lg overflow-y-auto h-auto w-full max-w-3xl my-10">
                     <div class="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                         <h5 class="font-bold text-lg">Status do Pretendente</h5>
                         <button type="button" class="text-white-dark hover:text-dark" @click="toggle2">
                             <?php echo file_get_contents('application/icons/close.svg'); ?>
                         </button>
                     </div>
-                    <div class="p-5">
-                        <div class="dark:text-white-dark/70 text-base font-medium text-[#1f2937]">    
-                                
-                            <div class="relative pt-5">
-                                <div class="perfect-scrollbar h-full -mx-2">
-                                    <div class="overflow-x-auto flex items-start flex-nowrap gap-5 pb-2 px-2">
-                                        <!-- Status -->
-                                        <template x-for="project in projectList" :key="project.id" >
-                                            <div class="panel w-80 flex-none border border-dark">
-                                                <div class="flex justify-between mb-5">
-                                                    <h4 x-text="project.title" class="text-primary font-bold "> </h4>
-                                                    <div class="flex items-center">
-                                                        <div x-data="dropdown" @click.outside="open = false" class="dropdown">
-                                                            <button type="button" class="hover:text-primary" @click="toggle">
-
-                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 opacity-70 hover:opacity-100">
-                                                                    <circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5"></circle>
-                                                                    <circle opacity="0.5" cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.5"></circle>
-                                                                    <circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.5"></circle>
-                                                                </svg>
-                                                            </button>
-                                                            <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0">
-                                                                <li><a href="javascript:;" @click="toggle, addEditProject(project)">Edit</a></li>
-                                                                <li><a href="javascript:;" @click="toggle, deleteProject(project)">Delete</a></li>
-                                                                <li><a href="javascript:;" @click="toggle, clearProjects(project)">Clear All</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- task list -->
-                                                <div class="sortable-list min-h-[150px]" :data-id="project.id">
-                                                    <template x-for="task in project.tasks">
-                                                        <div :key="project.id" :data-id="project.id" class="shadow bg-[#f4f4f4] dark:bg-[#262e40] p-3 pb-5 rounded-md mb-5 space-y-3 cursor-move">
-                                                            
-                                                            <div class="flex items-center w-max">
-                                                                <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-3.jpeg" />
-                                                                <div class="hover:text-primary" x-text="task.title"></div>
-                                                            </div>
-
-                                                            <p class="break-all" x-text="task.description"></p>
-                                                            <div class="flex gap-2 items-center flex-wrap">
-                                                                <template x-if="task.tags?.length">
-                                                                    <template x-for="(tag , i) in task.tags" :key="i">
-                                                                        <div class="btn px-2 py-1 flex btn-outline-primary">
-                                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                                                                <path d="M4.72848 16.1369C3.18295 14.5914 2.41018 13.8186 2.12264 12.816C1.83509 11.8134 2.08083 10.7485 2.57231 8.61875L2.85574 7.39057C3.26922 5.59881 3.47597 4.70292 4.08944 4.08944C4.70292 3.47597 5.59881 3.26922 7.39057 2.85574L8.61875 2.57231C10.7485 2.08083 11.8134 1.83509 12.816 2.12264C13.8186 2.41018 14.5914 3.18295 16.1369 4.72848L17.9665 6.55812C20.6555 9.24711 22 10.5916 22 12.2623C22 13.933 20.6555 15.2775 17.9665 17.9665C15.2775 20.6555 13.933 22 12.2623 22C10.5916 22 9.24711 20.6555 6.55812 17.9665L4.72848 16.1369Z" stroke="currentColor" stroke-width="1.5" />
-                                                                                <circle opacity="0.5" cx="8.60699" cy="8.87891" r="2" transform="rotate(-45 8.60699 8.87891)" stroke="currentColor" stroke-width="1.5" />
-                                                                                <path opacity="0.5" d="M11.5417 18.5L18.5208 11.5208" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                                            </svg>
-                                                                            <span class="ltr:ml-2 rtl:mr-2" x-text="tag"></span>
-                                                                        </div>
-                                                                    </template>
-                                                                </template>
-                                                                <template x-if="!task.tags?.length">
-                                                                    <div class="btn px-2 py-1 flex text-white-dark dark:border-white-dark/50 shadow-none">
-                                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                                                            <path d="M4.72848 16.1369C3.18295 14.5914 2.41018 13.8186 2.12264 12.816C1.83509 11.8134 2.08083 10.7485 2.57231 8.61875L2.85574 7.39057C3.26922 5.59881 3.47597 4.70292 4.08944 4.08944C4.70292 3.47597 5.59881 3.26922 7.39057 2.85574L8.61875 2.57231C10.7485 2.08083 11.8134 1.83509 12.816 2.12264C13.8186 2.41018 14.5914 3.18295 16.1369 4.72848L17.9665 6.55812C20.6555 9.24711 22 10.5916 22 12.2623C22 13.933 20.6555 15.2775 17.9665 17.9665C15.2775 20.6555 13.933 22 12.2623 22C10.5916 22 9.24711 20.6555 6.55812 17.9665L4.72848 16.1369Z" stroke="currentColor" stroke-width="1.5" />
-                                                                            <circle opacity="0.5" cx="8.60699" cy="8.87891" r="2" transform="rotate(-45 8.60699 8.87891)" stroke="currentColor" stroke-width="1.5" />
-                                                                            <path opacity="0.5" d="M11.5417 18.5L18.5208 11.5208" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                                        </svg>
-                                                                        <span class="ltr:ml-2 rtl:mr-2">No Tags</span>
-                                                                    </div>
-                                                                </template>
-                                                            </div>
-                                                            <div class="flex items-center justify-between">
-                                                                <div class="font-medium flex items-center hover:text-primary">
-
-                                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-3 rtl:ml-3">
-                                                                        <path d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12Z" stroke="currentColor" stroke-width="1.5" />
-                                                                        <path opacity="0.5" d="M7 4V2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                                        <path opacity="0.5" d="M17 4V2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                                        <path opacity="0.5" d="M2 9H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                                    </svg>
-                                                                    <span x-text="task.date"></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>                          
-                                <!-- Dados vindos do ajax -->
-                                <div id="resultStatusScrumBoard"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php require_once('application/pretendente/view/status/scrumBoard.php'); ?>
                 </div>
             </div>
         </div>
+
     </div>    
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>

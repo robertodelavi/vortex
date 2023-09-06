@@ -16,8 +16,8 @@
     $conn = new MySql();
 
     //* Autenticação
-	//  $conn->connOpen('localhost','vortex__autenticacao','root', '');
-    $conn->connOpen('brs36.brs.com.br','vegacscom_vortex','vegacscom_vortex', 'vortex@54741');
+	$conn->connOpen('localhost','vortex__autenticacao','root', '');
+    // $conn->connOpen('brs36.brs.com.br','vegacscom_vortex','vegacscom_vortex', 'vortex@54741');
 
     $sql = 'SELECT * FROM sisempresas WHERE emp_codigo = '.$_GET['emp'].' AND emp_ativado = "s"';
     $resultAuth = $conn->executeQuery($sql);
@@ -179,8 +179,11 @@
 
     // Empresa 
     $sql = '
-    SELECT * 
-    FROM sisempresas 
+    SELECT p.pes_nome1, IF(LENGTH(p.pes_cpfcnpj) > 11, p.pes_cpfcnpj, null) AS pes_cnpj, p.pes_foneres1, p.pes_fonecel1, p.pes_fonecom1, pes_email, p.pes_rua1, p.pes_numero1, b.bai_descricao, p.pes_complemento1, c.cid_descricao, c.cid_uf, p.pes_cep1, p.pes_creci, e.emp_logomarca
+    FROM sisempresas AS e 
+        LEFT JOIN pessoas AS p ON (e.emp_pessoa = p.pes_codigo)
+        LEFT JOIN bairros AS b ON (p.pes_bairro1 = b.bai_codigo)
+        LEFT JOIN cidades AS c ON (p.pes_cidade1 = c.cid_codigo)
     WHERE emp_codigo = '.$_GET['emp'];
     $resultEmpresa = $conn->executeQuery($sql);    
 
@@ -279,12 +282,44 @@
                     'galeria' => $galeria
                 ),
                 'empresa' => array(
+                    'nome' => $conn->result($resultEmpresa, 0, 'pes_nome1'),
+                    'cnpj' => maskCnpj($conn->result($resultEmpresa, 0, 'pes_cnpj')),
+                    'creci' => $conn->result($resultEmpresa, 0, 'pes_creci'),
                     'logomarca' => 'http://vegax.com.br/clientes/'.$_GET['emp'].'/empresa/'.$conn->result($resultEmpresa, 0, 'emp_logomarca'),
-                    'telefone' => '',
-                    'endereco' => '',
+                    'telefone' => array(
+                        'residencial' => $conn->result($resultEmpresa, 0, 'pes_foneres1'),
+                        'celular' => $conn->result($resultEmpresa, 0, 'pes_fonecel1'),
+                        'comercial' => $conn->result($resultEmpresa, 0, 'pes_fonecom1')
+                    ),
+                    'email' => $conn->result($resultEmpresa, 0, 'pes_email'),
+                    'endereco' => configAddress($resultEmpresa, $conn)
                 )
             );            
         }
+    }
+
+    function configAddress($result, $conn){
+        $endereco = '';
+        if ($conn->countLines($result) > 0){
+            for ($i=0; $i< $conn->countLines($result); $i++){
+                // Inserir em $endereco somente os campos que nao estiverem vazios
+                $endereco .= $conn->result($result, $i, 'pes_rua1') ? $conn->result($result, $i, 'pes_rua1').', ' : '';
+                $endereco .= $conn->result($result, $i, 'pes_numero1') ? $conn->result($result, $i, 'pes_numero1').', ' : '';
+                $endereco .= $conn->result($result, $i, 'pes_complemento1') ? $conn->result($result, $i, 'pes_complemento1').', ' : '';
+                $endereco .= $conn->result($result, $i, 'bai_descricao') ? $conn->result($result, $i, 'bai_descricao').', ' : '';
+                $endereco .= $conn->result($result, $i, 'pes_cep1') ? $conn->result($result, $i, 'pes_cep1').', ' : '';
+                $endereco .= $conn->result($result, $i, 'cid_descricao') ? ($conn->result($result, $i, 'cid_descricao').'/'.$conn->result($result, $i, 'cid_uf')).', ' : '';
+                $endereco = substr($endereco, 0, -2);
+            }
+        }
+        return $endereco;
+    }
+
+    function maskCnpj($cnpj){
+        $cnpj = preg_replace("/[^0-9]/", "", $cnpj);
+        $cnpj = str_pad($cnpj, 14, '0', STR_PAD_LEFT);
+        $cnpj = substr($cnpj, 0, 2).'.'.substr($cnpj, 2, 3).'.'.substr($cnpj, 5, 3).'/'.substr($cnpj, 8, 4).'-'.substr($cnpj, 12, 2);
+        return $cnpj;
     }
 
     echo json_encode(array('status' => true, 'data' => $res));
