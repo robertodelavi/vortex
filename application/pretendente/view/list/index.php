@@ -25,7 +25,7 @@ SELECT
 FROM pretendentes AS p
     LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
     LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
-LIMIT 30';
+LIMIT 20';
 $result = $data->find('dynamic', $sql);
 
 // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
@@ -82,16 +82,14 @@ if(isset($_GET['res'])){
 
         <!-- Filtros (mobile) -->   
         <div class="block sm:hidden overflow-y-auto mb-4" >
-            <div class="panel" >
-                <div class="flex items-center justify-between mb-4">
-                    <p class="font-semibold text-lg dark:text-white-light">Filtros mobile</p>
+            <div class="panel space-y-4 " >
+                <div class="flex items-center justify-between">
+                    <p class="font-semibold text-lg dark:text-white-light">Filtros</p>
                     <button class="btn btn-sm btn-outline-primary" @click="toggleFilter">
                         <?php echo file_get_contents('application/icons/filter.svg'); ?>
                     </button>
                 </div>
-                <!-- montar filtros baseado no toggleFilter -->
-                <div x-show="openFilter" x-transition x-transition.duration.300>
-                    <p>Opaaa</p>
+                <div x-show="openFilter">
                     <?php include('application/pretendente/view/list/formFilter.php'); ?>
                 </div>
             </div>        
@@ -103,7 +101,7 @@ if(isset($_GET['res'])){
             <div class="hidden sm:block overflow-y-auto" >
                 <div class="panel  " >
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
-                        Filtros desktop
+                        Filtros
                     </h5>
                     <?php include('application/pretendente/view/list/formFilter.php'); ?>
                 </div>        
@@ -217,10 +215,10 @@ if(isset($_GET['res'])){
             nomeDelete: null,
             currentData: arrData,
             etapas: etapas,
+            openFilter: false,
 
             toggleFilter() {
                 this.openFilter = !this.openFilter;
-                console.log("🚀 ~ toggleFilter: ", this.openFilter)
             },
 
             init() {

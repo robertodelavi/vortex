@@ -81,7 +81,7 @@ if(isset($_GET['tab'])){
                 <div>
                     <button type="button" onclick="nextPage('?module=pretendente&acao=lista_pretendente', '');" class="btn btn btn-outline-dark">
                         <?php echo file_get_contents('application/icons/voltar.svg'); ?>
-                        Voltar
+                        <span class="hidden sm:block">Voltar</span>
                     </button>   
                 </div>
             </div>
