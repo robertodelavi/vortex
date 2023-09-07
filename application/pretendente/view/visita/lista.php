@@ -34,7 +34,7 @@
             </a> 
         </div>
     </div>
-    <div class="mb-5">
+    <div class="mb-5 overflow-x-auto">
         <table>
             <thead>
                 <tr>

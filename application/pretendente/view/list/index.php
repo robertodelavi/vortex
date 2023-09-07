@@ -89,7 +89,8 @@ if(isset($_GET['res'])){
                         <?php echo file_get_contents('application/icons/filter.svg'); ?>
                     </button>
                 </div>
-                <div x-show="openFilter">
+                <!-- Abrir formulário com openFilter com efeito  -->
+                <div x-show="openFilter" x-transition x-transition.duration.300 class="overflow-hidden">
                     <?php include('application/pretendente/view/list/formFilter.php'); ?>
                 </div>
             </div>        

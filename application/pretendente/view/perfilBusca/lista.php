@@ -17,8 +17,8 @@
                 <button class="btn btn-primary" @click="toggle; openModalEditPerfil('<?php echo $_POST['param_0']; ?>', null);">Novo</button>    
             </div>
         </div>
-        <div class="mb-5">
-            <table>
+        <div class="mb-5 overflow-x-auto">
+            <table class="tabela whitespace-nowrap">
                 <thead>
                     <tr>
                         <th>Name</th>

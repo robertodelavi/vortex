@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result && count($result) > 0) {
             $html = '
-            <div class="flex">
-                <div class="w-1/2 mr-2">
+            <div class="sm:flex gap-4">
 
+                <div class="sm:w-1/2 mr-2">
                     <!-- LightBox da capa -->
                     <div class="rounded-md overflow-hidden relative w-full border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary hover:transition-colors duration-300" style="height: 300px; width: 100%;">
                         <template x-for="(item, i) in getItems" :key="i">
@@ -55,29 +55,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <div class="w-1/2 ml-2">
-                    <div class="grid grid-cols-2 gap-4">
+                <div class="sm:w-1/2 my-2 sm:mt-0">
+                    <!-- Título e valor -->
+                    <div class="sm:flex justify-between py-4 sm:py-0 ">
                         <div>
-                            <p class="text-md font-bold mb-2">
-                                ' . $result[0]['tpi_descricao'] . '
+                            <p class="text-xs sm:text-right">
+                                #' . $result[0]['imo_codigo'] . '
                             </p>
-                            <p class="mb-2">
-                                ' . $result[0]['bai_descricao'] . '
-                            </p>
+                            <p class="text-xl font-bold text-primary">' . $result[0]['tpi_descricao'] . '</p>
+                            <p>' . $result[0]['bai_descricao'] . '</p>
+                            
                         </div>
                         <div>
-                            <p class="text-lg font-bold text-success">
+                            <p class="text-xs sm:text-right">
+                                Valor de venda
+                            </p>
+                            <p class="text-xl font-bold text-success">
                                 R$ '.number_format(($result[0]['imv_valor']/100), 2, ',', '.').'
                             </p>
-                            <p class="text-xs mb-2">
-                                Código: ' . $result[0]['imo_codigo'] . '
-                            </p>
+                            
                         </div>
                     </div>
                     
-                    <!-- Principais características -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 text-center">
-                        <div class="flex flex-col items-center mt-5">
+                    <!-- Principais características (grid) -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-5 text-center">
+                        <div class="flex flex-col items-center">
                             <div class="mb-1">
                                 ' . file_get_contents('../../../../application/icons/area.svg') . '       
                             </div>
@@ -89,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         
-                        <div class="flex flex-col items-center mt-5">
+                        <div class="flex flex-col items-center">
                             <div class="mb-1">
                                 ' . file_get_contents('../../../../application/icons/area2.svg') . '       
                             </div>
@@ -101,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <div class="flex flex-col items-center mt-5">
+                        <div class="flex flex-col items-center">
                             <div class="mb-1">
                                 ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '       
                             </div>
@@ -113,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         
-                        <div class="flex flex-col items-center mt-5">
+                        <div class="flex flex-col items-center">
                             <div class="mb-1">
                                 ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '       
                             </div>
@@ -125,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         
-                        <div class="flex flex-col items-center mt-5">
+                        <div class="flex flex-col items-center">
                             <div class="mb-1">
                                 ' . file_get_contents('../../../../application/icons/banheiro.svg') . '       
                             </div>
@@ -137,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         
-                        <div class="flex flex-col items-center mt-5">
+                        <div class="flex flex-col items-center">
                             <div class="mb-1">
                                 ' . file_get_contents('../../../../application/icons/vagagaragem.svg') . '       
                             </div>
@@ -149,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         
-                        <div class="flex flex-col items-center mt-5">
+                        <div class="flex flex-col items-center">
                             <div class="mb-1">
                                 ' . file_get_contents('../../../../application/icons/cozinha.svg') . '       
                             </div>
@@ -159,12 +161,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </p>
                                 <p class="text-xs mt-0" >Cozinhas</p>
                             </div>
-                        </div>
-
-                        
-                                  
+                        </div>    
                     </div>
-
                 </div>
             </div>';
         }else{

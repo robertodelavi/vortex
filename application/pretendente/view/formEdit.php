@@ -172,21 +172,38 @@ if(isset($_GET['tab'])){
                     <?php 
                     if($resultPerfilBusca[0]['qtd'] > 0){ 
                     ?>
-                        <div class="flex h-screen gap-3">                
-                            <div class="w-1/5">
-                                <!-- Bloco dos filtros -->
-                                <div class="panel h-full">
-                                    <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
-                                        Filtros
-                                    </h5>
-                                    <?php require_once('application/pretendente/view/imoveis/formFilter.php'); ?>
+                        <div>
+                            <!-- Filtros (mobile) -->   
+                            <div class="block sm:hidden overflow-y-auto mb-4" >
+                                <div class="panel space-y-4 " >
+                                    <div class="flex items-center justify-between">
+                                        <p class="font-semibold text-lg dark:text-white-light">Filtros</p>
+                                        <button class="btn btn-sm btn-outline-primary" @click="toggleFilter">
+                                            <?php echo file_get_contents('application/icons/filter.svg'); ?>
+                                        </button>
+                                    </div>
+                                    <div x-show="openFilter" x-transition x-transition.duration.300 class="overflow-hidden">
+                                        <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                    </div>
+                                </div>        
+                            </div>
+    
+                            <div class="flex gap-3">                
+                                <!-- Filtros (desktop) -->
+                                <div class="hidden sm:block w-1/5">
+                                    <div class="panel h-full">
+                                        <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
+                                            Filtros
+                                        </h5>
+                                        <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="w-full">
-                                <!-- Imóveis vindo do ajax -->
-                                <div id="resulAjaxImoveis"></div>    
-                            </div>
-                        </div>     
+                                <div class="w-full">
+                                    <!-- Imóveis vindo do ajax -->
+                                    <div id="resulAjaxImoveis"></div>    
+                                </div>
+                            </div>     
+                        </div>
                     <?php 
                     }
                     // Se não tem perfil de busca, mostra mensagem de que não tem perfil de busca
@@ -406,6 +423,11 @@ if(isset($_GET['tab'])){
         Alpine.data("lightbox", () => ({
             allcontrols: 1,
             items: [],
+            openFilter: false,
+
+            toggleFilter() {
+                this.openFilter = !this.openFilter;
+            },
 
             getImovelPhotos(id){
                 if(id && id > 0){

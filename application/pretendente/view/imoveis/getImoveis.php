@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($resultFavoritos && count($resultFavoritos) > 0) {
             $html = '                                    
             <p class="font-semibold text-lg text-warning pb-2">Imóveis favoritos</p>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">';                    
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">';                    
                 foreach ($resultFavoritos as $i => $imovel) {
                     // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
                     $foto = $imovel['imf_arquivo'] ? 'http://vegax.com.br/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $html .= '
         <p class="font-semibold text-lg dark:text-white-light pb-2">Imóveis sugeridos</p>            
         <div>     
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">';
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">';
                 if ($resultImoveis && count($resultImoveis) > 0) {
                     foreach ($resultImoveis as $i => $imovel) {
                         // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';

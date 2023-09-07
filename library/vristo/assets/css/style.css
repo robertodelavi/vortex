@@ -27,13 +27,13 @@
   background-color: #888; /* Cor da thumb (o "pegador" do scroll) */
 }
 
-/* Media query pra ocultar em mobile */
-.hiddenMobile {
-    display: block;
+/* Scroll horizontal personalizado também */
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: #4361EE; /* Cor da thumb (o "pegador" do scroll) */
 }
 
-@media (max-width: 768px) {
-    .hiddenMobile {
-        display: none;
-    }
+/* altura */
+::-webkit-scrollbar-thumb {
+  height: 6px;
 }
+

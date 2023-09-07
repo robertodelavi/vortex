@@ -19,7 +19,7 @@
                 <button class="btn btn-primary" @click="toggle; openModalEditHistoricoAtendimento('<?php echo $_POST['param_0']; ?>', null);">Novo</button>    
             </div>
         </div>
-        <div class="mb-5">
+        <div class="mb-5 overflow-x-auto">
             <table>
                 <thead>
                     <tr>
