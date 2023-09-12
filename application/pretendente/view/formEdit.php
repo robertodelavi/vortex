@@ -278,6 +278,18 @@ if(isset($_GET['tab'])){
 </div>
 
 <script>
+    const selectUf = (uf) => {
+        var data = {
+            uf: uf
+        };
+        fetch('application/script/ajax/getCidades.php', {
+            method: 'POST',
+            body: JSON.stringify(data) // Converte o objeto em uma string JSON
+        }).then(response => response.json()).then(data => {
+            document.getElementById('resulAjaxCidades').innerHTML = data     
+        })        
+    }
+
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
     const getImoveis = (filters = null) => {
@@ -367,6 +379,7 @@ if(isset($_GET['tab'])){
 
     //* Histórico de atendimentos
     const openModalEditHistoricoAtendimento = (prh_pretendente, prh_codigo) => {
+        console.log("🚀 ~ openModalEditHistoricoAtendimento ", prh_pretendente, prh_codigo)
         if(prh_pretendente){
             fetch('application/pretendente/view/historicoAtendimentos/formHistoricoAtendimento.php', {
                 method: 'POST',
@@ -379,6 +392,7 @@ if(isset($_GET['tab'])){
                     'Content-Type': 'application/json'
                 }
             }).then(response => response.json()).then(data => {
+                console.log("🚀 ~ openModalEditHistoricoAtendimento ~ data:", data)
                 // Seta resultado do ajax na div
                 document.getElementById('resulAjaxHistoricoAtendimento').innerHTML = data;
             });

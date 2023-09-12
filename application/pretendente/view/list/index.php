@@ -206,6 +206,18 @@ if(isset($_GET['res'])){
 <script>
     const arrData = <?php echo json_encode($tableResult); ?>;
     const etapas = <?php echo json_encode($etapas); ?>;
+
+    const selectUf = (uf) => {
+        var data = {
+            uf: uf
+        };
+        fetch('application/script/ajax/getCidades.php', {
+            method: 'POST',
+            body: JSON.stringify(data) // Converte o objeto em uma string JSON
+        }).then(response => response.json()).then(data => {
+            document.getElementById('resulAjaxCidades').innerHTML = data     
+        })        
+    }
     
     document.addEventListener("alpine:init", () => {
 

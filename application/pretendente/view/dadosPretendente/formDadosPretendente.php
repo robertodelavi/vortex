@@ -4,14 +4,32 @@
         $sql = '
         SELECT * 
         FROM pretendentes AS p 
+            LEFT JOIN cidades AS c ON (p.prw_cidadeorigem = c.cid_codigo)
         WHERE p.prw_codigo = '.$_POST['param_0'];
         $result = $data->find('dynamic', $sql);
+
+        // Buscar as cidades iniciais, antes do carregamento via ajax
+        $sql = '
+        SELECT * 
+        FROM cidades
+        WHERE cid_uf = "'.$result[0]['cid_uf'].'" AND cid_uf <> "" AND cid_descricao <> ""  
+        GROUP BY cid_descricao
+        ORDER BY cid_descricao ASC';
+        $cidadesIniciais = $data->find('dynamic', $sql);
     }
 
     $sexo = array(
         'm' => 'Masculino',
         'f' => 'Feminino'
     );
+
+    $sql = '
+    SELECT * 
+    FROM cidades
+    WHERE cid_uf <> ""    
+    GROUP BY cid_uf
+    ORDER BY cid_uf ASC';
+    $estados = $data->find('dynamic', $sql);    
 
     $sql = '
     SELECT * 
@@ -66,7 +84,7 @@
     $statusNegocio = $data->find('dynamic', $sql);
 ?>
 
-<div class="flex flex-col sm:flex-row">
+<div class="flex flex-col sm:flex-row" >
     <div class="flex-1 grid sm:grid-cols-2 md:grid-cols-4 gap-5">
         <div>
             <label for="name">Nome do Pretendente</label>
@@ -146,8 +164,35 @@
             </select>
         </div>
         <div>
+            <label for="phone">Estado</label>
+            <select class="form-select text-white-dark" onchange="selectUf(this.value)" >
+                <option value="">-- Selecione --</option>
+                <?php 
+                    foreach($estados as $row){
+                        $selected = $result[0]['cid_uf'] == $row['cid_uf'] ? 'selected' : '';
+                        echo '
+                        <option value="'.$row['cid_uf'].'" '.$selected.' >
+                            '.$row['cid_uf'].'
+                        </option>';
+                    }
+                ?>
+            </select>            
+        </div>
+        <div>
+            <!-- Vindo via ajax -->
             <label for="phone">Cidade</label>
-            <input name="prw_cidadeorigem" type="text" class="form-input" value="<?php echo $result[0]['prw_cidadeorigem']; ?>" />
+            <select id="resulAjaxCidades" name="prw_cidadeorigem" class="form-select text-white-dark">
+                <option value="">-- Selecione o Estado --</option>
+                <?php 
+                    foreach($cidadesIniciais as $row){
+                        $selected = $result[0]['prw_cidadeorigem'] == $row['cid_codigo'] ? 'selected' : '';
+                        echo '
+                        <option value="'.$row['cid_codigo'].'" '.$selected.' >
+                            '.$row['cid_descricao'].'
+                        </option>';
+                    }
+                ?>
+            </select>
         </div>
         
         <div>
@@ -258,5 +303,4 @@
         <label for="web">Observações</label>
         <textarea name="prw_obs" class="form-input w-full" cols="4"><?php echo $result[0]['prw_obs']; ?></textarea>
     </div>
-</div>
-    
+</div>  
