@@ -252,15 +252,15 @@
                     }
                     
                     if(data.data[0]['codigo'] != ''){
-                        document.getElementById('titulo').innerHTML = '<div class="flex flex-col items-center p-1"><span class="badge badge-outline-primary"> CÓDIGO: '+data.data[0]['codigo']+'</span></div>';
+                        document.getElementById('titulo').innerHTML = '<span class="badge badge-outline-primary" style="margin: 5px;"> CÓDIGO: '+data.data[0]['codigo']+'</span>';
                     }
 
                     if(data.data[0]['tipo'] != ''){
-                        document.getElementById('titulo').innerHTML += '<div class="flex flex-col items-center p-1"><span class="badge badge-outline-success">'+data.data[0]['tipo'].toUpperCase()+'</span></div>';
+                        document.getElementById('titulo').innerHTML += '<span class="badge badge-outline-success" style="margin: 5px;">'+data.data[0]['tipo'].toUpperCase()+'</span>';
                     }
 
                     if(data.data[0]['bairro'] != ''){
-                        document.getElementById('titulo').innerHTML += '<div class="flex flex-col items-center p-1"><span class="badge badge-outline-info">'+data.data[0]['bairro'].toUpperCase()+'</span></div>';
+                        document.getElementById('titulo').innerHTML += '<span class="badge badge-outline-info" style="margin: 5px;">'+data.data[0]['bairro'].toUpperCase()+'</span>';
                     }
 
                     if(data.data[0]['rua'] != ''){
@@ -455,14 +455,14 @@
                     <!-- VALORES -->
                     <div class="panel">
                         <div id="logo"></div>
-                        <div id="titulo" class="flex mb-3"></div>                
-                        <div class="flex justify-between">
+                        <div id="titulo" class="grid lg:grid-cols-3 grid-cols-1 mb-3"></div>                
+                        <div class="grid lg:grid-cols-2 grid-cols-1">
                             <div>                    
                                 <p>À venda por</p>
                                 <h2 class="font-semibold text-3xl dark:text-white-light mb-5" id="detValor"></h2>
                             </div>
 
-                            <div>
+                            <div class="mb-5">
                                 <p>Compartilhe este imóvel</p>
                                 <div class="flex mt-3" style="font-size: 1.8em;">
                                     <a href="https://wa.me/?text=https://www.alternativachapeco.com.br/detalhes-imovel/?id_imovel=5666" target="_blank" rel="noopener">
