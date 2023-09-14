@@ -1,3 +1,11 @@
+<?php
+    // Desativa a exibição de erros
+    ini_set('display_errors', 0);
+
+    // Define o nível de relatório de erros para ignorar os warnings
+    error_reporting(E_ALL & ~E_WARNING);
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
