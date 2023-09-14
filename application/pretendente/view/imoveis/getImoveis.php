@@ -16,6 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql1 = createScriptImoveis($value, $filters, $sideFilters); //? Cria e configura o script (sql) para buscar os imóveis
         $resultImoveis = $data->find('dynamic', $sql1);
 
+        $sql = '
+        SELECT p.prw_telefones
+        FROM pretendentes AS p 
+        WHERE p.prw_codigo = ' . $value['pretendente'];
+        $pretendente = $data->find('dynamic', $sql);
+
         $sql2 = '
         SELECT 
             i.imo_codigo, 
@@ -56,7 +62,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');" class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url('.$foto.');"></div>
 
                                 <!-- AÇÕES -->
-                                <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
+                                <div class="absolute top-2 right-2 w-full flex justify-end gap-1">                                    
+                                    <!-- COMPARTILHAR -->
+                                    <div>
+                                        <div @click="() => toggleShare(\'favoritos\', '.$i.')" class="bg-white dark:bg-dark rounded p-2 flex relative">
+                                            <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
+                                                ' . file_get_contents('../../../icons/compartilhar.svg') . '
+                                            </button>
+                                        </div>
+                                        <!-- SELECIONAR MODO DE COMPARTILHAMENTO -->
+                                        <div x-show="openShare && sectionShare == \'favoritos\' && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1">
+                                            <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
+                                                <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
+                                                    <div class="text-primary">
+                                                        ' . file_get_contents('../../../icons/copiar.svg') . '
+                                                    </div>
+                                                    <p class="text-sm">Copiar Link</p>                                                
+                                                </div>
+                                                <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
+                                                    <div class="text-success">
+                                                        ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                                                    </div>
+                                                    <p class="text-sm">WhatsApp</p>                                                
+                                                </div>
+                                            </div>
+
+                                        </div>                       
+                                    </div>
+
                                     <!-- MARCAR VISITA -->
                                     <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
                                         <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
@@ -138,6 +171,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     
                                     <!-- AÇÕES -->
                                     <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
+                                        <!-- COMPARTILHAR -->
+                                        <div @click="() => toggleShare(\'sugeridos\', '.$i.')" class="bg-white dark:bg-dark rounded p-2 flex">
+                                            <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
+                                                ' . file_get_contents('../../../icons/compartilhar.svg') . '
+                                            </button>
+                                            <div x-show="openShare && sectionShare == \'sugeridos\' && indexShare == '.$i.'" x-transition x-transition.duration.300 class="overflow-hidden">
+                                                <p>Opa sopa</p>
+                                            </div>
+                                        </div>
+
                                         <!-- MARCAR VISITA -->
                                         <div @click="toggle2;" class="bg-white dark:bg-dark rounded p-2 flex">
                                             <button type="button" class="text-primary group" data-imovel-id="6" x-tooltip="Marcar visita" data-theme="primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">

@@ -11,14 +11,14 @@
     </div>
     <div class="w-full lg:w-1/2 relative flex justify-center items-center ">
         <div class="max-w-[480px] p-5 md:p-10 w-full">
-            <h2 class="font-bold text-3xl mb-3 text-white-dark">Password Reset</h2>
-            <p class="mb-7 text-white-dark">Enter your email to recover your ID</p>
+            <h2 class="font-bold text-3xl mb-3 text-white-dark">Redefinir Senha</h2>
+            <p class="mb-7 text-white-dark">Informe seu e-mail pra redefinir sua senha</p>
             <form class="space-y-5" @submit.prevent="window.location='/'">
                 <div>
-                    <label for="email" class="text-white-dark">Email</label>
-                    <input id="email" type="email" class="form-input" placeholder="Enter Email" />
+                    <label for="email" class="text-white-dark">E-mail</label>
+                    <input id="email" type="email" class="form-input" placeholder="Seu E-mail" />
                 </div>
-                <button type="submit" class="btn btn-primary w-full">RECOVER</button>
+                <button type="submit" class="btn btn-primary w-full">Redefinir</button>
             </form>
             <p class="text-center text-white-dark mt-6">Acessar sua conta ? <a href="<?php echo BASE_URL; ?>" class="text-primary font-bold hover:underline">Acessar</a></p>
         </div>

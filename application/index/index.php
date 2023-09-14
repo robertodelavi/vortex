@@ -16,29 +16,29 @@
 <div class="flex min-h-screen">
     <div class="bg-gradient-to-t from-[#ff1361bf] to-[#44107A] w-1/2  min-h-screen hidden lg:flex flex-col items-center justify-center text-white dark:text-black p-4">
         <div class="w-full mx-auto mb-5"><img src="<?php echo BASE_THEME_URL; ?>/assets/images/auth-cover.svg" alt="coming_soon" class="lg:max-w-[370px] xl:max-w-[500px] mx-auto" /></div>
-        <h3 class="text-3xl font-bold mb-4 text-center">Join the community of expert developers</h3>
-        <p>It is easy to setup with great customer experience. Start your 7-day free trial</p>
+        <h3 class="text-3xl font-extrabold mb-4 text-center">VORTEX</h3>
+        <p>O software moderno que melhor gerencia seus imóveis, de onde você estiver.</p>
     </div>
     <div class="w-full lg:w-1/2 relative flex justify-center items-center">
         <div class="max-w-[480px] p-5 md:p-10">
-            <h2 class="font-bold text-3xl mb-3 text-white-dark">Sign In</h2>
-            <p class="mb-7 text-white-dark">Enter your email and password to login</p>
+            <h2 class="font-bold text-3xl mb-3 text-white-dark">Entrar</h2>
+            <p class="mb-7 text-white-dark">Entre com o seu e-mail e senha pra acessar</p>
             <form class="space-y-5" method="POST" action="?module=index&action=valida_senha" >
                 <div>
-                    <label for="email" class="text-white-dark">Email</label>
+                    <label for="email" class="text-white-dark">E-mail</label>
                     <input name="usuario" id="email" type="text" class="form-input" placeholder="Enter Email" />
                 </div>
                 <div>
-                    <label for="password" class="text-white-dark">Password</label>
+                    <label for="password" class="text-white-dark">Senha</label>
                     <input name="senha" id="password" type="password" class="form-input" placeholder="Enter Password" />
                 </div>
                 <div>
                     <label class="cursor-pointer">
                         <input type="checkbox" class="form-checkbox" />
-                        <span class="text-white-dark">Remember me</span>
+                        <span class="text-white-dark">Lembrar de mim</span>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary w-full">SIGN IN</button>
+                <button type="submit" class="btn btn-primary w-full">Entrar</button>
             </form>
             <div class="relative my-7 h-5 text-center before:w-full before:h-[1px] before:absolute before:inset-0 before:m-auto before:bg-[#ebedf2]  dark:before:bg-[#253b5c]">
                 <div class="font-bold text-white-dark bg-[#fafafa] dark:bg-[#060818] px-2 relative z-[1] inline-block"> <span>OR</span></div>
@@ -79,7 +79,7 @@
                     </button>
                 </li>
             </ul>
-            <p class="text-center text-white-dark">Esqueceu sua senha ? <a href="application/index/esqueceuSenha.php" class="text-primary font-bold hover:underline">Recuperar</a></p>
+            <p class="text-center text-white-dark">Esqueceu sua senha ? <a href="application/index/esqueceuSenha.php" class="text-primary font-bold hover:underline">Redefinir</a></p>
         </div>
     </div>
 </div>

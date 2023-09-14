@@ -1,6 +1,6 @@
 <?php
 $sql = '
-SELECT p.prw_codigo, p.prw_nome
+SELECT p.prw_codigo, p.prw_nome, p.prw_telefones
 FROM pretendentes AS p 
 WHERE p.prw_codigo = ' . $_POST['param_0'];
 $result = $data->find('dynamic', $sql);
@@ -438,6 +438,34 @@ if(isset($_GET['tab'])){
             allcontrols: 1,
             items: [],
             openFilter: false,
+            openShare: false,
+            indexShare: null,
+            sectionShare: null,
+
+            toggleShare(section, i) {
+                console.log('toggleShare: ', i, section)
+                this.openShare = !this.openShare;
+                this.indexShare = i;
+                this.sectionShare = section;
+            },
+
+            copyLink(id){                            
+                const url = this.getUrlImovel(id)
+                navigator.clipboard.writeText(url)
+                this.openShare = false
+                toast('Link copiado!', 'success', 3000)
+            },
+
+            shareWhatsapp(id, whatsapp){
+                const url = this.getUrlImovel(id)             
+                window.open(`https://api.whatsapp.com/send?text=${url}`, '_blank')
+                this.openShare = false
+            },
+
+            getUrlImovel(id){
+                const emp_codigo = 1 //? temp (pegar da sessão ou localstorage)    
+                return `https://vegax.com.br/vortex/imovel/detalhes?emp=${emp_codigo}&id=${id}`
+            },
 
             toggleFilter() {
                 this.openFilter = !this.openFilter;
