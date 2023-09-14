@@ -172,13 +172,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <!-- AÇÕES -->
                                     <div class="absolute top-2 right-2 w-full flex justify-end gap-1">
                                         <!-- COMPARTILHAR -->
-                                        <div @click="() => toggleShare(\'sugeridos\', '.$i.')" class="bg-white dark:bg-dark rounded p-2 flex">
-                                            <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
-                                                ' . file_get_contents('../../../icons/compartilhar.svg') . '
-                                            </button>
-                                            <div x-show="openShare && sectionShare == \'sugeridos\' && indexShare == '.$i.'" x-transition x-transition.duration.300 class="overflow-hidden">
-                                                <p>Opa sopa</p>
+                                        <div>
+                                            <div @click="() => toggleShare(\'sugeridos\', '.$i.')" class="bg-white dark:bg-dark rounded p-2 flex relative">
+                                                <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
+                                                    ' . file_get_contents('../../../icons/compartilhar.svg') . '
+                                                </button>
                                             </div>
+                                            <!-- SELECIONAR MODO DE COMPARTILHAMENTO -->
+                                            <div x-show="openShare && sectionShare == \'sugeridos\' && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1">
+                                                <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
+                                                    <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
+                                                        <div class="text-primary">
+                                                            ' . file_get_contents('../../../icons/copiar.svg') . '
+                                                        </div>
+                                                        <p class="text-sm">Copiar Link</p>                                                
+                                                    </div>
+                                                    <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
+                                                        <div class="text-success">
+                                                            ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                                                        </div>
+                                                        <p class="text-sm">WhatsApp</p>                                                
+                                                    </div>
+                                                </div>
+
+                                            </div>                       
                                         </div>
 
                                         <!-- MARCAR VISITA -->
