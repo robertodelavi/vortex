@@ -458,7 +458,7 @@ if(isset($_GET['tab'])){
 
             shareWhatsapp(id, whatsapp){
                 const url = this.getUrlImovel(id)             
-                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`, '_blank')
+                window.open(`https://api.whatsapp.com/send?phone=55${whatsapp}&text=${encodeURIComponent(url)}`, '_blank')
                 this.openShare = false
             },
 
