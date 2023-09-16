@@ -17,6 +17,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
 
+        <meta property="og:image" content="<?php echo $_GET['img']?>">
+        <!-- Substitua "URL_DA_IMAGEM_AQUI" pela URL da imagem que deseja exibir como miniatura -->
+
+        <!-- Outras meta tags Open Graph -->
+        <meta property="og:title" content="<?php echo $_GET['titulo']?>">
+        <meta property="og:description" content="<?php echo $_GET['desc']?>">
+        <!-- Adicione outras meta tags Open Graph conforme necessário -->
+
         <script>
             var url = 'https://vegax.com.br/vortex/api/imoveis/detalhes/?emp='+<?php echo $_GET['emp']?>+'&id='+<?php echo $_GET['id']?>;
 
@@ -353,6 +361,18 @@
                     metaDescription.setAttribute('property', 'og:description');
                     metaDescription.setAttribute('content', data.data[0]['fotos']['capa']['descricao']);
 
+                    var metaTwitterDescription = document.createElement('meta');
+                    metaTwitterDescription.setAttribute('property', 'twitter:description');
+                    metaTwitterDescription.setAttribute('content', data.data[0]['fotos']['capa']['descricao']);
+
+                    var metaTwitterTitle = document.createElement('meta');
+                    metaTwitterTitle.setAttribute('property', 'twitter:title');
+                    metaTwitterTitle.setAttribute('content', data.data[0]['codigo']+' - '+data.data[0]['tipo']+' - '+data.data[0]['bairro']);
+
+                    var metaTwitterImage = document.createElement('meta');
+                    metaTwitterImage.setAttribute('property', 'twitter:image');
+                    metaTwitterImage.setAttribute('content', data.data[0]['fotos']['capa']['url']);
+
                     // Acesse o elemento head do seu documento HTML
                     var head = document.head || document.getElementsByTagName('head')[0];
 
@@ -361,6 +381,11 @@
                     head.appendChild(metaTitle);
                     head.appendChild(metaImage);
                     head.appendChild(metaDescription);
+
+                    head.appendChild(metaTwitterDescription);
+                    head.appendChild(metaTwitterTitle);
+                    head.appendChild(metaTwitterImage);
+                    
 
                     document.getElementById('detValor').innerHTML = precovenda;
 
@@ -399,14 +424,13 @@
                         document.getElementById('infoEmpresa').innerHTML += '<p class="flex"><?php echo file_get_contents('../../application/icons/icoPin.svg'); ?>  &nbsp;'+data.data[0]['empresa']['endereco']+'</p>';
                     }      
                     //------------------------------------------------------------------------------------------------------ 
-
-                    
-                    
                 });
             });
         </script>
 
         <!-- SEO -->
+        <meta name="twitter:card" content="summary" />
+
         <meta name="description" content="Este é uma página para visualização dos imóvel cadastrados no sistema Vórtex.">
         <meta name="author" content="Vórtex Sistemas">
         <meta name="keywords" content="Imóveis, imobiliaria, vendas, locação"/>
@@ -417,16 +441,9 @@
 
         <meta property="business:contact_data:country_name" content="PAÍS" />
         <meta property="business:contact_data:website" content="URL" />
-        <meta property="business:contact_data:region" content="SP" />
+        <meta property="business:contact_data:region" content="SC" />
         <meta property="business:contact_data:email" content="EMAIL" />
         <meta property="business:contact_data:phone_number" content="TEL" />
-
-
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:description" content="DESCRIÇÃO"/>
-        <meta name="twitter:title" content="TITULO" />
-        <meta name="twitter:image" content="URL IMAGEM" />
-
 
         <meta name="geo.placename" content="LOCALIZAÇÃO" />
         <meta name="geo.region" content="BR" />
