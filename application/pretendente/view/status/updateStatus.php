@@ -7,7 +7,7 @@ $data = new DataManipulation();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $value = json_decode(file_get_contents('php://input'), true); // Recebendo os dados do corpo da requisição
-    if (isset($value['id']) && $value['id'] > 0 && isset($value['status']) && $value['status'] > 0) {
+    if (isset($value['id']) && $value['id'] > 0 && isset($value['status'])) {
        
         $sql = 'UPDATE pretendentes SET prw_psa_codigo = '.$value['status'].' WHERE prw_codigo = '.$value['id'];
         $data->executaSQL($sql);

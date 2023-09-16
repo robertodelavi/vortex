@@ -35,7 +35,6 @@
                                             <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/profile-3.jpeg" />
                                             <div class="hover:text-primary" x-text="task.title"></div>
                                         </div>
-                                        <p class="break-all" x-text="task.description"></p>
                                     </div>
                                 </template>
                             </div>

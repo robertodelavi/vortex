@@ -35,9 +35,11 @@ FROM pretendentesstatusatendimento';
 $totalEtapas = $data->find('dynamic', $sql);
 
 $sql = '
-SELECT *
+SELECT 0 AS psa_codigo, "Indefinido" AS psa_descricao, "" AS psa_cor, 0 AS psa_ordem
+UNION ALL
+(SELECT *
 FROM pretendentesstatusatendimento
-ORDER BY psa_ordem ASC';
+ORDER BY psa_ordem ASC)';
 $etapas = $data->find('dynamic', $sql);
 
 $tableResult = [];
@@ -185,7 +187,7 @@ if(isset($_GET['res'])){
         </div>
 
         <!-- Modal Status do Pretendente (scrumboard) -->
-        <div class="fixed inset-0 bg-[black]/60 z-[999] hidden" :class="open2 && '!block'">
+        <div class="fixed inset-0 bg-[black]/60 z-[999] hidden overflow-y-auto" :class="open2 && '!block'">
             <div class="flex items-start justify-center px-4"  @click.self="open2 = false">
                 <div x-show="open2" x-transition x-transition.duration.300
                     class="panel border-0 p-0 rounded-lg overflow-y-auto h-auto w-full max-w-3xl my-10">
@@ -242,8 +244,6 @@ if(isset($_GET['res'])){
             },
 
             updateTableData(data) {
-                console.log("🚀 ~ updateTableData: ", data)
-                
                 if (this.datatable2) {
                     this.datatable2.destroy();
                 }
@@ -358,7 +358,6 @@ if(isset($_GET['res'])){
                     .then(response => response.json())
                     .then(data => {
                         // Atualiza os dados da tabela com os dados filtrados
-                        console.log('Dados retornados do ajax: ', data)
                         this.currentData = data;
                         this.updateTableData(data);
                     })
@@ -370,7 +369,6 @@ if(isset($_GET['res'])){
             setFormValues(formData) {
                 const formValues = {};
                 for (let [key, value] of formData.entries()) {
-                    console.log('==> ', key, value)
                     formValues[key] = value;
                 }
                 // Adiciona os valores extras ao formData
@@ -400,13 +398,14 @@ if(isset($_GET['res'])){
             },
 
             limpaFiltros() {
+                document.querySelectorAll('select').forEach((select) => {
+                    select.selectedIndex = 0;
+                })
                 document.getElementById("formFilter").reset();
                 this.updateTableData(arrData);
-                // location.reload() 
             },
 
             confirmDelete(id, nome) {
-                console.log("🚀 ~ confirmDelete ~ nome:", nome)
                 this.isAddEventModal = true;
                 this.idDelete = id;
                 this.nomeDelete = nome;
@@ -444,7 +443,7 @@ if(isset($_GET['res'])){
             afterDrag(event) {
                 const draggedCard = event.to;
                 const projectId = draggedCard.getAttribute('data-id');
-                if(projectId && projectId > 0 && this.pretendenteID && this.pretendenteID > 0){
+                if(projectId && this.pretendenteID && this.pretendenteID > 0){
                     // Atualiza status enviando projectId pro arquivo ajax do php 
                     fetch('application/pretendente/view/status/updateStatus.php', {
                         method: 'POST',
@@ -456,7 +455,6 @@ if(isset($_GET['res'])){
                         .then(response => response.json())
                         .then(data => {
                             // Atualiza os dados da tabela com os dados filtrados
-                            console.log('Dados retornados do ajax: ', data)
                             if(data.status == 'success'){
                                 toast(data.message, "success", 3000);
 
@@ -657,7 +655,6 @@ if(isset($_GET['res'])){
             },
 
             getStatusScrumBoard(id){
-                console.log("🚀 ~ getStatusScrumBoard id:", id)
                 this.pretendenteID = id;
                 fetch('application/pretendente/view/status/getStatus.php', {
                     method: 'POST',
@@ -666,7 +663,6 @@ if(isset($_GET['res'])){
                     .then(response => response.json())
                     .then(data => {
                         // Atualiza os dados da tabela com os dados filtrados
-                        console.log('Dados retornados do ajax: ', data)
                         this.updateData(data);
                     })
                     .catch(error => {

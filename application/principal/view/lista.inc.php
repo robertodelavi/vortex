@@ -298,6 +298,9 @@ foreach($result as $row){
             },
 
             limpaFiltros(){
+                document.querySelectorAll('select').forEach((select) => {
+                    select.selectedIndex = 0;
+                })
                 document.getElementById("formFilter").reset();
                 this.updateTableData(arrData);
             },

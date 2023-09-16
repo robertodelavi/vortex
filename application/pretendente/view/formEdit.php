@@ -531,6 +531,9 @@ if(isset($_GET['tab'])){
             },
 
             limpaFiltros() {
+                document.querySelectorAll('select').forEach((select) => {
+                    select.selectedIndex = 0;
+                })
                 document.getElementById("formFilter").reset();
                 getImoveis()
             },

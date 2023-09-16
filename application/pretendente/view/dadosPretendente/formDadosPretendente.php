@@ -94,6 +94,7 @@
         <div>
             <label for="country">Status Atendimento</label>
             <select name="prw_psa_codigo" class="form-select text-white-dark">
+                <option selected="">-- Selecione --</option>
                 <?php 
                     foreach($statusAtendimento as $row){
                         $selected = $result[0]['prw_psa_codigo'] == $row['psa_codigo'] ? 'selected' : '';
