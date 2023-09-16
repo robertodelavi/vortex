@@ -10,22 +10,13 @@ SELECT
     p.prw_telefones, 
     ps.psa_descricao AS statusNome, 
     ps.psa_cor,
-    
-    (SELECT IF(ph.prh_datacad <> "", DATE_FORMAT(ph.prh_datacad, "%d/%m/%y"), "--")
-    FROM pretendenteshistorico AS ph 
-    WHERE ph.prh_pretendente = p.prw_codigo
-    ORDER BY ph.prh_datacad ASC
-    LIMIT 1) AS primeiroCadastro,
-
-    (SELECT IF(ph.prh_datacad <> "", DATE_FORMAT(ph.prh_datacad, "%d/%m/%y"), "--")
-    FROM pretendenteshistorico AS ph 
-    WHERE ph.prh_pretendente = p.prw_codigo
-    ORDER BY ph.prh_datacad DESC
-    LIMIT 1) AS ultimoCadastro
+    p.prw_datacad AS primeiroCadastro,
+    p.prw_dataatual AS ultimoCadastro
 FROM pretendentes AS p
     LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
     LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
-LIMIT 20';
+ORDER BY 10 DESC, 2 ASC
+LIMIT 100';
 $result = $data->find('dynamic', $sql);
 
 // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
@@ -44,6 +35,10 @@ $etapas = $data->find('dynamic', $sql);
 
 $tableResult = [];
 foreach ($result as $row) {
+    // Converte data yyyymmdd pra dd/mm/yyyy
+    $row['primeiroCadastro'] = $row['primeiroCadastro'] ? date('d/m/Y', strtotime($row['primeiroCadastro'])) : '--';
+    $row['ultimoCadastro'] = $row['ultimoCadastro'] ? date('d/m/Y', strtotime($row['ultimoCadastro'])) : '--';
+
     $arrRow = [];
     array_push($arrRow, trim($row['prw_nome']));    
     array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['psa_cor'].'; "></div>');

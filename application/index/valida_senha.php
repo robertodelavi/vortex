@@ -46,8 +46,9 @@ class Valida_SenhaCommand implements Command
                     'emp_estado'  => $resultAuth['emp_estado']
                 ), 
                 array(
-                    'usu_email' => $user, 
-                    'usu_senha' => $pass
+                    'usu_email' => $user
+                    // , 
+                    // 'usu_senha' => $pass
                 ), $idSession);
                 
             if ($result['login'] == 'Logado') {

@@ -202,7 +202,6 @@
                 'complemento' => $conn->result($result, $i, 'imo_complemento'),
                 'cep' => $conn->result($result, $i, 'imo_cep'),
                 'bairro' => $conn->result($result, $i, 'bai_descricao'),
-                'area' => $conn->result($result, $i, 'imo_areaconstruida'),
                 'quartos' => $conn->result($result, $i, 'imo_quartos'),
                 'suites' => $conn->result($result, $i, 'imo_suites'),
                 'banheiros' => $conn->result($result, $i, 'imo_banheiros'),
