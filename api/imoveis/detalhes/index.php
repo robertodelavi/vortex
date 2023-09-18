@@ -127,14 +127,15 @@
         -- Valor
         (((iv.imv_valor*m.moe_valor)/100)/100) AS imv_valor,        
         -- Foto
+        ft.imf_imovel,
         ft.imf_arquivo,
         ft.imf_descricao,
         ft.imf_ficha,
         ft.imf_web
     FROM imoveis AS i 
-        INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+        INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
         LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
-        LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
+        LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s" AND ft.imf_web = "s")
         LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
         LEFT JOIN tipoconstrucao AS tc ON (i.imo_tipoconstrucao = tc.tcn_codigo)
         LEFT JOIN utilizacao AS u ON (i.imo_utilizacao = u.uti_codigo)
@@ -159,6 +160,7 @@
     // Galeria de fotos
     $sql = '
     SELECT 
+        imf_imovel,
         imf_arquivo,
         imf_descricao,
         imf_ficha,
@@ -169,7 +171,7 @@
     $galeria = [];
     if ($conn->countLines($resultGaleria) > 0){
         for ($i=0; $i< $conn->countLines($resultGaleria); $i++){
-            $imagem = $conn->result($resultGaleria, $i, 'imf_arquivo');
+            $imagem = $conn->result($resultGaleria, $i, 'imf_imovel').'-'.$conn->result($resultGaleria, $i, 'imf_arquivo');
             $galeria[] = array(
                 'url' => $imagem ? $imagesBaseUrl.$imagem : null,
                 'descricao' => $conn->result($resultGaleria, $i, 'imf_descricao'),
@@ -193,7 +195,7 @@
     $res = [];
     if ($conn->countLines($result) > 0){
         for ($i=0; $i< $conn->countLines($result); $i++){
-            $imagem = $conn->result($result, $i, 'imf_arquivo');
+            $imagem = $conn->result($result, $i, 'imf_imovel').'-'.$conn->result($result, $i, 'imf_arquivo');
             $res[] = array(
                 'disponivel' => true,
                 'codigo' => $conn->result($result, $i, 'imo_codigo'),

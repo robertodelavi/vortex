@@ -33,13 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             i.imo_banheiros, 
             i.imo_garagem, 
             ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
+            ft.imf_imovel,
             ft.imf_arquivo
         FROM pretendentesimoveis AS p 
             LEFT JOIN imoveis AS i ON (p.pwi_imovel = i.imo_codigo)
-            INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+            INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
             LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
 
-            LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
+            LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s" AND ft.imf_web = "s")
             LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
             LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
         WHERE p.pwi_pretendente = ' . $value['pretendente'] . ' AND p.pwi_favorito = 1
@@ -55,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">';                    
                 foreach ($resultFavoritos as $i => $imovel) {
                     // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
-                    $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                    $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
                     $html .= '
                     <div id="favoritos-container" class="cursor-pointer border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary rounded-md hover:transition-colors duration-300 bg-white dark:bg-[#0e1726] p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),_0px_12px_24px_-4px_rgba(145,158,171,0.12)]">
                         <div class="rounded-md overflow-hidden mb-5 shadow-[0_6px_10px_0_rgba(0,0,0,0.14),_0_1px_18px_0_rgba(0,0,0,0.12),_0_3px_5px_-1px_rgba(0,0,0,0.20)]">                                                
@@ -164,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($resultImoveis && count($resultImoveis) > 0) {
                     foreach ($resultImoveis as $i => $imovel) {
                         // $foto = $imovel['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
-                        $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                        $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
                         $html .= '
                         <div id="imoveis-container" class="cursor-pointer border-4 border-[#ebedf2] dark:border-[#191e3a] dark:hover:border-primary hover:border-primary rounded-md hover:transition-colors duration-300 bg-white dark:bg-[#0e1726] p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),_0px_12px_24px_-4px_rgba(145,158,171,0.12)]">
                             <div class="rounded-md overflow-hidden mb-5 shadow-[0_6px_10px_0_rgba(0,0,0,0.14),_0_1px_18px_0_rgba(0,0,0,0.12),_0_3px_5px_-1px_rgba(0,0,0,0.20)]">  
@@ -288,11 +289,12 @@ function createScriptImoveis($value, $filters, $sideFilters){
         i.imo_banheiros, 
         i.imo_garagem, 
         ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
+        ft.imf_imovel,
         ft.imf_arquivo
     FROM imoveis AS i 
-        INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+        INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
         LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
-        LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
+        LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s" AND ft.imf_web = "s")
         LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
         LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
     WHERE ';

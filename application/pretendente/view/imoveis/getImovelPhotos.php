@@ -11,15 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = '
         SELECT *
         FROM imovelfoto AS ft
-        WHERE ft.imf_imovel = ' . $value['id'].' 
+        WHERE ft.imf_imovel = ' . $value['id'].' AND ft.imf_web = "s"
         ORDER BY ft.imf_principal DESC';
         $result = $data->find('dynamic', $sql);
+
+        $BASE_URL_IMAGENS = $_SESSION['BASE_URL_IMAGENS'];
 
         $res = array();
         if($result && count($result) > 0){
             foreach ($result as $key => $value) {
-                // $foto = $value['imf_arquivo'] ? 'application/images/clientes/1/imoveis/'.$value['imf_arquivo'] : 'application/images/no-image-transparent.png';
-                $foto = $value['imf_arquivo'] ? 'http://vegax.com.br/clientes/1/imoveis/'.$value['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                $foto = $value['imf_arquivo'] ? $BASE_URL_IMAGENS.$value['imf_imovel'].'-'.$value['imf_arquivo'] : 'application/images/no-image-transparent.png';
                 $res[] = array(
                     'src' => $foto,
                     'title' => $value['imf_descricao'] ? $value['imf_descricao'] : 'Imagem '.($key+1), 

@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ti.tpi_descricao, 
             b.bai_descricao, 
             i.imo_detalhes,
+            ft.imf_imovel,
             ft.imf_arquivo
         FROM imoveis AS i
             LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s")
@@ -30,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $res[$key]['id'] = $value['id'];
             $res[$key]['titulo'] = $value['id'].' - '.mb_strtoupper($resValue['tpi_descricao']).' - '.mb_strtoupper($resValue['bai_descricao']);
             $res[$key]['desc'] = utf8_encode($resValue['imo_detalhes']);
-            $res[$key]['img'] = $resValue['imf_arquivo'] ? $_SESSION['BASE_URL_IMAGENS'] . $resValue['imf_arquivo'] : null;            
+            $res[$key]['img'] = $resValue['imf_arquivo'] ? $_SESSION['BASE_URL_IMAGENS'] . $resValue['imf_imovel'].'-'.$resValue['imf_arquivo'] : null;            
         }
 
         // Retorna resposta
