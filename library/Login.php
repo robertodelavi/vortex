@@ -36,7 +36,8 @@ class Login{
 					e.emp_bd_pass, 
 					e.emp_nome, 
 					e.emp_cidade, 
-					e.emp_estado
+					e.emp_estado,
+                    e.emp_base_url_imagem
         		FROM sisusuarios_sisempresas AS ue 
             		JOIN sisusuarios AS u ON (ue.usu_codigo = u.usu_codigo)
             		JOIN sisempresas AS e ON (ue.emp_codigo = e.emp_codigo)
@@ -59,6 +60,9 @@ class Login{
 				$retorno['emp_cidade'] = $dbAuth->result($result, $i, 'emp_cidade');
 				$retorno['emp_estado'] = $dbAuth->result($result, $i, 'emp_estado');
 				$retorno['mensagem'] = "Autenticado com Sucesso";
+                //? Cria SESSÕES
+                $_SESSION['v_emp_codigo'] = $dbAuth->result($result, $i, 'emp_codigo');
+                $_SESSION['BASE_URL_IMAGENS'] = $dbAuth->result($result, $i, 'emp_base_url_imagem');
 			}
 		}else{
 			$retorno['login'] 	 = "falha";
@@ -96,7 +100,6 @@ class Login{
 		if ($db->countLines($result) > 0){
 			for ($i=0;$i<$db->countLines($result);$i++){
 				$_SESSION['v_usu_codigo'] 		= $db->result($result, $i,'usu_codigo');
-				$_SESSION['v_emp_codigo'] 		= $db->result($result, $i,'emp_codigo');
 				$_SESSION['database'] 			= $authData['emp_bd'];
 				$_SESSION['database_host'] 		= $authData['emp_bd_host'];
 				$_SESSION['database_user'] 		= $authData['emp_bd_user'];

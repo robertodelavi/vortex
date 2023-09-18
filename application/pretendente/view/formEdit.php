@@ -449,22 +449,67 @@ if(isset($_GET['tab'])){
                 this.sectionShare = section;
             },
 
-            copyLink(id){                            
-                const url = this.getUrlImovel(id)
-                navigator.clipboard.writeText(url)
-                this.openShare = false
-                toast('Link copiado!', 'success', 3000)
+            async copyLink(id){                            
+                let url = this.getUrlImovel(id)                
+                var data = {
+                    id: id,
+                    emp_codigo: '<?php echo $_SESSION['v_emp_codigo']; ?>'
+                };
+                fetch('application/pretendente/view/imoveis/getImovelThumb.php', {
+                    method: 'POST',
+                    body: JSON.stringify(data) // Converte o objeto em uma string JSON
+                }).then(response => response.json()).then(data => {
+                    url += `?emp=${encodeURIComponent(data.emp)}&id=${encodeURIComponent(id)}&titulo=${encodeURIComponent(data.titulo)}&desc=${encodeURIComponent(data.desc)}&img=${encodeURIComponent(data.img)}`;
+                    
+                    navigator.clipboard.writeText(url)
+                    this.openShare = false
+                    toast('Link copiado!', 'success', 3000)
+                })
             },
 
             shareWhatsapp(id, whatsapp){
-                const url = this.getUrlImovel(id)             
-                window.open(`https://api.whatsapp.com/send?phone=55${whatsapp}&text=${encodeURIComponent(url)}`, '_blank')
-                this.openShare = false
+                let url = this.getUrlImovel(id)
+                var data = {
+                    id: id,
+                    emp_codigo: '<?php echo $_SESSION['v_emp_codigo']; ?>'
+                };
+                fetch('application/pretendente/view/imoveis/getImovelThumb.php', {
+                    method: 'POST',
+                    body: JSON.stringify(data) // Converte o objeto em uma string JSON
+                }).then(response => response.json()).then(data => {
+                    url = encodeURIComponent(`${url}?emp=${data.emp}&id=${id}&titulo=${encodeURIComponent(data.titulo)}&desc=${encodeURIComponent(data.desc)}&img=${encodeURIComponent(data.img)}`);
+                    
+                    window.open(`https://api.whatsapp.com/send?phone=55${whatsapp}&text=${url}`, '_blank')
+                    this.openShare = false
+                })
+            },
+
+            //* Encurta a URL 
+            // Função para encurtar uma URL
+            async shortenURL(url) {
+                // Calcular o hash SHA-256 da URL
+                const hash = await this.sha256(url);
+                console.log("🚀 ~ hash:", hash)
+
+                // Converter o hash em uma sequência curta
+                const shortened = hash.substring(0, 8); // Use os primeiros 8 caracteres do hash
+
+                // Retornar a URL encurtada
+                return shortened;
+            },
+
+            // Função para calcular o hash SHA-256 de uma string
+            sha256(input) {
+                return crypto.subtle.digest('SHA-256', new TextEncoder().encode(input)).then(hashBuffer => {
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+                    return hashHex;
+                });
             },
 
             getUrlImovel(id){
-                const emp_codigo = 1 //? temp (pegar da sessão ou localstorage)    
-                return `https://vegax.com.br/vortex/imovel/detalhes?emp=${emp_codigo}&id=${id}`
+                const emp_codigo = '<?php echo $_SESSION['v_emp_codigo']; ?>';
+                return `https://vegax.com.br/vortex/imovel/detalhes`;                
             },
 
             toggleFilter() {

@@ -29,6 +29,7 @@
             $emp_bd = $conn->result($resultAuth, $i, 'emp_bd');
             $emp_user = $conn->result($resultAuth, $i, 'emp_bd_user');
             $emp_pass = $conn->result($resultAuth, $i, 'emp_bd_pass');
+            $emp_base_url_image = $conn->result($resultAuth, $i, 'emp_base_url_imagem');
         }
     }
 
@@ -153,7 +154,7 @@
         exit;
     }
 
-    $imagesBaseUrl = 'http://vegax.com.br/clientes/'.$_GET['emp'].'/imoveis/';
+    $imagesBaseUrl = $emp_base_url_image ? $emp_base_url_image : null;
 
     // Galeria de fotos
     $sql = '
@@ -168,8 +169,9 @@
     $galeria = [];
     if ($conn->countLines($resultGaleria) > 0){
         for ($i=0; $i< $conn->countLines($resultGaleria); $i++){
+            $imagem = $conn->result($resultGaleria, $i, 'imf_arquivo');
             $galeria[] = array(
-                'url' => $imagesBaseUrl.$conn->result($resultGaleria, $i, 'imf_arquivo'),
+                'url' => $imagem ? $imagesBaseUrl.$imagem : null,
                 'descricao' => $conn->result($resultGaleria, $i, 'imf_descricao'),
                 'ficha' => $conn->result($resultGaleria, $i, 'imf_ficha'),
                 'web' => $conn->result($resultGaleria, $i, 'imf_web')
@@ -191,6 +193,7 @@
     $res = [];
     if ($conn->countLines($result) > 0){
         for ($i=0; $i< $conn->countLines($result); $i++){
+            $imagem = $conn->result($result, $i, 'imf_arquivo');
             $res[] = array(
                 'disponivel' => true,
                 'codigo' => $conn->result($result, $i, 'imo_codigo'),
@@ -246,7 +249,7 @@
                 'portaoEletronico' => $conn->result($result, $i, 'imo_portaoeletronico'),
                 'pocoArtesiano' => $conn->result($result, $i, 'imo_pocoartesiano'),
                 'condominioFechado' => $conn->result($result, $i, 'imo_condominiofechado'),                
-                // 'detalhes' => base64_encode($conn->result($result, $i, 'imo_detalhes')),                
+                'detalhes' => utf8_encode($conn->result($result, $i, 'imo_detalhes')),     
                 'numeroDaGaragem' => $conn->result($result, $i, 'imo_numerodagaragem'),
                 'numeroDoDeposito' => $conn->result($result, $i, 'imo_numerododeposito'),
                 'hobbyBox' => $conn->result($result, $i, 'imo_hobbybox'),
@@ -273,7 +276,7 @@
                 'valor' => number_format($conn->result($result, $i, 'imv_valor'), 2, ',', '.'),
                 'fotos' => array(
                     'capa' => array(
-                        'url' => $imagesBaseUrl.$conn->result($result, $i, 'imf_arquivo'),
+                        'url' => $imagem ? $imagesBaseUrl.$imagem : null,
                         'descricao' => $conn->result($result, $i, 'imf_descricao'),
                         'ficha' => $conn->result($result, $i, 'imf_ficha'),
                         'web' => $conn->result($result, $i, 'imf_web')
