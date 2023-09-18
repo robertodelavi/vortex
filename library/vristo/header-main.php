@@ -8,7 +8,7 @@
 
 <head>
     <meta charset='utf-8' />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <meta http-equiv='Content-Security-Policy' content='IE=edge' />
     <title>VORTEX</title>
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_THEME_URL; ?>/favicon.png" />

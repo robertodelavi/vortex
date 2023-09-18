@@ -28,9 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($result as $key => $resValue) {
             $res[$key]['emp'] = $value['emp_codigo'];
             $res[$key]['id'] = $value['id'];
-            $res[$key]['titulo'] = $value['emp_codigo'].' - '.mb_strtoupper($resValue['tpi_descricao']).' - '.mb_strtoupper($resValue['bai_descricao']);
+            $res[$key]['titulo'] = $value['id'].' - '.mb_strtoupper($resValue['tpi_descricao']).' - '.mb_strtoupper($resValue['bai_descricao']);
             $res[$key]['desc'] = utf8_encode($resValue['imo_detalhes']);
-            $res[$key]['img'] = $resValue['imf_arquivo'] ? $_SESSION['BASE_URL_IMAGENS'] . $resValue['imf_arquivo'] : 'application/images/no-image.png';            
+            $res[$key]['img'] = $resValue['imf_arquivo'] ? $_SESSION['BASE_URL_IMAGENS'] . $resValue['imf_arquivo'] : null;            
         }
 
         // Retorna resposta

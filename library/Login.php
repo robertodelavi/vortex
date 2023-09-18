@@ -12,6 +12,7 @@ class Login{
 	function authenticateUser($params, $session){
 		$dbAuth = new MySql();
 		$dbAuth->connOpen('localhost','vortex__autenticacao','root', '');
+        // $dbAuth->connOpen('brs36.brs.com.br','vegacscom_vortex','vegacscom_vortex', 'vortex@54741');
 		
 		$sql = "SELECT * FROM sismenu WHERE men_situacao = 1";
 		$mentotal = $dbAuth->executeQuery($sql,false);	

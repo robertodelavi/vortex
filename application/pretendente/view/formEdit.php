@@ -484,29 +484,6 @@ if(isset($_GET['tab'])){
                 })
             },
 
-            //* Encurta a URL 
-            // Função para encurtar uma URL
-            async shortenURL(url) {
-                // Calcular o hash SHA-256 da URL
-                const hash = await this.sha256(url);
-                console.log("🚀 ~ hash:", hash)
-
-                // Converter o hash em uma sequência curta
-                const shortened = hash.substring(0, 8); // Use os primeiros 8 caracteres do hash
-
-                // Retornar a URL encurtada
-                return shortened;
-            },
-
-            // Função para calcular o hash SHA-256 de uma string
-            sha256(input) {
-                return crypto.subtle.digest('SHA-256', new TextEncoder().encode(input)).then(hashBuffer => {
-                    const hashArray = Array.from(new Uint8Array(hashBuffer));
-                    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-                    return hashHex;
-                });
-            },
-
             getUrlImovel(id){
                 const emp_codigo = '<?php echo $_SESSION['v_emp_codigo']; ?>';
                 return `https://vegax.com.br/vortex/imovel/detalhes`;                
