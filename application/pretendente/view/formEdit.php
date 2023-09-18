@@ -449,7 +449,7 @@ if(isset($_GET['tab'])){
                 this.sectionShare = section;
             },
 
-            async copyLink(id){                            
+            copyLink(id){                            
                 let url = this.getUrlImovel(id)                
                 var data = {
                     id: id,
