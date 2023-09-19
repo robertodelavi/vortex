@@ -198,10 +198,21 @@ if(isset($_GET['tab'])){
                                         <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
                                     </div>
                                 </div>
-                                <div class="w-full">
+                                <div class="w-full relative">                                    
                                     <!-- Imóveis vindo do ajax -->
-                                    <div id="resulAjaxImoveis"></div>    
+                                    <div class="relative" id="resulAjaxImoveis"></div>    
                                 </div>
+                                <!-- Botão com modo de exibição (grid/lista) -->
+                                <div class="absolute right-0">
+                                    <div class="flex gap-1 px-6">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" @click="allcontrols = 1; bindFancybox();" x-tooltip="Visualização em Grade" data-theme="primary">
+                                            <?php echo file_get_contents('application/icons/grid.svg'); ?>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" @click="allcontrols = 2; bindFancybox();" x-tooltip="Visualização em Lista" data-theme="primary">
+                                            <?php echo file_get_contents('application/icons/list.svg'); ?>
+                                        </button>
+                                    </div>
+                                </div>                                    
                             </div>                             
                         </form>                        
                     <?php 
