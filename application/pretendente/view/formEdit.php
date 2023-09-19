@@ -122,7 +122,7 @@ if(isset($_GET['tab'])){
                         <a href="javascript:;"
                             class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
-                            onClick="getImoveis()">
+                            onClick="getImoveis(null, 'grid')">
                             <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
                             <span class="hidden sm:block">Imóveis</span>
                         </a>
@@ -188,7 +188,7 @@ if(isset($_GET['tab'])){
                                 </div>        
                             </div>
     
-                            <div class="flex gap-3">                
+                            <div class="flex gap-3 relative">                
                                 <!-- Filtros (desktop) -->
                                 <div class="hidden sm:block w-1/5">
                                     <div class="panel h-full">
@@ -198,17 +198,17 @@ if(isset($_GET['tab'])){
                                         <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
                                     </div>
                                 </div>
-                                <div class="w-full relative">                                    
+                                <div class="w-full " >                                    
                                     <!-- Imóveis vindo do ajax -->
                                     <div class="relative" id="resulAjaxImoveis"></div>    
                                 </div>
-                                <!-- Botão com modo de exibição (grid/lista) -->
-                                <div class="absolute right-0">
-                                    <div class="flex gap-1 px-6">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" @click="allcontrols = 1; bindFancybox();" x-tooltip="Visualização em Grade" data-theme="primary">
+                                <!-- Botão com modo de exibição (grid/list) -->
+                                <div class="absolute right-0 top-0">
+                                    <div class="flex gap-1 ">
+                                        <button type="button" x-tooltip="Visualização em Grade" data-theme="primary" class="btn" :class="{'btn-outline-primary' : modeView == 'list', 'btn-primary' : modeView == 'grid'}" @click="setModeView('grid')">
                                             <?php echo file_get_contents('application/icons/grid.svg'); ?>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-primary" @click="allcontrols = 2; bindFancybox();" x-tooltip="Visualização em Lista" data-theme="primary">
+                                        <button type="button" x-tooltip="Visualização em Lista" data-theme="primary" class="btn" :class="{'btn-outline-primary' : modeView == 'grid', 'btn-primary': modeView == 'list'}" @click="setModeView('list')">
                                             <?php echo file_get_contents('application/icons/list.svg'); ?>
                                         </button>
                                     </div>
@@ -289,6 +289,9 @@ if(isset($_GET['tab'])){
 </div>
 
 <script>
+    //* GLOBAL: mode view (grid ou list)
+    let modeView = '<?php echo $_GET['mode'] != '' ? $_GET['mode'] : 'grid'; ?>';
+    
     const selectUf = (uf) => {
         var data = {
             uf: uf
@@ -303,9 +306,11 @@ if(isset($_GET['tab'])){
 
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
-    const getImoveis = (filters = null) => {
+    const getImoveis = (filters = null, mode = 'grid') => {
+        console.log("🚀 ~ getImoveis:", mode)
         var data = {
             pretendente: <?php echo $_POST['param_0']; ?>,
+            mode: mode,
             filters: filters
         };
         
@@ -322,7 +327,7 @@ if(isset($_GET['tab'])){
             document.getElementById('resulAjaxImoveis').innerHTML = data;
         })
     }
-    getImoveis()
+    getImoveis(null, modeView)
 
     const getImovel = (id) => {
         var data = {
@@ -351,7 +356,7 @@ if(isset($_GET['tab'])){
                 body: JSON.stringify(data) // Converte o objeto em uma string JSON
             }).then(response => response.json()).then(data => {
                 setTimeout(() => {
-                    getImoveis() // Atualiza listagem dos imóveis
+                    getImoveis(null, modeView)
                 }, 300);
     
                 action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
@@ -444,7 +449,8 @@ if(isset($_GET['tab'])){
             openShare: false,
             indexShare: null,
             sectionShare: null,
-
+            modeView: modeView,
+            
             toggleShare(section, i) {
                 this.openShare = !this.openShare;
                 this.indexShare = i;
@@ -493,6 +499,12 @@ if(isset($_GET['tab'])){
 
             toggleFilter() {
                 this.openFilter = !this.openFilter;
+            },
+
+            setModeView(mode) {
+                modeView = mode
+                this.modeView = mode
+                getImoveis(null, mode)            
             },
 
             getImovelPhotos(id){
@@ -550,7 +562,7 @@ if(isset($_GET['tab'])){
                     // console.log('imoveis ===> ', key, value);
                 }                
                 
-                getImoveis(filters)
+                getImoveis(filters, modeView)
             },
 
             limpaFiltros() {
@@ -558,7 +570,7 @@ if(isset($_GET['tab'])){
                     select.selectedIndex = 0;
                 })
                 document.getElementById('formFilterId').reset();                
-                getImoveis()
+                getImoveis(null, modeView)
             },
         }));
     }); 
