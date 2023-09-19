@@ -430,6 +430,7 @@ if(isset($_GET['res'])){
             projectList: [],
             
             updateData(scrumBoardData){
+                console.log("🚀 ~ updateData ~ scrumBoardData:", scrumBoardData)
                 this.projectList = scrumBoardData;
                 this.initializeSortable();
             },
@@ -457,6 +458,7 @@ if(isset($_GET['res'])){
                                 const updatedDataStatus = this.updateDataStatus(projectId)
                                 this.updateTableData(updatedDataStatus);   
 
+                                console.log("🚀 ~ afterDrag ~ pretendente:", this.pretendenteID)
                                 this.getStatusScrumBoard(this.pretendenteID)                                                        
                             }
                         })
@@ -480,7 +482,8 @@ if(isset($_GET['res'])){
                         
                         etapas.map((etapa) => { // varre etapas
                             if(etapa.psa_codigo == projectId){
-                                const percent = (etapa.psa_ordem * 100)/etapas.length;
+                                // Remove opção "infefinido" do calculo de %
+                                const percent = etapas.length > 1 ? (etapa.psa_ordem * 100)/(etapas.length-1) : 100;
                                 item[1] = `
                                 <div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:${percent}%; background-color: ${etapa.psa_cor}; "></div>`;
                             }
@@ -657,6 +660,7 @@ if(isset($_GET['res'])){
                 })
                     .then(response => response.json())
                     .then(data => {
+                        console.log("🚀 ~ getStatusScrumBoard ~ data:", data)
                         // Atualiza os dados da tabela com os dados filtrados
                         this.updateData(data);
                     })

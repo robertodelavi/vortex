@@ -171,8 +171,8 @@ if(isset($_GET['tab'])){
                     <!-- Se tem perfil de busca, mostra os imóveis sugeridos -->
                     <?php 
                     if($resultPerfilBusca[0]['qtd'] > 0){ 
-                    ?>
-                        <div>
+                    ?>                        
+                        <form x-on:submit="submitForm($event)" id="formFilterId" >
                             <!-- Filtros (mobile) -->   
                             <div class="block sm:hidden overflow-y-auto mb-4" >
                                 <div class="panel space-y-4 " >
@@ -183,7 +183,7 @@ if(isset($_GET['tab'])){
                                         </button>
                                     </div>
                                     <div x-show="openFilter" x-transition x-transition.duration.300 class="overflow-hidden">
-                                        <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                        <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
                                     </div>
                                 </div>        
                             </div>
@@ -195,15 +195,15 @@ if(isset($_GET['tab'])){
                                         <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                                             Filtros
                                         </h5>
-                                        <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                        <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <!-- Imóveis vindo do ajax -->
                                     <div id="resulAjaxImoveis"></div>    
                                 </div>
-                            </div>     
-                        </div>
+                            </div>                             
+                        </form>                        
                     <?php 
                     }
                     // Se não tem perfil de busca, mostra mensagem de que não tem perfil de busca
@@ -297,8 +297,7 @@ if(isset($_GET['tab'])){
             pretendente: <?php echo $_POST['param_0']; ?>,
             filters: filters
         };
-        console.log("🚀 ~ getImoveis ~ data:", data)
-
+        
         //? Loading
         setTimeout(() => {
             document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex justify-center items-start min-h-screen mt-4"><div class="flex flex-col items-center"><span class="animate-spin border-4 border-primary border-l-transparent rounded-full w-12 h-12 mb-5"></span><p class="text-white-dark">Buscando imóveis pro seu perfil...</p></div></div>'
@@ -308,15 +307,13 @@ if(isset($_GET['tab'])){
             method: 'POST',
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
-            // Seta resultado do ajax na div
-            console.log('🚀 ~ getImoveis ~ data', data)
+            // Seta resultado do ajax na div        
             document.getElementById('resulAjaxImoveis').innerHTML = data;
         })
     }
     getImoveis()
 
     const getImovel = (id) => {
-        console.log('getImovel')
         var data = {
             id: id
         };
@@ -338,13 +335,10 @@ if(isset($_GET['tab'])){
             pretendente: <?php echo $_POST['param_0']; ?>
         };
         if(data){
-            console.log("🚀 ~ setFavorite ~ data:", data)
             fetch('application/pretendente/view/imoveis/setFavorite.php', {
                 method: 'POST',
                 body: JSON.stringify(data) // Converte o objeto em uma string JSON
             }).then(response => response.json()).then(data => {
-                console.log('Dados retornados do ajax: ', data)
-    
                 setTimeout(() => {
                     getImoveis() // Atualiza listagem dos imóveis
                 }, 300);
@@ -379,7 +373,6 @@ if(isset($_GET['tab'])){
 
     //* Histórico de atendimentos
     const openModalEditHistoricoAtendimento = (prh_pretendente, prh_codigo) => {
-        console.log("🚀 ~ openModalEditHistoricoAtendimento ", prh_pretendente, prh_codigo)
         if(prh_pretendente){
             fetch('application/pretendente/view/historicoAtendimentos/formHistoricoAtendimento.php', {
                 method: 'POST',
@@ -392,7 +385,6 @@ if(isset($_GET['tab'])){
                     'Content-Type': 'application/json'
                 }
             }).then(response => response.json()).then(data => {
-                console.log("🚀 ~ openModalEditHistoricoAtendimento ~ data:", data)
                 // Seta resultado do ajax na div
                 document.getElementById('resulAjaxHistoricoAtendimento').innerHTML = data;
             });
@@ -443,7 +435,6 @@ if(isset($_GET['tab'])){
             sectionShare: null,
 
             toggleShare(section, i) {
-                console.log('toggleShare: ', i, section)
                 this.openShare = !this.openShare;
                 this.indexShare = i;
                 this.sectionShare = section;
@@ -503,7 +494,6 @@ if(isset($_GET['tab'])){
                             'Content-Type': 'application/json'
                         }
                     }).then(response => response.json()).then(data => {
-                        console.log('🚀 ~ getImovelPhotos ~ data', data)
                         this.items = data
                     });
                 }
@@ -546,7 +536,7 @@ if(isset($_GET['tab'])){
                 const filters = {};
                 for (let [key, value] of formData.entries()) {
                     filters[key] = value;
-                    console.log('===> ', key, value);
+                    // console.log('imoveis ===> ', key, value);
                 }                
                 
                 getImoveis(filters)
@@ -556,7 +546,7 @@ if(isset($_GET['tab'])){
                 document.querySelectorAll('select').forEach((select) => {
                     select.selectedIndex = 0;
                 })
-                document.getElementById("formFilter").reset();
+                document.getElementById('formFilterId').reset();                
                 getImoveis()
             },
         }));

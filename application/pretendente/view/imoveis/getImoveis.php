@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $filters = getFilters($value['pretendente'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
         $sql1 = createScriptImoveis($value, $filters, $sideFilters); //? Cria e configura o script (sql) para buscar os imóveis
+
+        // echo json_encode($sql1); exit;
+
         $resultImoveis = $data->find('dynamic', $sql1);
 
         $sql = '
@@ -297,37 +300,37 @@ function createScriptImoveis($value, $filters, $sideFilters){
         LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s" AND ft.imf_web = "s")
         LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
         LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
-    WHERE ';
+    WHERE i.imo_codigo > 0 ';
 
     // Imóveis que não estejam nos favoritos
-    $sql .= ' i.imo_codigo NOT IN (SELECT pwi_imovel FROM pretendentesimoveis WHERE pwi_pretendente = '.$value['pretendente'].' AND pwi_favorito = 1) AND ';
+    $sql .= ' AND i.imo_codigo NOT IN (SELECT pwi_imovel FROM pretendentesimoveis WHERE pwi_pretendente = '.$value['pretendente'].' AND pwi_favorito = 1) ';
 
     //? Filtros da barra lateral     
     if($sideFilters){ 
         //? Código
-        if($sideFilters['codigo']) $sql .= ' i.imo_codigo = "'.$sideFilters['codigo'].'" ';
+        if($sideFilters['codigo']) $sql .= ' AND i.imo_codigo = "'.$sideFilters['codigo'].'" ';
         //? Faixa de valor 
         if($sideFilters['valorIni'] && $sideFilters['valorFin']) {
-            $sql .= ' (((iv.imv_valor*m.moe_valor)/100)/100) BETWEEN "'.moneyToFloat($sideFilters['valorIni']).'" AND "'.moneyToFloat($sideFilters['valorFin']).'" ';
+            $sql .= ' AND (((iv.imv_valor*m.moe_valor)/100)/100) BETWEEN "'.moneyToFloat($sideFilters['valorIni']).'" AND "'.moneyToFloat($sideFilters['valorFin']).'" ';
         }
         //? Bairro 
-        if($sideFilters['bairro'] != '') $sql .= ' b.bai_descricao LIKE "%'.$sideFilters['bairro'].'%" ';
+        if($sideFilters['bairro'] != '') $sql .= ' AND b.bai_descricao LIKE "%'.$sideFilters['bairro'].'%" ';
         //? Dormitórios (between)
         if($sideFilters['dormitoriosIni'] && $sideFilters['dormitoriosFin']) {
-            $sql .= ' i.imo_quartos BETWEEN "'.$sideFilters['dormitoriosIni'].'" AND "'.$sideFilters['dormitoriosFin'].'" ';
+            $sql .= ' AND i.imo_quartos BETWEEN "'.$sideFilters['dormitoriosIni'].'" AND "'.$sideFilters['dormitoriosFin'].'" ';
         }
         //? Suítes (between)
         if($sideFilters['suitesIni'] && $sideFilters['suitesFin']) {
-            $sql .= ' i.imo_suites BETWEEN "'.$sideFilters['suitesIni'].'" AND "'.$sideFilters['suitesFin'].'" ';
+            $sql .= ' AND i.imo_suites BETWEEN "'.$sideFilters['suitesIni'].'" AND "'.$sideFilters['suitesFin'].'" ';
         }
         //? Garagem 
-        if($sideFilters['garagem'] != '') $sql .= ' i.imo_garagem = "'.$sideFilters['garagem'].'" ';
+        if($sideFilters['garagem'] != '') $sql .= ' AND i.imo_garagem = "'.$sideFilters['garagem'].'" ';
         //? Tipo de imóvel 
-        if($sideFilters['tipoImovel'] != '') $sql .= ' i.imo_tipoimovel = "'.$sideFilters['tipoImovel'].'" ';
+        if($sideFilters['tipoImovel'] != '') $sql .= ' AND i.imo_tipoimovel = "'.$sideFilters['tipoImovel'].'" ';
     }else{
         $filters = json_decode($filters);
         foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
-            $sql .= '(';
+            $sql .= ' AND (';
             foreach($valuePerfil as $keyCampo => $valueCampo){ // cada campo do perfil
                 //? Com intervalo de valores
                 if($valueCampo->intervalo && $valueCampo->inicio != '' && $valueCampo->fim != ''){
