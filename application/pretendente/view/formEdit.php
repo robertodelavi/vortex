@@ -203,7 +203,7 @@ if(isset($_GET['tab'])){
                                     <div class="relative" id="resulAjaxImoveis"></div>    
                                 </div>
                                 <!-- Botão com modo de exibição (grid/list) -->
-                                <div class="absolute right-0 top-0">
+                                <div class="hidden sm:block absolute right-0 top-0">
                                     <div class="flex gap-1 ">
                                         <button type="button" x-tooltip="Visualização em Grade" data-theme="primary" class="btn" :class="{'btn-outline-primary' : modeView == 'list', 'btn-primary' : modeView == 'grid'}" @click="setModeView('grid')">
                                             <?php echo file_get_contents('application/icons/grid.svg'); ?>
