@@ -11,7 +11,7 @@
     $sql = "SELECT * FROM usuario_areaatuacao WHERE usu_codigo = ".$_POST['param_0'];
     $atuacao = $data->find('dynamic', $sql);
 
-    if($_SESSION['wf_userPermissao'] > 1){
+    if($_SESSION['v_usu_nivel'] > 1){
         if($usuario[0]['upe_codigo'] == 1){
             $inativar = '';    
         }else{
@@ -136,7 +136,7 @@
                         <label class="control-label" for="upe_codigo">Função/Cargo:</label>
                         <select name="upe_codigo" class="form-control" id="upe_codigo" <?php echo $inativar; ?> onchange="mostra_representante();" required >
                         <?php
-                            if($_SESSION['wf_userPermissao'] > 1){ //CASO NÃO FOR ADM
+                            if($_SESSION['v_usu_nivel'] > 1){ //CASO NÃO FOR ADM
                                 echo '<option value="'.$usuario[0]['upe_codigo'].'" selected>'.$usuario[0]['upe_descricao'].'</option>';
                             }else{
                                 for($i=0; $i<count($permissao); $i++){
@@ -181,7 +181,7 @@
 	                                <div class="col-sm-9">
 	                                    ÁREA DE ATUAÇÃO
 	                                </div>
-	                                <?php if($_SESSION['wf_userPermissao'] == 1){ ?>
+	                                <?php if($_SESSION['v_usu_nivel'] == 1){ ?>
 	                                    <div class="col-sm-3" style="text-align: right;">
 	                                        <a href="#" onClick='abreAreaatuacao("<?php echo $_POST['param_0']?>");' title="Adicionar área de atuação" style="text-decoration:none;"> <button class="btn btn-default btn-xs" style="margin: 0" type="button"><i class="fa fa-plus"></i>  Adicionar área de atuação</button> </a>
 	                                    </div>
@@ -197,7 +197,7 @@
 						                    <tr>
 						                        <th>ESTADO</th>
 								            	<th>ÁREA DE ATUAÇÃO</th>
-								            	<?php if($_SESSION['wf_userPermissao'] == 1){ echo '<th>Opção</th>'; } ?>
+								            	<?php if($_SESSION['v_usu_nivel'] == 1){ echo '<th>Opção</th>'; } ?>
 						                    </tr>
 					                    </thead>
 					    
@@ -208,7 +208,7 @@
 												<tr>
 													<td ><a href="#" title="Visualizar usuário" onClick="nextPage(\'?module=usuario&acao=visualiza_usu_atuacao\', '.$atuacao[$i]['uaa_codigo'].');" style="text-decoration:none;">'.$atuacao[$i]['uaa_estado'].'</a></td>
 													<td >'.$atuacao[$i]['uaa_area_atuacao'].'</td>';
-													if($_SESSION['wf_userPermissao'] == 1){
+													if($_SESSION['v_usu_nivel'] == 1){
 														echo '
 														<td> 
 														   <a href="#" onClick=\'deletar('.$atuacao[$i]['uaa_codigo'].', '.$atuacao[$i]['usu_codigo'].');\' title="Excluir Área de atuação" style="text-decoration:none;">

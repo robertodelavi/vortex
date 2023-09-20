@@ -1,7 +1,7 @@
 <?php
 $data = new DataManipulation();
 
-echo '<p style="color: #FFF;">'.var_dump($_SESSION).'</p>';
+// echo var_dump($_SESSION);
 
 include 'library/vristo/header-main.php';
 require_once 'application/script/php/functions.php';

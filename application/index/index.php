@@ -5,12 +5,8 @@
     public function execute() {
         if($_GET['acao'] == 'logout'){
             require_once 'application/index/logout.inc.php';
-        }		
-        
+        }		        
         $randon = md5(uniqid(time()));
-        $_SESSION['wf_idSession'] = $randon;
-        
-        $online = 0;			        
 ?>
 
 <div class="flex min-h-screen">
@@ -24,6 +20,8 @@
             <h2 class="font-bold text-3xl mb-3 text-white-dark">Entrar</h2>
             <p class="mb-7 text-white-dark">Entre com o seu e-mail e senha pra acessar</p>
             <form class="space-y-5" method="POST" action="?module=index&action=valida_senha" >
+                <input type="hidden" name="postSession" value="<?php echo $randon; ?>" />
+
                 <div>
                     <label for="email" class="text-white-dark">E-mail</label>
                     <input name="usuario" id="email" type="text" class="form-input" placeholder="Enter Email" />

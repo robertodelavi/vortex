@@ -3,13 +3,13 @@
 
 	switch ($tela[0]) {
 		case 'lista':
-			if($_SESSION['wf_userPermissao'] == 1){
+			if($_SESSION['v_usu_nivel'] == 1){
 				require_once 'application/usuario/view/lista.inc.php';
 			}
 		break;
 		
 		case 'novo':
-			if($_SESSION['wf_userPermissao'] == 1){
+			if($_SESSION['v_usu_nivel'] == 1){
 				require_once 'application/usuario/view/frmCadastro.inc.php';
 			}
 		break;

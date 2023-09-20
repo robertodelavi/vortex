@@ -1,29 +1,4 @@
     <?php
-	$sql = "SELECT count(*) AS qtd FROM financeiro_cliente WHERE fin_situacao = 0 AND cli_codigo = ".$_SESSION['wf_userCliente'];
-    $financeiro = $data->find('dynamic', $sql);
-
-	$sql = "SELECT count(*) AS qtd FROM producao_cliente WHERE prc_situacao < 2 AND cli_codigo = ".$_SESSION['wf_userCliente'];
-    $producao = $data->find('dynamic', $sql);
-
-    $sql = "SELECT prc_codigo FROM producao_cliente WHERE prc_situacao < 2 AND cli_codigo = ".$_SESSION['wf_userCliente'];
-    $prod = $data->find('dynamic', $sql);
-
-    if($producao[0]['qtd'] > 0){
-    	//$sql = "SELECT pch_data	FROM producao_cliente_historico WHERE prc_codigo = ".$prod[0]['prc_codigo']." ORDER BY pch_data DESC LIMIT 0,1";
-        $sql = "SELECT h.pch_data FROM producao_cliente_historico AS h WHERE h.prc_codigo in (SELECT p.prc_codigo FROM producao_cliente AS p WHERE cli_codigo = ".$_SESSION['wf_userCliente'].") ORDER BY pch_data DESC LIMIT 0,1";
-
-    	$data_atualizacao = $data->find('dynamic', $sql);
-    	$data_atualizacao[0]['pch_data'] = implode("/", array_reverse(explode("-", $data_atualizacao[0]['pch_data'])));
-    }else{
-        $data_atualizacao[0]['pch_data'] = "--/--/----";
-    }
-
-
-    $sql = "SELECT p.*, (SELECT h.pch_data FROM producao_cliente_historico AS h WHERE h.prc_codigo = p.prc_codigo ORDER BY h.pch_data DESC LIMIT 0,1) AS pch_data
-            FROM producao_cliente AS p
-            WHERE cli_codigo = ".$_SESSION['wf_userCliente'].'
-            ORDER BY prc_situacao ASC, prc_data_entrega DESC';
-    $graficoProducao = $data->find('dynamic', $sql);
 
     $gp_label = '';
     $gp_nro   = '';

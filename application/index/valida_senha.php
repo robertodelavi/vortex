@@ -25,14 +25,14 @@ class Valida_SenhaCommand implements Command
 
         $user = addslashes($_POST['usuario']);
         $pass = addslashes($_POST['senha']);
-        $idSession = $_POST['wf_idSession'];
+        $postSession = $_POST['postSession'];
 
         $login = new Login();
         $login->tableAuth = 'sisusuarios';
         $login->table = 'sisusuarios';
 
         // Autentica usuário
-        $resultAuth = $login->authenticateUser(array('usu_email' => $user, 'usu_senha' => $pass), $idSession);
+        $resultAuth = $login->authenticateUser(array('usu_email' => $user, 'usu_senha' => $pass), $postSession);
         if($resultAuth['login'] == 'Autenticado' && $resultAuth['emp_bd'] != null){
             // Loga usuário
             $result = $login->validateUser(
@@ -49,7 +49,7 @@ class Valida_SenhaCommand implements Command
                     'usu_email' => $user
                     // , 
                     // 'usu_senha' => $pass
-                ), $idSession);
+                ), $postSession);
                 
             if ($result['login'] == 'Logado') {
                 //* Logado com sucesso    
