@@ -359,7 +359,7 @@ if(isset($_GET['tab'])){
                     getImoveis(null, modeView)
                 }, 300);
     
-                action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
+                action ? toast('Imóvel favoritado com sucesso!', 'warning', 300000) : toast('Imóvel desfavoritado com sucesso!', '', 30000)
             }).catch(error => {
                 console.error('Erro ao enviar dados:', error);
             });
