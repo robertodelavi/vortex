@@ -249,7 +249,7 @@
                     }
 
                     if(data.data[0]['rua'] != ''){
-                        document.getElementById('localizacao').innerHTML += '<p><?php echo file_get_contents('../../application/icons/icoPin.svg'); ?></p><p>'+data.data[0]['rua'].toUpperCase()+' '+data.data[0]['numero'].toUpperCase()+' '+data.data[0]['complemento'].toUpperCase()+', BAIRRO '+data.data[0]['bairro'].toUpperCase()+', '+data.data[0]['cidade'].toUpperCase()+'/'+data.data[0]['uf'].toUpperCase()+'</p>';
+                        document.getElementById('localizacao').innerHTML += '<p style="margin-right: 5px"><?php echo file_get_contents('../../application/icons/icoPin.svg'); ?></p><p>'+data.data[0]['rua'].toUpperCase()+' '+data.data[0]['numero'].toUpperCase()+' '+data.data[0]['complemento'].toUpperCase()+',<br /> BAIRRO '+data.data[0]['bairro'].toUpperCase()+', '+data.data[0]['cidade'].toUpperCase()+'/'+data.data[0]['uf'].toUpperCase()+'</p>';
                     }
                     
                     if(data.data[0]['fotos']['capa']['url'] != ''){
@@ -392,8 +392,6 @@
                     }    
 
                     
-                    document.getElementById('galeriaFotos').innerHTML = '<a href="javascript:;"><img alt="image-gallery" data-fancybox="gallery" class="rounded-md w-full h-full object-cover" src="'+data.data[0]['fotos']['capa']['url']+'" data-caption="'+data.data[0]['fotos']['capa']['descricao']+'"></a>';
-                    
                     for (var j = 0; j < data.data[0]['fotos']['galeria'].length; j++) {
                       document.getElementById('galeriaFotos').innerHTML += '<a href="javascript:;"><img alt="image-gallery" data-fancybox="gallery" class="rounded-md w-full h-full object-cover" src="'+data.data[0]['fotos']['galeria'][j]['url']+'" data-caption="'+data.data[0]['fotos']['galeria'][j]['descricao']+'"></a>';
                     }                    
@@ -454,7 +452,14 @@
                                     <h2 class="font-semibold text-4xl dark:text-white-light mb-5" id="detValor"></h2>
                                 </div>
 
-                                <div class="mb-5">
+                                <div class="mb-5 flex items-end">
+                                    <div class="w-1/2">
+                                        <button type="button" class="btn btn-primary w-full">Fale conosco</button>
+                                    </div>
+                                    <div class="w-1/2 ml-2">
+                                        <button type="button" class="btn btn-success w-full">Compartilhe</button>
+                                    </div>
+                                    <!--
                                     <p>Compartilhe este imóvel</p>
                                     <div class="flex mt-3" style="font-size: 1.8em;">
                                         <a href="https://wa.me/?text=https://www.alternativachapeco.com.br/detalhes-imovel/?id_imovel=5666" target="_blank" rel="noopener">
@@ -472,7 +477,7 @@
                                         <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://www.alternativachapeco.com.br/detalhes-imovel/?id_imovel=5666" target="_blank" rel="noopener">
                                             <i class="fab fa-linkedin"></i>
                                         </a>
-                                    </div>    
+                                    </div>    -->
                                 </div>
                             </div>
                         </div>
@@ -487,7 +492,7 @@
                         <div class="panel mb-8">
                             <div id="caracteristica"></div>
                         </div>
-                        <div class="panel mb-8">
+                        <div class="panel">
                             <div id="localizacao" class="flex mt-4 mb-5 items-center"></div>
                             <div id="descricaoImovel"></div>
                         </div>
