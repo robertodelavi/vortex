@@ -1,4 +1,11 @@
 <?php 
+
+    $sql = '
+    SELECT usu_somenteatendimentomeu
+    FROM sisusuarios
+    WHERE usu_codigo = ' . $_SESSION['v_usu_codigo'];
+    $usuarioLogado = $data->find('dynamic', $sql);
+
     $sql = '
     SELECT * 
     FROM situacaovenda';
@@ -59,8 +66,14 @@
     </div>
     <div>
         <label>Atendimentos</label>
+
         <select name="atendimentos" class="form-select text-white-dark">
-            <option value="todos">Todos</option>
+            <option value="" >-- Selecione --</option>
+            <?php 
+                if($usuarioLogado[0]['usu_somenteatendimentomeu'] != 's') {
+                    echo '<option value="todos">Todos</option>';
+                }
+            ?>            
             <option value="meus" >Somente meus</option>
         </select>
     </div>

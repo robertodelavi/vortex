@@ -4,26 +4,26 @@
 	function meu_autoloader($nomeClasse) {
 		
 		// Caso não esteja atualizado um cookie, todos são atualizados com o valor atual da variável de sessão
-		if(($_SESSION['wf_userSession'] != $_COOKIE['wf_userSession']) 	  ||
-		($_SESSION['wf_userId'] != $_COOKIE['wf_userId'])	  ||
-		($_SESSION['wf_userName'] != $_COOKIE['wf_userName']) ||
+		if(($_SESSION['v_userSession'] != $_COOKIE['v_userSession']) 	  ||
+		($_SESSION['v_usu_codigo'] != $_COOKIE['v_usu_codigo'])	  ||
+		($_SESSION['v_usu_nome'] != $_COOKIE['v_usu_nome']) ||
 		($_SESSION['wf_idSession'] != $_COOKIE['wf_idSession']) || 
 		($_SESSION['wf_userPermissao'] != $_COOKIE['wf_userPermissao']) || 
 		($_SESSION['wf_userEmail'] != $_COOKIE['wf_userEmail'])){
-			setcookie('wf_userSession', $_SESSION['wf_userSession'], $tempo_cookie);	
-			setcookie('wf_userId', $_SESSION['wf_userId'], $tempo_cookie);	
-			setcookie('wf_userName', $_SESSION['wf_userName'], $tempo_cookie);	
+			setcookie('v_userSession', $_SESSION['v_userSession'], $tempo_cookie);	
+			setcookie('v_usu_codigo', $_SESSION['v_usu_codigo'], $tempo_cookie);	
+			setcookie('v_usu_nome', $_SESSION['v_usu_nome'], $tempo_cookie);	
 			setcookie('wf_session', $_SESSION['wf_session'], $tempo_cookie);	
 			setcookie('wf_idSession', $_SESSION['wf_idSession'], $tempo_cookie);	
 			setcookie('wf_userPermissao', $_SESSION['wf_userPermissao'], $tempo_cookie);	
 			setcookie('wf_userEmail', $_SESSION['wf_userEmail'], $tempo_cookie);	
 		}
 
-		if(!$_SESSION['wf_userSession']){
+		if(!$_SESSION['v_userSession']){
 		    // Para não perder sessão
-		    $_SESSION['wf_userId']         = $_COOKIE['wf_userId'];
-			$_SESSION['wf_userName']       = $_COOKIE['wf_userName'];
-			$_SESSION['wf_userSession']    = $_COOKIE['wf_userSession'];
+		    $_SESSION['v_usu_codigo']         = $_COOKIE['v_usu_codigo'];
+			$_SESSION['v_usu_nome']       = $_COOKIE['v_usu_nome'];
+			$_SESSION['v_userSession']    = $_COOKIE['v_userSession'];
 			$_SESSION['wf_userPermissao']  = $_COOKIE['wf_userPermissao'];
 			$_SESSION['wf_userEmail']  	   = $_COOKIE['wf_userEmail'];
 			$_SESSION['wf_idSession']      = $_COOKIE['wf_idSession'];

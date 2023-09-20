@@ -15,6 +15,14 @@ SELECT
 FROM pretendentes AS p
     LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
     LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
+WHERE prw_codigo > 0';
+
+//? Usuário logado tem permisão de ver somente os atendimentos dele
+if($_SESSION['v_somente_atendimentos_meu'] == "s"){
+    $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
+}
+
+$sql .= '
 ORDER BY 10 DESC, 2 ASC
 LIMIT 100';
 $result = $data->find('dynamic', $sql);

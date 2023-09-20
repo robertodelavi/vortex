@@ -302,6 +302,6 @@
 <div class="flex-1 mt-5">
     <div>
         <label for="web">Observações</label>
-        <textarea name="prw_obs" class="form-input w-full" cols="4"><?php echo $result[0]['prw_obs']; ?></textarea>
+        <textarea name="prw_obs" class="form-input w-full" cols="4"><?php echo utf8_encode($result[0]['prw_obs']); ?></textarea>
     </div>
 </div>  

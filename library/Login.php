@@ -101,6 +101,7 @@ class Login{
 		if ($db->countLines($result) > 0){
 			for ($i=0;$i<$db->countLines($result);$i++){
 				$_SESSION['v_usu_codigo'] 		= $db->result($result, $i,'usu_codigo');
+				$_SESSION['v_somente_atendimentos_meu'] = $db->result($result, $i,'usu_somenteatendimentomeu');
 				$_SESSION['database'] 			= $authData['emp_bd'];
 				$_SESSION['database_host'] 		= $authData['emp_bd_host'];
 				$_SESSION['database_user'] 		= $authData['emp_bd_user'];
@@ -109,12 +110,12 @@ class Login{
 				$_SESSION['menu']				= $this->$menu;
 				$_SESSION['unidadeCidade'] 		= $authData['emp_cidade'].'/'.$authData['emp_estado'];
 				//
-				$_SESSION['wf_userId'] 			= $db->result($result, $i,'usu_codigo');
-				$_SESSION['wf_userName'] 		= $db->result($result, $i,'usu_nome');	
+				$_SESSION['v_usu_codigo'] 			= $db->result($result, $i,'usu_codigo');
+				$_SESSION['v_usu_nome'] 		= $db->result($result, $i,'usu_nome');	
 				$_SESSION['wf_userEmail'] 		= $db->result($result, $i,'usu_email');									
 				$_SESSION['wf_userPermissao'] 	= 1;
 				$_SESSION['wf_userCliente'] 	= 1;
-				$_SESSION['wf_userSession'] 	= $session;
+				$_SESSION['v_userSession'] 	= $session;
 
 				$retorno['login'] 	 = 'Logado';
 				$retorno['nome'] 	 = $db->result($result, $i,'usu_nome');
@@ -131,12 +132,12 @@ class Login{
 				setcookie('unidade', $_SESSION['unidade'], $tempo_cookie, "/");
 				setcookie('unidadeCidade', $_SESSION['unidadeCidade'], $tempo_cookie, "/");
 				//
-				setcookie('wf_userId', $_SESSION['wf_userId'], $tempo_cookie, "/");			
-				setcookie('wf_userName', $_SESSION['wf_userName'], $tempo_cookie, "/");			
+				setcookie('v_usu_codigo', $_SESSION['v_usu_codigo'], $tempo_cookie, "/");			
+				setcookie('v_usu_nome', $_SESSION['v_usu_nome'], $tempo_cookie, "/");			
 				setcookie('wf_userEmail', $_SESSION['wf_userEmail'], $tempo_cookie, "/");
 				setcookie('wf_userPermissao', $_SESSION['wf_userPermissao'], $tempo_cookie, "/");
 				setcookie('wf_userCliente', $_SESSION['wf_userCliente'], $tempo_cookie, "/");
-				setcookie('wf_userSession', $_SESSION['wf_userSession'], $tempo_cookie, "/");				
+				setcookie('v_userSession', $_SESSION['v_userSession'], $tempo_cookie, "/");				
 				setcookie('wf_idSession', $_SESSION['wf_idSession'], $tempo_cookie, "/");	
 			}
 		}else{
@@ -148,7 +149,7 @@ class Login{
 
 	function logout(){
 		unset($_SESSION);
-		/*unset($_SESSION['wf_userName']);
+		/*unset($_SESSION['v_usu_nome']);
 		unset($_SESSION['wf_userEmail']);
 		unset($_SESSION['wf_userPermissao']);
 		unset($_SESSION['wf_userCliente']);*/

@@ -36,6 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
         LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
     WHERE prw_codigo > 0 ';
+
+    //? Usuário logado tem permisão de ver somente os atendimentos dele
+    if($_SESSION['v_somente_atendimentos_meu'] == "s"){
+        $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
+    }
     
     if($values){
         //? Nome
@@ -58,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($values['prw_origem']) $sql .= ' AND p.prw_origem = "'.$values['prw_origem'].'" ';
         //? Usuário
         if($values['prw_usuario']) $sql .= ' AND p.prw_usuario = "'.$values['prw_usuario'].'" ';
+        //? Atendimentos
+        if($values['atendimentos'] == 'meus') $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
     }
     
     $sql .= '
