@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             b.bai_descricao, 
             i.imo_areaconstruida, 
             i.imo_quartos, 
+            i.imo_suites,
             i.imo_banheiros, 
             i.imo_garagem, 
             ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
@@ -202,7 +203,7 @@ function mountList($tipo, $result, $BASE_URL_IMAGENS){
                     <div class="flex gap-4">
                         <!-- FOTO (esquerda) --> 
                         <div class="w-1/3 rounded-md overflow-hidden mb-5 shadow-[0_6px_10px_0_rgba(0,0,0,0.14),_0_1px_18px_0_rgba(0,0,0,0.12),_0_3px_5px_-1px_rgba(0,0,0,0.20)]">                                                
-                            <div class="rounded-md overflow-hidden relative" style="height: 200px;">
+                            <div class="rounded-md overflow-hidden relative" style="height: 150px;">
                                 <div @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');" class="bg-cover bg-center h-full transform hover:scale-110 transition duration-500 ease-in-out " style="background-image: url('.$foto.');"></div>
     
                                 <!-- AÇÕES -->
@@ -281,11 +282,21 @@ function mountList($tipo, $result, $BASE_URL_IMAGENS){
                                         ' . file_get_contents('../../../../application/icons/area.svg') . '                        
                                         <p class="mt-2 text-xs">' . ($imovel['imo_areaconstruida'] ? number_format(($imovel['imo_areaconstruida'] / 100), 0, ',', '.') : '0') . 'm²</p>
                                     </div>
+                                    
                                     <div class="flex flex-col items-center">
                                         ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '                        
                                         <p class="mt-2 text-xs">' . ($imovel['imo_quartos'] ? $imovel['imo_quartos'] : '0') . ' Quartos</p>
-                                    </div>
-    
+                                    </div>';
+                                        
+                                    if($imovel['imo_suites'] > 0){
+                                        $html .= '
+                                        <div class="flex flex-col items-center">
+                                            ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '                        
+                                            <p class="mt-2 text-xs">Sendo '.$imovel['imo_suites'].' '.($imovel['imo_suites'] > 1 ? 'suítes' : 'suíte').'</p>
+                                        </div>';
+                                    }
+                                        
+                                    $html .= '
                                     <div class="flex flex-col items-center">
                                         ' . file_get_contents('../../../../application/icons/banheiro.svg') . '
                                         <p class="mt-2 text-xs">' . ($imovel['imo_banheiros'] ? $imovel['imo_banheiros'] : '0') . ' Banheiros</p>
@@ -319,6 +330,7 @@ function createScriptImoveis($value, $filters, $sideFilters){
         b.bai_descricao, 
         i.imo_areaconstruida, 
         i.imo_quartos, 
+        i.imo_suites,
         i.imo_banheiros, 
         i.imo_garagem, 
         ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
