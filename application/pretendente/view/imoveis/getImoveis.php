@@ -10,13 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($value['pretendente']) && $value['pretendente'] > 0) {
         
         //* Filtro da lateral da listagem dos imóveis 
-        $sideFilters = $value['filters'];
-        
+        $sideFilters = $value['filters'];        
         $filters = getFilters($value['pretendente'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
         $sql1 = createScriptImoveis($value, $filters, $sideFilters); //? Cria e configura o script (sql) para buscar os imóveis
-
         // echo json_encode($sql1); exit;
-
         $resultImoveis = $data->find('dynamic', $sql1);
 
         $sql = '
@@ -371,8 +368,9 @@ function createScriptImoveis($value, $filters, $sideFilters){
         if($sideFilters['tipoImovel'] != '') $sql .= ' AND i.imo_tipoimovel = "'.$sideFilters['tipoImovel'].'" ';
     }else{
         $filters = json_decode($filters);
+        $sql .= ' AND ( ';
         foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
-            $sql .= ' AND (';
+            $sql .= ' (';
             foreach($valuePerfil as $keyCampo => $valueCampo){ // cada campo do perfil
                 //? Com intervalo de valores
                 if($valueCampo->intervalo && $valueCampo->inicio != '' && $valueCampo->fim != ''){
@@ -391,6 +389,7 @@ function createScriptImoveis($value, $filters, $sideFilters){
             $sql .= ') OR ';
         }
         $sql = substr($sql, 0, -4);
+        $sql .= ' ) ';
     }
 
     $sql .= ' 

@@ -172,12 +172,15 @@
     if ($conn->countLines($resultGaleria) > 0){
         for ($i=0; $i< $conn->countLines($resultGaleria); $i++){
             $imagem = $conn->result($resultGaleria, $i, 'imf_imovel').'-'.$conn->result($resultGaleria, $i, 'imf_arquivo');
-            $galeria[] = array(
-                'url' => $imagem ? $imagesBaseUrl.$imagem : null,
-                'descricao' => $conn->result($resultGaleria, $i, 'imf_descricao'),
-                'ficha' => $conn->result($resultGaleria, $i, 'imf_ficha'),
-                'web' => $conn->result($resultGaleria, $i, 'imf_web')
-            );
+
+            if($imagem /*&& validImage($imagesBaseUrl.$imagem)*/){                
+                $galeria[] = array(
+                    'url' => $imagesBaseUrl.$imagem,
+                    'descricao' => $conn->result($resultGaleria, $i, 'imf_descricao'),
+                    'ficha' => $conn->result($resultGaleria, $i, 'imf_ficha'),
+                    'web' => $conn->result($resultGaleria, $i, 'imf_web')
+                );            
+            }
         }
     }
 
@@ -324,6 +327,11 @@
         $cnpj = str_pad($cnpj, 14, '0', STR_PAD_LEFT);
         $cnpj = substr($cnpj, 0, 2).'.'.substr($cnpj, 2, 3).'.'.substr($cnpj, 5, 3).'/'.substr($cnpj, 8, 4).'-'.substr($cnpj, 12, 2);
         return $cnpj;
+    }
+
+    function validImage($url){
+        $imageInfo = getimagesize($url);
+        return $imageInfo ? true : false;
     }
 
     echo json_encode(array('status' => true, 'data' => $res));

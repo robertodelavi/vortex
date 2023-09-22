@@ -323,6 +323,7 @@ if(isset($_GET['tab'])){
             method: 'POST',
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
+            console.log("🚀 ~ getImoveis ~ data:", data)
             // Seta resultado do ajax na div        
             document.getElementById('resulAjaxImoveis').innerHTML = data;
         })
@@ -467,7 +468,7 @@ if(isset($_GET['tab'])){
                     method: 'POST',
                     body: JSON.stringify(data) // Converte o objeto em uma string JSON
                 }).then(response => response.json()).then(data => {
-                    url += `?emp=${encodeURIComponent(data.emp)}&id=${encodeURIComponent(id)}&titulo=${encodeURIComponent(data.titulo)}&desc=${encodeURIComponent(data.desc)}&img=${encodeURIComponent(data.img)}`;
+                    url += `?emp=${encodeURIComponent(data.emp)}&id=${encodeURIComponent(id)}&titulo=${encodeURIComponent(data.titulo)}&desc=${encodeURIComponent(data.desc)}&img=${data.img}`;
                     
                     navigator.clipboard.writeText(url)
                     this.openShare = false
