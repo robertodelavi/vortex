@@ -122,7 +122,7 @@ if(isset($_GET['tab'])){
                         <a href="javascript:;"
                             class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
                             :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
-                            onClick="getImoveis(null, 'grid')">
+                            onClick="getImoveis(null, 'table')">
                             <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
                             <span class="hidden sm:block">Imóveis</span>
                         </a>
@@ -198,17 +198,20 @@ if(isset($_GET['tab'])){
                                         <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
                                     </div>
                                 </div>
-                                <div class="w-full " >                                    
+                                <div class="w-full " >            
                                     <!-- Imóveis vindo do ajax -->
                                     <div class="relative" id="resulAjaxImoveis"></div>    
                                 </div>
-                                <!-- Botão com modo de exibição (grid/list) -->
+                                <!-- Botão com modo de exibição (tabela/grid/list) -->
                                 <div class="hidden sm:block absolute right-0 top-0">
                                     <div class="flex gap-1 ">
-                                        <button type="button" x-tooltip="Visualização em Grade" data-theme="primary" class="btn" :class="{'btn-outline-primary' : modeView == 'list', 'btn-primary' : modeView == 'grid'}" @click="setModeView('grid')">
+                                        <button type="button" x-tooltip="Visualização em Tabela" data-theme="primary" class="btn" :class="{'btn-primary' : modeView == 'table', 'btn-outline-primary' : modeView != 'table'}" @click="setModeView('table')">
+                                            <?php echo file_get_contents('application/icons/table.svg'); ?>
+                                        </button>
+                                        <button type="button" x-tooltip="Visualização em Grade" data-theme="primary" class="btn" :class="{'btn-primary' : modeView == 'grid', 'btn-outline-primary' : modeView != 'grid'}" @click="setModeView('grid')">
                                             <?php echo file_get_contents('application/icons/grid.svg'); ?>
                                         </button>
-                                        <button type="button" x-tooltip="Visualização em Lista" data-theme="primary" class="btn" :class="{'btn-outline-primary' : modeView == 'grid', 'btn-primary': modeView == 'list'}" @click="setModeView('list')">
+                                        <button type="button" x-tooltip="Visualização em Lista" data-theme="primary" class="btn" :class="{'btn-primary': modeView == 'list', 'btn-outline-primary' : modeView != 'list'}" @click="setModeView('list')">
                                             <?php echo file_get_contents('application/icons/list.svg'); ?>
                                         </button>
                                     </div>
@@ -289,8 +292,11 @@ if(isset($_GET['tab'])){
 </div>
 
 <script>
+
+    
+
     //* GLOBAL: mode view (grid ou list)
-    let modeView = '<?php echo $_GET['mode'] != '' ? $_GET['mode'] : 'grid'; ?>';
+    let modeView = '<?php echo $_GET['mode'] != '' ? $_GET['mode'] : 'table'; ?>';
     
     const selectUf = (uf) => {
         var data = {
@@ -306,7 +312,7 @@ if(isset($_GET['tab'])){
 
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
-    const getImoveis = (filters = null, mode = 'grid') => {
+    const getImoveis = (filters = null, mode = 'table') => {
         console.log("🚀 ~ getImoveis:", mode)
         var data = {
             pretendente: <?php echo $_POST['param_0']; ?>,
@@ -323,7 +329,7 @@ if(isset($_GET['tab'])){
             method: 'POST',
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
-            console.log("🚀 ~ getImoveis ~ data:", data)
+            console.log(data)
             // Seta resultado do ajax na div        
             document.getElementById('resulAjaxImoveis').innerHTML = data;
         })
@@ -364,10 +370,9 @@ if(isset($_GET['tab'])){
             }).catch(error => {
                 console.error('Erro ao enviar dados:', error);
             });
-        }
-        
+        }        
     }
-
+    
     //* Perfil de busca
     const openModalEditPerfil = (ppf_pretendente, ppf_codigo) => {        
         if (ppf_pretendente) {
@@ -411,6 +416,7 @@ if(isset($_GET['tab'])){
     //* Visita 
     const openModalFormVisita = (prv_codigo, imo_codigo) => {
         if(imo_codigo){
+            console.log("🚀 ~ openModalFormVisita ~ imo_codigo:", imo_codigo)
             fetch('application/pretendente/view/visita/formVisita.php', {
                 method: 'POST',
                 body: JSON.stringify({ 
@@ -418,7 +424,7 @@ if(isset($_GET['tab'])){
                     prv_codigo: prv_codigo,
                     imo_codigo: imo_codigo,
                     prv_pretendente: '<?php echo $_POST['param_0']; ?>',
-                    prv_empresa: 1, //? temp (pegar da sessão ou localstorage) 
+                    prv_empresa: '<?php echo $_SESSION['v_emp_codigo']; ?>'
                 }),
                 headers: {
                     'Content-Type': 'application/json'
@@ -449,13 +455,13 @@ if(isset($_GET['tab'])){
             openFilter: false,
             openShare: false,
             indexShare: null,
-            sectionShare: null,
+            // sectionShare: null,
             modeView: modeView,
             
-            toggleShare(section, i) {
+            toggleShare(i) {
                 this.openShare = !this.openShare;
                 this.indexShare = i;
-                this.sectionShare = section;
+                // this.sectionShare = section;
             },
 
             copyLink(id){                            
