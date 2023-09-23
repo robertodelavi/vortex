@@ -132,7 +132,7 @@
                         contItens++;
                     }
 
-                    if(data.data[0]['elevadores'] != ''){
+                    if(data.data[0]['elevadores'] > 0){
                         item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoElevador.svg'); ?><p class="mt-2 text-xs text-center">'+data.data[0]['elevadores']+' elevador(es)</p></div>');
                         contItens++;
                     }
@@ -233,15 +233,7 @@
                     }
                     
                     if(data.data[0]['codigo'] != ''){
-                        document.getElementById('titulo').innerHTML = '<p class="mb-2"><span class="badge badge-outline-primary" style="margin: 5px;"> CÓDIGO: '+data.data[0]['codigo']+'</span></p>';
-                    }
-
-                    if(data.data[0]['tipo'] != ''){
-                        document.getElementById('titulo').innerHTML += '<span class="badge badge-outline-success" style="margin: 5px;">'+data.data[0]['tipo'].toUpperCase()+'</span>';
-                    }
-
-                    if(data.data[0]['bairro'] != ''){
-                        document.getElementById('titulo').innerHTML += '<span class="badge badge-outline-info" style="margin: 5px;">'+data.data[0]['bairro'].toUpperCase()+'</span>';
+                        document.getElementById('titulo').innerHTML = '<span class="badge bg-primary" style="margin: 5px;"> #'+data.data[0]['codigo']+'</span>';
                     }
 
                     if(data.data[0]['detalhes'] != ''){
@@ -252,12 +244,27 @@
                         document.getElementById('localizacao').innerHTML += '<p style="margin-right: 5px"><?php echo file_get_contents('../../application/icons/icoPin.svg'); ?></p><p>'+data.data[0]['rua'].toUpperCase()+' '+data.data[0]['numero'].toUpperCase()+' '+data.data[0]['complemento'].toUpperCase()+',<br /> BAIRRO '+data.data[0]['bairro'].toUpperCase()+', '+data.data[0]['cidade'].toUpperCase()+'/'+data.data[0]['uf'].toUpperCase()+'</p>';
                     }
                     
-                    if(data.data[0]['fotos']['capa']['url'] != ''){
-                        document.getElementById('fotoCapa').innerHTML = "<div style='width: 100%; height: 90vh; background-size: cover; background-position: center; background-image: url("+data.data[0]['fotos']['capa']['url']+");'></div>";
+
+                    if(data.data[0]['tipo'] != ''){
+                        document.getElementById('tagsImoveis').innerHTML += '<span class="badge bg-success" style="margin: 5px;">'+data.data[0]['tipo'].toUpperCase()+'</span>';
+                    }
+
+                    if(data.data[0]['bairro'] != ''){
+                        document.getElementById('tagsImoveis').innerHTML += '<span class="badge bg-info" style="margin: 5px;">'+data.data[0]['bairro'].toUpperCase()+'</span>';
+                    }
+
+                    if(dispositivo == 'celular'){
+                        if(data.data[0]['fotos']['capa']['url'] != ''){
+                            document.getElementById('fotoCapa').innerHTML = "<img src='"+data.data[0]['fotos']['capa']['url']+"' class='object-cover' />";
+                        }
+                    }else{
+                        if(data.data[0]['fotos']['capa']['url'] != ''){
+                            document.getElementById('fotoCapa').innerHTML = "<div style='width: 100%; height: 90vh; background-size: cover; background-position: center; background-image: url("+data.data[0]['fotos']['capa']['url']+");'></div>";
+                        }
                     }
 
                     if(data.data[0]['valor'] != ''){
-                        var precovenda = 'R$<strong>'+data.data[0]['valor']+'</strong>';
+                        var precovenda = 'R$ <strong>'+data.data[0]['valor']+'</strong>';
                     }else{
                         var precovenda = 'Sob consulta';
                     }
@@ -270,7 +277,7 @@
                         aux = i+1;
 
                         if(dispositivo == 'celular'){
-                            if(aux%3 == 0){
+                            if(aux%2 == 0){
                                 linhaCarac++;
                                 document.getElementById('caracteristica').innerHTML += '<div class="flex justify-between mt-5" id="caracLinha'+linhaCarac+'"></div>';
                             }
@@ -285,14 +292,10 @@
 
                     //Valida quantos espaços preciso colocar a mais quando tem menos itens na ultima linha
                     if(dispositivo == 'celular'){
-                        switch(aux%3){
+                        switch(aux%2){
                             case 1:
                                 document.getElementById('caracLinha'+linhaCarac).innerHTML += '<div class="'+tamanhoColuna+'">&nbsp;</div>';
-                                document.getElementById('caracLinha'+linhaCarac).innerHTML += '<div class="'+tamanhoColuna+'">&nbsp;</div>';
                                 break;
-                            case 2:    
-                                document.getElementById('caracLinha'+linhaCarac).innerHTML += '<div class="'+tamanhoColuna+'"></div>';
-                                break;  
                         }
                     }else{
                         switch(aux%4){
@@ -358,7 +361,7 @@
 
                     // DADOS DA EMPRESA ------------------------------------------------------------------------------------------------------        
                     if(data.data[0]['empresa']['logomarca'] !== undefined && data.data[0]['empresa']['logomarca'] != ''){
-                        document.getElementById('logoCliente').innerHTML = '<img src="'+data.data[0]['empresa']['logomarca']+'" style="width: 10rem;" />';
+                        document.getElementById('logoCliente').innerHTML = '<img src="'+data.data[0]['empresa']['logomarca']+'" style="width: 10rem;" class="rounded-md" />';
                     }else{
                         document.getElementById('logoCliente').innerHTML = '<img src="../../application/images/logo-vortex-branca.png" style="width: 10rem;" />';
                     }
@@ -436,7 +439,7 @@
         <div>
             <div>
                 <div class="grid lg:grid-cols-2 grid-cols-1 gap-6 pb-5 auto-cols-auto auto-rows-auto">
-                    <div class="panel">
+                    <div class="panel flex items-center">
                         <div class="flex h-screen items-center">
                             <div id="logoCliente"></div>
                             <div id="infoEmpresa" style="margin-left: 10px;"></div>
@@ -446,18 +449,18 @@
                     <div class="panel">
                         <div>
                             <div id="titulo" class="mb-8"></div>
-                            <div class="grid lg:grid-cols-2 grid-cols-1 gap-6">
+                            <div class="grid lg:grid-cols-1 grid-cols-1 gap-6">
                                 <div>                    
-                                    <div class="text-primary">À venda por</div>
-                                    <h2 class="font-semibold text-4xl dark:text-white-light mb-5" id="detValor"></h2>
+                                    <div class="">À venda por</div>
+                                    <h2 class="font-bold text-4xl dark:text-white-light" id="detValor"></h2>
                                 </div>
 
-                                <div class="mb-5 flex items-end">
+                                <div class="flex items-end">
                                     <div class="w-1/2">
-                                        <button type="button" class="btn btn-primary w-full">Fale conosco</button>
+                                        <button type="button" class="btn btn-outline-primary w-full">Fale conosco</button>
                                     </div>
                                     <div class="w-1/2 ml-2">
-                                        <button type="button" class="btn btn-success w-full">Compartilhe</button>
+                                        <button type="button" class="btn btn-outline-success w-full">Compartilhe</button>
                                     </div>
                                     <!--
                                     <p>Compartilhe este imóvel</p>
@@ -485,11 +488,14 @@
                 </div>
                 <div class="grid lg:grid-cols-2 grid-cols-1 gap-6 pb-5 auto-cols-auto auto-rows-auto">
                     <div class="panel">
-                        <div id="fotoCapa"></div>
+                        <div>
+                            <div id="tagsImoveis" class="absolute mt-3 ml-2"></div>
+                            <div id="fotoCapa"></div>
+                        </div>
                     </div>
                     <div class="gap-6 pb-5">
                         <!-- CARACTERISTICAS -->
-                        <div class="panel mb-8">
+                        <div class="panel mb-5">
                             <div id="caracteristica"></div>
                         </div>
                         <div class="panel">
