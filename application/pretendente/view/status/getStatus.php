@@ -18,11 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // SQL buscar as etapas/status 
         $sql = '
-        SELECT 0 AS psa_codigo, "Indefinido" AS psa_descricao
+        SELECT 0 AS psa_codigo, "Indefinido" AS psa_descricao, 0 AS psa_ordem
         UNION ALL
-        (SELECT psa_codigo, psa_descricao
-        FROM pretendentesstatusatendimento
-        ORDER BY psa_ordem ASC)';
+        (SELECT psa_codigo, psa_descricao, psa_ordem
+        FROM pretendentesstatusatendimento)
+        ORDER BY psa_ordem ASC';
         $status = $data->find('dynamic', $sql);
 
         // Cards com todas as etapas
