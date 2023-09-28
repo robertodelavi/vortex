@@ -142,6 +142,18 @@
             </div>
         </div>
 
+        <!-- Looker -->        
+        <div class="grid grid-cols-12 gap-6">
+            <div class="flex items-center mb-5 font-bold">
+                <span class="text-lg">Looker</span>
+            </div>
+            <div class="flex items-center mb-5 font-bold">
+
+
+            <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/207406f6-fe71-4b58-b1cb-022df687de77/page/dptLD" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+        </div>    
+
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <!-- Favorites -->
             <div>

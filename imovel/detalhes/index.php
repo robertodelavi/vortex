@@ -63,7 +63,7 @@
                     }
 
                     if(data.data[0]['area'] != '0'){
-                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoRegua.svg'); ?><p class="mt-2 text-xs text-center">Área construida<br />'+(data.data[0]['areaConstruida']/100)+' m²</p></div>');
+                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoRegua.svg'); ?><p class="mt-2 text-xs text-center">Área construída<br />'+(data.data[0]['areaConstruida']/100)+' m²</p></div>');
                         contItens++;
                     }
 
@@ -98,12 +98,12 @@
                     }
 
                     if(data.data[0]['suites'] != '0'){
-                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoQuarto.svg'); ?><p class="mt-2 text-xs text-center">Sendo '+data.data[0]['suites']+' Suites(s)</p></div>');
+                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoQuarto.svg'); ?><p class="mt-2 text-xs text-center">Sendo '+data.data[0]['suites']+' Suíte(s)</p></div>');
                         contItens++;
                     }
 
                     if(data.data[0]['banheiros'] != '0'){
-                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoBanheiro.svg'); ?><p class="mt-2 text-xs text-center">'+data.data[0]['banheiros']+' Banheiros(s)</p></div>');
+                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoBanheiro.svg'); ?><p class="mt-2 text-xs text-center">'+data.data[0]['banheiros']+' Banheiro(s)</p></div>');
                         contItens++;
                     }
 

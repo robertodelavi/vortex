@@ -292,9 +292,6 @@ if(isset($_GET['tab'])){
 </div>
 
 <script>
-
-    
-
     //* GLOBAL: mode view (grid ou list)
     let modeView = '<?php echo $_GET['mode'] != '' ? $_GET['mode'] : 'table'; ?>';
     

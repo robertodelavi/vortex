@@ -18,9 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             i.imo_quartos, 
             i.imo_banheiros, 
             i.imo_garagem,
+
+            i.imo_areaterreno,
+            i.imo_areaconstruida,
+            i.imo_areaprivativa,
+            i.imo_areautil,
+            i.imo_areacomum,
+            i.imo_areagaragem,
+            tc.tcn_descricao AS tipoconstrucao,
+
             ((iv.imv_valor*m.moe_valor)/100) AS imv_valor
         FROM imoveis AS i
             INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
+            LEFT JOIN tipoconstrucao AS tc ON (i.imo_tipoconstrucao = tc.tcn_codigo)
             LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
             LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
             LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
@@ -75,94 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </p>
                             
                         </div>
-                    </div>
+                    </div>';
                     
-                    <!-- Principais características (grid) -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-5 text-center">
-                        <div class="flex flex-col items-center">
-                            <div class="mb-1">
-                                ' . file_get_contents('../../../../application/icons/area.svg') . '       
-                            </div>
-                            <div>
-                                <p class="text-primary font-bold text-md mb-0" >
-                                    '.($result[0]['imo_areaconstruida'] ? number_format(($result[0]['imo_areaconstruida'] / 100), 0, ',', '.') : '0').' m²
-                                </p>
-                                <p class="text-xs mt-0" >Área total</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col items-center">
-                            <div class="mb-1">
-                                ' . file_get_contents('../../../../application/icons/area2.svg') . '       
-                            </div>
-                            <div>
-                                <p class="text-primary font-bold text-md mb-0" >
-                                    '.($result[0]['imo_areaprivativa'] ? number_format(($result[0]['imo_areaprivativa'] / 100), 0, ',', '.') : '0').' m²
-                                </p>
-                                <p class="text-xs mt-0" >Área construída</p>
-                            </div>
-                        </div>
+                    // Características (grid)
+                    include('formCaracteristicas.php');
 
-                        <div class="flex flex-col items-center">
-                            <div class="mb-1">
-                                ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '       
-                            </div>
-                            <div>
-                                <p class="text-primary font-bold text-md mb-0" >
-                                    '.($result[0]['imo_quartos'] ? $result[0]['imo_quartos'] : '0').'
-                                </p>
-                                <p class="text-xs mt-0" >Quartos</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col items-center">
-                            <div class="mb-1">
-                                ' . file_get_contents('../../../../application/icons/dormitorio.svg') . '       
-                            </div>
-                            <div>
-                                <p class="text-primary font-bold text-md mb-0" >
-                                    '.($result[0]['imo_suites'] ? $result[0]['imo_suites'] : '0').'
-                                </p>
-                                <p class="text-xs mt-0" >Suítes</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col items-center">
-                            <div class="mb-1">
-                                ' . file_get_contents('../../../../application/icons/banheiro.svg') . '       
-                            </div>
-                            <div>
-                                <p class="text-primary font-bold text-md mb-0" >
-                                    '.($result[0]['imo_banheiros'] ? $result[0]['imo_banheiros'] : '0').'
-                                </p>
-                                <p class="text-xs mt-0" >Banheiros</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col items-center">
-                            <div class="mb-1">
-                                ' . file_get_contents('../../../../application/icons/vagagaragem.svg') . '       
-                            </div>
-                            <div>
-                                <p class="text-primary font-bold text-md mb-0" >
-                                    '.($result[0]['imo_garagem'] ? $result[0]['imo_garagem'] : '0').'
-                                </p>
-                                <p class="text-xs mt-0" >Vagas</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col items-center">
-                            <div class="mb-1">
-                                ' . file_get_contents('../../../../application/icons/cozinha.svg') . '       
-                            </div>
-                            <div>
-                                <p class="text-primary font-bold text-md mb-0" >
-                                    '.($result[0]['imo_cozinha'] ? $result[0]['imo_cozinha'] : '0').'
-                                </p>
-                                <p class="text-xs mt-0" >Cozinhas</p>
-                            </div>
-                        </div>    
-                    </div>
+                $html .= '
                 </div>
             </div>';
         }else{
