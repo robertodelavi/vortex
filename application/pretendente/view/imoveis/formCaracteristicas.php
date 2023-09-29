@@ -1,6 +1,6 @@
 <?php 
     $html .= '
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-5 text-center">';
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-5 p-6 rounded-lg text-center dark:bg-[#060818]">';
         if($result[0]['imo_areaterreno']){
             $html .= '
             <div class="flex flex-col items-center">

@@ -11,8 +11,18 @@
 <div class="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-[#0e1726]">
     <div class="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
         <a href="<?php echo BASE_URL; ?>/?module=home" class="main-logo flex items-center shrink-0">
-            <img class="w-8 ltr:-ml-1 rtl:-mr-1 inline" src="<?php echo BASE_THEME_URL; ?>/assets/images/logo.svg" alt="image" />
-            <span class="text-2xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle hidden md:inline dark:text-white-light transition-all duration-300">VORTEX</span>
+            <!-- Mobile -->
+            <div class="block sm:hidden">
+                <img class="h-12 ltr:-ml-1 rtl:-mr-1 inline" src="application/images/favicon.ico" alt="image" />
+            </div>
+            <!-- Dark -->
+            <div class="hidden sm:block" x-show="$store.app.theme === 'dark'" x-cloak>
+                <img class="h-12 ltr:-ml-1 rtl:-mr-1 inline" src="application/images/logo-vortex-branca.png" alt="image" />
+            </div>
+            <!-- Light -->
+            <div class="hidden sm:block" x-show="$store.app.theme !== 'dark'" x-cloak>
+                <img class="h-12 ltr:-ml-1 rtl:-mr-1 inline" src="application/images/logo-vortex-preta.png" alt="image" />
+            </div>
         </a>
 
         <a href="javascript:;" class="collapse-icon flex-none dark:text-[#d0d2d6] hover:text-primary dark:hover:text-primary flex lg:hidden ltr:ml-2 rtl:mr-2 p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:bg-white-light/90 dark:hover:bg-dark/60" @click="$store.app.toggleSidebar()">
@@ -184,15 +194,17 @@
 
         <!-- Usuário -->
         <div class="dropdown" x-data="dropdown" @click.outside="open = false">
-            <a href="javascript:;" class="relative group" @click="toggle()">
-                <span><img class="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100" src="<?php echo BASE_THEME_URL; ?>/assets/images/user-profile.jpeg" alt="image" /></span>
+            <a href="javascript:;" class="relative block p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="toggle()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M15.5841 20.4366C14.5358 20.7944 13.3099 21 12 21C8.13401 21 5 19.2091 5 17C5 14.7909 8.13401 13 12 13C14.6083 13 16.8834 13.8152 18.0877 15.024" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M18 18.5C18.3905 18.8905 18.6095 19.1095 19 19.5L21 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <!-- <span><img class="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100" src="application/images/favicon.ico" alt="image" /></span> -->
             </a>
             <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0 text-dark dark:text-white-dark top-11 !py-0 w-[300px] font-semibold dark:text-white-light/90">
                 <li>
-                    <div class="flex items-center px-4 py-4">
-                        <div class="flex-none">
-                            <img class="rounded-md w-10 h-10 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/user-profile.jpeg" alt="image" />
-                        </div>
+                    <div class="flex items-center py-4">
                         <div class="ltr:pl-4 rtl:pr-4">
                             <h4 class="text-base"><?php echo $usuario[0]['usu_nome']; ?><span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span></h4>
                             <a class="text-black/60 text-sm hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;"><?php echo $usuario[0]['usu_email']; ?></a>

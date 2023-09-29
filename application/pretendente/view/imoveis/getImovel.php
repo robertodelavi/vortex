@@ -49,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             i.imo_condominiofechado,
             i.imo_arealazer,
             i.imo_piscina,
-            i.imo_terraco,      
+            i.imo_terraco,    
+            i.imo_detalhes,  
 
             ((iv.imv_valor*m.moe_valor)/100) AS imv_valor
         FROM imoveis AS i
@@ -108,14 +109,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </p>
                             <p class="text-xl font-bold text-success">
                                 R$ '.number_format(($result[0]['imv_valor']/100), 2, ',', '.').'
-                            </p>
-                            
+                            </p>                                                        
+                            <!-- COMPARTILHAR -->
+                            <div class="mt-2">
+                                <div @click="() => toggleShare(-1)" class="bg-white dark:bg-dark rounded p-2 flex">
+                                    <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
+                                        <div class="flex items-center text-center gap-2">
+                                            '.file_get_contents('../../../icons/compartilhar.svg').'<p class="text-sm"> Compartilhar</p>
+                                        </div>
+                                    </button>
+                                </div>
+                                <!-- SELECIONAR MODO DE COMPARTILHAMENTO -->
+                                <div x-show="openShare && indexShare == -1" x-transition x-transition.duration.300 class="absolute mt-1 cursor-pointer">
+                                    <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
+                                        <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$result[0]['imo_codigo'].');" >
+                                            <div class="text-primary">
+                                                ' . file_get_contents('../../../icons/copiar.svg') . '
+                                            </div>
+                                            <p class="text-sm">Copiar Link</p>                                                
+                                        </div>
+                                        <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$result[0]['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
+                                            <div class="text-success">
+                                                ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                                            </div>
+                                            <p class="text-sm">WhatsApp</p>                                                
+                                        </div>
+                                    </div>
+
+                                </div>                       
+                            </div>
                         </div>
                     </div>';
                     
                     // Características (grid)
                     include('formCaracteristicas.php');
 
+                    // Detalhes 
+                    if($result[0]['imo_detalhes']){
+                        $html .= '
+                        <div class="py-4">
+                            <p>Informações Adicionais</p>
+                            <p class="text-sm">'.utf8_encode($result[0]['imo_detalhes']).'</p>
+                        </div>';
+                    }                    
                 $html .= '
                 </div>
             </div>';

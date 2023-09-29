@@ -37,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
     WHERE prw_codigo > 0 ';
 
-    //? Usuário logado só ve pretententes que cadastrados por usuários(corretores) com niveis <= ao dele
+    //? Usuário logado só ve pretententes que foram cadastrados por ele mesmo e com niveis menores ao dele
     if($_SESSION['v_usu_nivel']){
-        $sql .= ' AND u.usu_nivel <= '.$_SESSION['v_usu_nivel'].' ';
+        $sql .= ' AND (u.usu_codigo = '.$_SESSION['v_usu_codigo'].' OR u.usu_nivel < '.$_SESSION['v_usu_nivel'].')';
     }
 
     //? Usuário logado tem permisão de ver somente os atendimentos dele

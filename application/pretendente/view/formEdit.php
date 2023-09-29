@@ -463,7 +463,10 @@ if(isset($_GET['tab'])){
                 // this.sectionShare = section;
             },
 
-            copyLink(id){                            
+            copyLink(id){     
+
+                this.toggleShare(null)
+
                 let url = this.getUrlImovel(id)                
                 var data = {
                     id: id,
@@ -482,6 +485,8 @@ if(isset($_GET['tab'])){
             },
 
             shareWhatsapp(id, whatsapp){
+                this.toggleShare(null)
+
                 let url = this.getUrlImovel(id)
                 var data = {
                     id: id,
