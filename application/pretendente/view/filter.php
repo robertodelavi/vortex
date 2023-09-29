@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $sql = '
     SELECT 
-        p.prw_codigo, 
+        IF((p.prw_usuario = '.$_SESSION['v_usu_codigo'].' OR u.usu_nivel < '.$_SESSION['v_usu_nivel'].'), p.prw_codigo, 0) AS prw_codigo, 
         p.prw_nome, 
         p.prw_email,     
         p.prw_psa_codigo, 
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //? Usuário logado só ve pretententes que foram cadastrados por ele mesmo e com niveis menores ao dele
     if($_SESSION['v_usu_nivel']){
-        $sql .= ' AND (u.usu_codigo = '.$_SESSION['v_usu_codigo'].' OR u.usu_nivel < '.$_SESSION['v_usu_nivel'].')';
+        $sql .= ' AND (u.usu_codigo = '.$_SESSION['v_usu_codigo'].' OR u.usu_nivel <= '.$_SESSION['v_usu_nivel'].')';
     }
 
     //? Usuário logado tem permisão de ver somente os atendimentos dele
