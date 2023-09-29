@@ -393,13 +393,15 @@ if(isset($_GET['tab'])){
     //* Histórico de atendimentos
     const openModalEditHistoricoAtendimento = (prh_pretendente, prh_codigo) => {
         if(prh_pretendente){
+            const data = { 
+                action: (prh_pretendente > 0 && prh_codigo > 0 ? '?module=pretendente&acao=updatehistorico_pretendente' : '?module=pretendente&acao=gravahistorico_pretendente'), 
+                prh_pretendente: parseInt(prh_pretendente), 
+                prh_codigo: parseInt(prh_codigo) 
+            }
+            console.log("🚀 ~ openModalEditHistoricoAtendimento ~ data:", data)
             fetch('application/pretendente/view/historicoAtendimentos/formHistoricoAtendimento.php', {
                 method: 'POST',
-                body: JSON.stringify({ 
-                    action: (prh_pretendente > 0 && prh_codigo > 0 ? '?module=pretendente&acao=updatehistorico_pretendente' : '?module=pretendente&acao=gravahistorico_pretendente'), 
-                    prh_pretendente: prh_pretendente, 
-                    prh_codigo: prh_codigo 
-                }),
+                body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -413,16 +415,16 @@ if(isset($_GET['tab'])){
     //* Visita 
     const openModalFormVisita = (prv_codigo, imo_codigo) => {
         if(imo_codigo){
-            console.log("🚀 ~ openModalFormVisita ~ imo_codigo:", imo_codigo)
+            const data = { 
+                action: prv_codigo ? '?module=pretendente&acao=updatevisita_pretendente' : '?module=pretendente&acao=gravavisita_pretendente', 
+                prv_codigo: prv_codigo,
+                imo_codigo: imo_codigo,
+                prv_pretendente: '<?php echo $_POST['param_0']; ?>',
+                prv_empresa: '<?php echo $_SESSION['v_emp_codigo']; ?>'
+            }
             fetch('application/pretendente/view/visita/formVisita.php', {
                 method: 'POST',
-                body: JSON.stringify({ 
-                    action: prv_codigo ? '?module=pretendente&acao=updatevisita_pretendente' : '?module=pretendente&acao=gravavisita_pretendente', 
-                    prv_codigo: prv_codigo,
-                    imo_codigo: imo_codigo,
-                    prv_pretendente: '<?php echo $_POST['param_0']; ?>',
-                    prv_empresa: '<?php echo $_SESSION['v_emp_codigo']; ?>'
-                }),
+                body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
                 }

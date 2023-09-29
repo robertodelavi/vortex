@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="flex-1 mt-5">
                     <div>
                         <label for="nome">Observação</label>
-                        <textarea name="prv_obs" class="form-input" rows="3">'.$result[0]['prv_obs'].'</textarea>                    
+                        <textarea name="prv_obs" class="form-input" rows="3">'.utf8_encode($result[0]['prv_obs']).'</textarea>                    
                     </div>
                 </div>
             </div>

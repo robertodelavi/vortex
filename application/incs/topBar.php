@@ -1,3 +1,13 @@
+<?php 
+    // Obtém usuário logado
+    $sql = '
+        SELECT usu_nome, usu_email
+        FROM sisusuarios
+        WHERE usu_codigo = "'.$_SESSION['v_usu_codigo'].'"
+        LIMIT 1';
+    $usuario = $data->find('dynamic', $sql);
+?>
+
 <div class="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-[#0e1726]">
     <div class="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
         <a href="<?php echo BASE_URL; ?>/?module=home" class="main-logo flex items-center shrink-0">
@@ -171,24 +181,26 @@
                 </template>
             </ul>
         </div>
-        <div class="dropdown flex-shrink-0" x-data="dropdown" @click.outside="open = false">
+
+        <!-- Usuário -->
+        <div class="dropdown" x-data="dropdown" @click.outside="open = false">
             <a href="javascript:;" class="relative group" @click="toggle()">
                 <span><img class="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100" src="<?php echo BASE_THEME_URL; ?>/assets/images/user-profile.jpeg" alt="image" /></span>
             </a>
-            <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0 text-dark dark:text-white-dark top-11 !py-0 w-[230px] font-semibold dark:text-white-light/90">
+            <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0 text-dark dark:text-white-dark top-11 !py-0 w-[300px] font-semibold dark:text-white-light/90">
                 <li>
                     <div class="flex items-center px-4 py-4">
                         <div class="flex-none">
                             <img class="rounded-md w-10 h-10 object-cover" src="<?php echo BASE_THEME_URL; ?>/assets/images/user-profile.jpeg" alt="image" />
                         </div>
                         <div class="ltr:pl-4 rtl:pr-4">
-                            <h4 class="text-base">John Doe<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span></h4>
-                            <a class="text-black/60  hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;">johndoe@gmail.com</a>
+                            <h4 class="text-base"><?php echo $usuario[0]['usu_nome']; ?><span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span></h4>
+                            <a class="text-black/60 text-sm hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;"><?php echo $usuario[0]['usu_email']; ?></a>
                         </div>
                     </div>
                 </li>
-                <li>
-                    <a href="<?php echo BASE_THEME_URL; ?>/users/profile.php" class="dark:hover:text-white" @click="toggle">
+                <!-- <li>
+                    <a disabled href="<?php echo BASE_THEME_URL; ?>/users/profile.php" class="dark:hover:text-white" @click="toggle">
                         <svg class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
                             <path opacity="0.5" d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z" stroke="currentColor" stroke-width="1.5" />
@@ -215,7 +227,7 @@
                             </g>
                         </svg>
                         Lock Screen</a>
-                </li>
+                </li> -->
                 <li class="border-t border-white-light dark:border-white-light/10">
                     <a href="?module=index&acao=logout" class=" text-danger !py-3" @click="toggle">
                         <svg class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -7,11 +7,6 @@
     $usuarioLogado = $data->find('dynamic', $sql);
 
     $sql = '
-    SELECT * 
-    FROM situacaovenda';
-    $situacaoVenda = $data->find('dynamic', $sql);
-
-    $sql = '
     SELECT *
     FROM pretendentesstatusnegocio';
     $statusNegocio = $data->find('dynamic', $sql);
@@ -81,9 +76,8 @@
         <label>Situação</label>
         <select name="situacao" class="form-select text-white-dark">
             <option value="">-- Todos --</option>
-            <?php foreach ($situacaoVenda as $key => $value) { ?>
-                <option value="<?php echo $value['stv_codigo'] ?>"><?php echo $value['stv_descricao']; ?></option>
-            <?php } ?>
+            <option value="n">Em aberto</option>
+            <option value="s">Concluído</option>            
         </select>
     </div>
     <div>

@@ -37,6 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
     WHERE prw_codigo > 0 ';
 
+    //? Usuário logado só ve pretententes que cadastrados por usuários(corretores) com niveis <= ao dele
+    if($_SESSION['v_usu_nivel']){
+        $sql .= ' AND u.usu_nivel <= '.$_SESSION['v_usu_nivel'].' ';
+    }
+
     //? Usuário logado tem permisão de ver somente os atendimentos dele
     if($_SESSION['v_somente_atendimentos_meu'] == "s"){
         $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
@@ -45,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if($values){
         //? Nome
         if($values['nome']) $sql .= ' AND p.prw_nome LIKE "%'.$values['nome'].'%" ';
+        //? Situação 
+        if($values['situacao']) $sql .= ' AND p.prw_concluido = "'.$values['situacao'].'" ';
         //? E-mail
         if($values['email']) $sql .= ' AND p.prw_email LIKE "%'.$values['email'].'%" ';
         //? Telefones

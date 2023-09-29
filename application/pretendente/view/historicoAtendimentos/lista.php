@@ -49,9 +49,11 @@
                                     ) . 
                                 '</td>
                                 <td>     
-                                    <button type="button" x-tooltip="Editar Histórico de Atendimento" data-placement="left" class="mr-2 hover:text-info" @click="toggle; openModalEditHistoricoAtendimento(\'' . $_POST['param_0'] . '\', \'' . $row['prh_codigo'] . '\');">
-                                        '.file_get_contents('application/icons/edit.svg').'
-                                    </button> 
+                                    <div @click="toggle;">
+                                        <button type="button" x-tooltip="Editar Histórico de Atendimento" data-placement="left" class="mr-2 hover:text-info" @click="openModalEditHistoricoAtendimento(\'' . $_POST['param_0'] . '\', \'' . $row['prh_codigo'] . '\');">
+                                            '.file_get_contents('application/icons/edit.svg').'
+                                        </button>                                     
+                                    </div>
                                 </td>
                             </tr>';
                         }

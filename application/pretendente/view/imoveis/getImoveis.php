@@ -97,10 +97,12 @@ function mountTable($result, $BASE_URL_IMAGENS){
                                                 </div>
                                             </div>
                                         </div>                                     
-                                    </div>                           
-                                    <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="toggle2; () => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
-                                        ' . file_get_contents('../../../icons/flag.svg') . '
-                                    </button>';
+                                    </div>
+                                    <div @click="toggle2;" >
+                                        <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
+                                            ' . file_get_contents('../../../icons/flag.svg') . '
+                                        </button>
+                                    </div>';
 
                                     if($imovel['favorito'] == 1){
                                         $html .= '

@@ -173,7 +173,7 @@
                     }
 
                     if(data.data[0]['gasCentral'] != 'n'){
-                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoQuarto.svg'); ?><p class="mt-2 text-xs text-center">Gás Central</p></div>');
+                        item.push('<div class="'+tamanhoColuna+'"><?php echo file_get_contents('../../application/icons/icoGasCentral.svg'); ?><p class="mt-2 text-xs text-center">Gás Central</p></div>');
                         contItens++;
                     }
 

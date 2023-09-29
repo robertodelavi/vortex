@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 JOIN pretendentes AS p ON (ph.prh_pretendente = p.prw_codigo)
                 LEFT JOIN pretendentescontato AS pc ON (pc.pco_codigo = ph.prh_codigo)
                 LEFT JOIN sisusuarios AS u ON (ph.prh_usuario = u.usu_codigo)
-            WHERE ph.prh_pretendente = ' . $value['prh_pretendente'].' AND ph.prh_codigo = '.$value['prh_codigo'];
+            WHERE ph.prh_pretendente = "'.$value['prh_pretendente'].'" AND ph.prh_codigo = "'.$value['prh_codigo'].'"';
             $result = $data->find('dynamic', $sql);
         }
 
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="flex-1 mt-5">
                     <div>
                         <label for="nome">Descrição</label>
-                        <textarea name="prh_descricao" class="form-input" rows="3">'.$result[0]['prh_descricao'].'</textarea>                        
+                        <textarea name="prh_descricao" class="form-input" rows="3">'.utf8_encode($result[0]['prh_descricao']).'</textarea>                        
                     </div>
                 </div>
             </div>

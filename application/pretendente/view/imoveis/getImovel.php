@@ -26,12 +26,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             i.imo_areacomum,
             i.imo_areagaragem,
             tc.tcn_descricao AS tipoconstrucao,
+            u.uti_descricao AS utilizacao,
+            i.imo_edificio,
+            i.imo_pontoreferencia,
+            i.imo_posicao,
+            i.imo_elevadores,
+            tp.tpp_descricao AS tipoPiso,
+            i.imo_salaestar,
+            i.imo_salatv,
+            i.imo_lareira,
+            i.imo_cozinha,      
+            i.imo_areadeservico,
+            i.imo_dependenciaempregada,
+            i.imo_gascentral,
+            i.imo_playground,
+            i.imo_lavabo,
+            i.imo_churrasqueira,
+            i.imo_salaofestas,
+            i.imo_sacada,
+            i.imo_pocoartesiano,
+            i.imo_portaoeletronico,
+            i.imo_condominiofechado,
+            i.imo_arealazer,
+            i.imo_piscina,
+            i.imo_terraco,      
 
             ((iv.imv_valor*m.moe_valor)/100) AS imv_valor
         FROM imoveis AS i
             INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
             LEFT JOIN tipoconstrucao AS tc ON (i.imo_tipoconstrucao = tc.tcn_codigo)
             LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
+            LEFT JOIN utilizacao AS u ON (i.imo_utilizacao = u.uti_codigo)
+            LEFT JOIN tipopiso AS tp ON (i.imo_tipopiso = tp.tpp_codigo)
             LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
             LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
         WHERE i.imo_codigo = ' . $value['id'];
