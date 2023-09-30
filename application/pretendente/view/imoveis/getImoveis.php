@@ -25,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $BASE_URL_IMAGENS = $_SESSION['BASE_URL_IMAGENS'];
 
         //* IMÓVEIS
-        $html = '<p class="font-semibold text-lg dark:text-white-light my-3">Imóveis</p>';
+        $html = '';
+        $html = $value['mode'] != 'table' ? '<p class="font-semibold text-lg dark:text-white-light my-3">Imóveis</p>' : '';
         $html .= $value['mode'] == 'table' ? mountTable($resultImoveis, $BASE_URL_IMAGENS) : ($value['mode'] == 'grid' ? mountGrid($resultImoveis, $BASE_URL_IMAGENS) : mountList($resultImoveis, $BASE_URL_IMAGENS));                    
 
         //? Retorna resposta
@@ -36,6 +37,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 //* MONTA TABELA
 function mountTable($result, $BASE_URL_IMAGENS){
+    $values = [];
+    $rowData[0] = 'row 1';
+    $rowData[1] = 'row 1';
+    $rowData[2] = 'row 1';
+    $rowData[3] = 'row 1';
+    $rowData[4] = 'row 1';
+    $rowData[5] = 'row 1';
+    $rowData[6] = 'row 1';
+    $rowData[7] = 'row 1';
+    $rowData[8] = 'row 1';
+    $rowData[9] = 'row 1';
+    $rowData[10] = 'row 1';
+
+    // for com array de 7 posições 
+    for($i = 0; $i < 7; $i++){
+        $values[$i] = $rowData;
+    }
+
+    return $values;
+    exit;
+
+
+
     if($result && count($result) > 0){
         $html = '
         <div class="cursor-pointer border border-[#ebedf2] dark:border-[#191e3a] rounded-md hover:transition-colors duration-300 bg-white dark:bg-[#0e1726] p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),_0px_12px_24px_-4px_rgba(145,158,171,0.12)]">
@@ -102,20 +126,22 @@ function mountTable($result, $BASE_URL_IMAGENS){
                                         <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
                                             ' . file_get_contents('../../../icons/flag.svg') . '
                                         </button>
-                                    </div>';
-
-                                    if($imovel['favorito'] == 1){
-                                        $html .= '
-                                        <button type="button" x-tooltip="Desfavoritar imóvel" @click="() => setFavorite(false, ' . $imovel['imo_codigo'] . ')" >
-                                            ' . file_get_contents('../../../icons/starContained.svg') . '
-                                        </button>';
-                                    }else{
-                                        $html .= '
-                                        <button type="button" x-tooltip="Favoritar imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')" >
-                                            ' . file_get_contents('../../../icons/star.svg') . '
-                                        </button>';
-                                    }
-                                $html .= '
+                                    </div>
+                                    
+                                    <div>';
+                                        if($imovel['favorito'] == 1){
+                                            $html .= '                                            
+                                            <button type="button" x-tooltip="Desfavoritar imóvel" @click="() => setFavorite(false, ' . $imovel['imo_codigo'] . ')" >
+                                                ' . file_get_contents('../../../icons/starContained.svg') . '
+                                            </button>';
+                                        }else{
+                                            $html .= '                                               
+                                            <button type="button" x-tooltip="Favoritar imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')" >
+                                                ' . file_get_contents('../../../icons/star.svg') . '
+                                            </button>';
+                                        }
+                                    $html .= '                                    
+                                    </div>
                                 </div>
                             </td>                          
                         </tr>';

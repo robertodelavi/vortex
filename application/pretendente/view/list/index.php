@@ -64,7 +64,6 @@ foreach ($result as $row) {
     //
     array_push($tableResult, $arrRow);
 }
-
 function getProgressPercent($totalEtapas, $row){
     if(!$totalEtapas) $totalEtapas = 1;
     $percent = ($row['prw_psa_codigo'] * 100)/$totalEtapas;
@@ -215,6 +214,7 @@ if(isset($_GET['res'])){
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
     const arrData = <?php echo json_encode($tableResult); ?>;
+    console.log("🚀 ~ arrData:", arrData)
     const etapas = <?php echo json_encode($etapas); ?>;
 
     const selectUf = (uf) => {
@@ -263,7 +263,7 @@ if(isset($_GET['res'])){
                 this.datatable2 = new simpleDatatables.DataTable('#myTable2', {
                     data: {
                         headings: ['Nome do Pretendente', 'Status', 'Atendido por', 'Telefones', 'P. Atendimento', 'U. Atendimento', 'E-mail', 'Ações'],
-                        data: data
+                        data: data,
                     },
                     searchable: false,
                     perPage: 20,

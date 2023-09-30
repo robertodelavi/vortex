@@ -71,180 +71,183 @@ if(isset($_GET['tab'])){
 
 <div class="overflow-y-auto" x-data="lightbox">
     <div x-data="modal" >
-        <div class="pt-0">
-            <div class="flex items-center justify-between mb-5">
-                <div>
-                    <p>Pretendente</p>
-                    <h5 class="font-semibold text-lg dark:text-white-light "><?php echo $result[0]['prw_nome']; ?></h5>
-                </div>
+        <div >
+            <div class="pt-0">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <p>Pretendente</p>
+                        <h5 class="font-semibold text-lg dark:text-white-light "><?php echo $result[0]['prw_nome']; ?></h5>
+                    </div>
 
-                <div>
-                    <button type="button" onclick="nextPage('?module=pretendente&acao=lista_pretendente', '');" class="btn btn btn-outline-dark">
-                        <?php echo file_get_contents('application/icons/voltar.svg'); ?>
-                        <span class="hidden sm:block">Voltar</span>
-                    </button>   
+                    <div>
+                        <button type="button" onclick="nextPage('?module=pretendente&acao=lista_pretendente', '');" class="btn btn btn-outline-dark">
+                            <?php echo file_get_contents('application/icons/voltar.svg'); ?>
+                            <span class="hidden sm:block">Voltar</span>
+                        </button>   
+                    </div>
                 </div>
-            </div>
-        
-            <!-- ABAS -->
-            <div x-data="{tab: '<?php echo $currentTab; ?>'}">
-                <ul
-                    class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
-                    <li class="inline-block">
-                        <a href="javascript:;"
-                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                            :class="{'!border-primary text-primary' : tab == 'pretendente'}" @click="tab='pretendente'">
-        
-                            <?php echo file_get_contents('application/icons/pessoa2.svg'); ?>
-                            <span class="hidden sm:block">Dados Gerais</span>
-                        </a>
-                    </li>
-                    <li class="inline-block">
-                        <a href="javascript:;"
-                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                            :class="{'!border-primary text-primary' : tab == 'perfis'}" @click="tab='perfis'">
-        
-                            <?php echo file_get_contents('application/icons/perfis.svg'); ?>
-                            <span class="hidden sm:block">Perfis de Busca</span>
-                        </a>
-                    </li>
-                    <li class="inline-block">
-                        <a href="javascript:;"
-                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                            :class="{'!border-primary text-primary' : tab == 'historico-atendimentos'}"
-                            @click="tab='historico-atendimentos'">
-        
-                            <?php echo file_get_contents('application/icons/historico.svg'); ?>
-                            <span class="hidden sm:block">Histórico de Atendimentos</span>
-                        </a>
-                    </li>
-                    <li class="inline-block">
-                        <a href="javascript:;"
-                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                            :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
-                            onClick="getImoveis(null, 'table')">
-                            <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
-                            <span class="hidden sm:block">Imóveis</span>
-                        </a>
-                    </li>
-                    <li class="inline-block">
-                        <a href="javascript:;"
-                            class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                            :class="{'!border-primary text-primary' : tab == 'visita'}" @click="tab='visita'" >
-                            <?php echo file_get_contents('application/icons/flag.svg'); ?>
-                            <span class="hidden sm:block">Visita</span>
-                        </a>
-                    </li>
-                </ul>
-        
-                <!-- DADOS DO PRETENDENTE -->
-                <template x-if="tab === 'pretendente'">
-                    <form method="POST" action="?module=pretendente&acao=updatedados_pretendente" class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]">
-                        <div class="flex justify-between mb-4">
-                            <div>
-                                <h5 class="text-lg font-semibold">Dados Gerais</h5>
-                            </div>    
-                            <div>
-                                <button type="submit" class="btn btn-primary">Salvar</button>
-                            </div>            
-                        </div>   
-                        
-                        <input type="hidden" name="prw_codigo" value="<?php echo $_POST['param_0']; ?>" />
-                        
-                        <?php include_once('application/pretendente/view/dadosPretendente/formDadosPretendente.php'); ?>
-                    </form>
-                </div>
-                </template>
-        
-                <!-- PERFIS DE BUSCA -->        
-                <template x-if="tab === 'perfis'"> 
-                    <?php include_once('application/pretendente/view/perfilBusca/lista.php'); ?>
-                </template>
-        
-                <!-- HISTÓRICO DE ATENDIMENTOS -->
-                <template x-if="tab === 'historico-atendimentos'">
-                    <?php include_once('application/pretendente/view/historicoAtendimentos/lista.php'); ?>
-                </template>
-        
-                <!-- IMÓVEIS -->
-                <template x-if="tab === 'imoveis'"> 
-                    <!-- Se tem perfil de busca, mostra os imóveis sugeridos -->
-                    <?php 
-                    if($resultPerfilBusca[0]['qtd'] > 0){ 
-                    ?>                        
-                        <form x-on:submit="submitForm($event)" id="formFilterId" >
-                            <!-- Filtros (mobile) -->   
-                            <div class="block sm:hidden overflow-y-auto mb-4" >
-                                <div class="panel space-y-4 " >
-                                    <div class="flex items-center justify-between">
-                                        <p class="font-semibold text-lg dark:text-white-light">Filtros</p>
-                                        <button class="btn btn-sm btn-outline-primary" @click="toggleFilter">
-                                            <?php echo file_get_contents('application/icons/filter.svg'); ?>
-                                        </button>
-                                    </div>
-                                    <div x-show="openFilter" x-transition x-transition.duration.300 class="overflow-hidden">
-                                        <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
-                                    </div>
-                                </div>        
-                            </div>
-    
-                            <div class="flex gap-3 relative">                
-                                <!-- Filtros (desktop) -->
-                                <div class="hidden sm:block w-1/5">
-                                    <div class="panel h-full">
-                                        <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
-                                            Filtros
-                                        </h5>
-                                        <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
-                                    </div>
-                                </div>
-                                <div class="w-full " >            
-                                    <!-- Imóveis vindo do ajax -->
-                                    <div class="relative" id="resulAjaxImoveis"></div>    
-                                </div>
-                                <!-- Botão com modo de exibição (tabela/grid/list) -->
-                                <div class="hidden sm:block absolute right-0 top-0">
-                                    <div class="flex gap-1 ">
-                                        <button type="button" x-tooltip="Visualização em Tabela" data-theme="primary" class="btn" :class="{'btn-primary' : modeView == 'table', 'btn-outline-primary' : modeView != 'table'}" @click="setModeView('table')">
-                                            <?php echo file_get_contents('application/icons/table.svg'); ?>
-                                        </button>
-                                        <button type="button" x-tooltip="Visualização em Grade" data-theme="primary" class="btn" :class="{'btn-primary' : modeView == 'grid', 'btn-outline-primary' : modeView != 'grid'}" @click="setModeView('grid')">
-                                            <?php echo file_get_contents('application/icons/grid.svg'); ?>
-                                        </button>
-                                        <button type="button" x-tooltip="Visualização em Lista" data-theme="primary" class="btn" :class="{'btn-primary': modeView == 'list', 'btn-outline-primary' : modeView != 'list'}" @click="setModeView('list')">
-                                            <?php echo file_get_contents('application/icons/list.svg'); ?>
-                                        </button>
-                                    </div>
-                                </div>                                    
-                            </div>                             
-                        </form>                        
-                    <?php 
-                    }
-                    // Se não tem perfil de busca, mostra mensagem de que não tem perfil de busca
-                    if($resultPerfilBusca[0]['qtd'] == 0){ ?>
-                        <div class="flex items-start min-h-screen mt-4">
-                            <div class="">                                                                  
-                                <span class="ltr:pr-2 rtl:pl-2 flex items-center gap-2 mb-4 ">
-                                    <?php echo file_get_contents('application/icons/warning.svg'); ?>
-                                    Não há perfil de busca cadastrado para este pretendente.
-                                </span>
-                                <a href="javascript:;" class="text-primary hover:text-primary-dark/70" @click="tab='perfis'">
-                                    <button type="button" class="btn btn-primary">
-                                        Cadastrar perfil de busca
-                                    </button>                                        
-                                </a>                                
-                            </div>
+            
+                <!-- ABAS -->
+                <div x-data="{tab: '<?php echo $currentTab; ?>'}">
+                    <ul
+                        class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
+                        <li class="inline-block">
+                            <a href="javascript:;"
+                                class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                :class="{'!border-primary text-primary' : tab == 'pretendente'}" @click="tab='pretendente'">
+            
+                                <?php echo file_get_contents('application/icons/pessoa2.svg'); ?>
+                                <span class="hidden sm:block">Dados Gerais</span>
+                            </a>
+                        </li>
+                        <li class="inline-block">
+                            <a href="javascript:;"
+                                class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                :class="{'!border-primary text-primary' : tab == 'perfis'}" @click="tab='perfis'">
+            
+                                <?php echo file_get_contents('application/icons/perfis.svg'); ?>
+                                <span class="hidden sm:block">Perfis de Busca</span>
+                            </a>
+                        </li>
+                        <li class="inline-block">
+                            <a href="javascript:;"
+                                class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                :class="{'!border-primary text-primary' : tab == 'historico-atendimentos'}"
+                                @click="tab='historico-atendimentos'">
+            
+                                <?php echo file_get_contents('application/icons/historico.svg'); ?>
+                                <span class="hidden sm:block">Histórico de Atendimentos</span>
+                            </a>
+                        </li>
+                        <li class="inline-block">
+                            <a href="javascript:;"
+                                class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
+                                onClick="getImoveis(null, 'table')">
+                                <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
+                                <span class="hidden sm:block">Imóveis</span>
+                            </a>
+                        </li>
+                        <li class="inline-block">
+                            <a href="javascript:;"
+                                class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                :class="{'!border-primary text-primary' : tab == 'visita'}" @click="tab='visita'" >
+                                <?php echo file_get_contents('application/icons/flag.svg'); ?>
+                                <span class="hidden sm:block">Visita</span>
+                            </a>
+                        </li>
+                    </ul>
+            
+                    <!-- DADOS DO PRETENDENTE -->
+                    <template x-if="tab === 'pretendente'">
+                        <form method="POST" action="?module=pretendente&acao=updatedados_pretendente" class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]">
+                            <div class="flex justify-between mb-4">
+                                <div>
+                                    <h5 class="text-lg font-semibold">Dados Gerais</h5>
+                                </div>    
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>            
+                            </div>   
                             
-                        </div>
-                    <?php 
-                    }
-                    ?>
-                </template>
+                            <input type="hidden" name="prw_codigo" value="<?php echo $_POST['param_0']; ?>" />
+                            
+                            <?php include_once('application/pretendente/view/dadosPretendente/formDadosPretendente.php'); ?>
+                        </form>
+                    </div>
+                    </template>
+            
+                    <!-- PERFIS DE BUSCA -->        
+                    <template x-if="tab === 'perfis'"> 
+                        <?php include_once('application/pretendente/view/perfilBusca/lista.php'); ?>
+                    </template>
+            
+                    <!-- HISTÓRICO DE ATENDIMENTOS -->
+                    <template x-if="tab === 'historico-atendimentos'">
+                        <?php include_once('application/pretendente/view/historicoAtendimentos/lista.php'); ?>
+                    </template>
+            
+                    <!-- IMÓVEIS -->
+                    <template x-if="tab === 'imoveis'"> 
+                        <!-- Se tem perfil de busca, mostra os imóveis sugeridos -->
+                        <?php 
+                        if($resultPerfilBusca[0]['qtd'] > 0){ 
+                        ?>  
+                            
+                            <form x-on:submit="submitForm($event)" id="formFilterId" >
+                                <!-- Filtros (mobile) -->   
+                                <div class="block sm:hidden overflow-y-auto mb-4" >
+                                    <div class="panel space-y-4 " >
+                                        <div class="flex items-center justify-between">
+                                            <p class="font-semibold text-lg dark:text-white-light">Filtros</p>
+                                            <button class="btn btn-sm btn-outline-primary" @click="toggleFilter">
+                                                <?php echo file_get_contents('application/icons/filter.svg'); ?>
+                                            </button>
+                                        </div>
+                                        <div x-show="openFilter" x-transition x-transition.duration.300 class="overflow-hidden">
+                                            <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                        </div>
+                                    </div>        
+                                </div>
+        
+                                <div class="flex gap-3 relative">                
+                                    <!-- Filtros (desktop) -->
+                                    <div class="hidden sm:block w-1/5">
+                                        <div class="panel h-full">
+                                            <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
+                                                Filtros
+                                            </h5>
+                                            <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                        </div>
+                                    </div>
+                                    <div class="w-full " >     
+                                        <!-- Imóveis vindo do ajax -->
+                                        <div class="relative" id="resulAjaxImoveis"></div>   
+                                    </div>
+                                    <!-- Botão com modo de exibição (tabela/grid/list) -->
+                                    <div class="hidden sm:block absolute right-0 top-0">
+                                        <div class="flex gap-1 ">
+                                            <button type="button" x-tooltip="Visualização em Tabela" data-theme="primary" class="btn" :class="{'btn-primary' : modeView == 'table', 'btn-outline-primary' : modeView != 'table'}" @click="setModeView('table')">
+                                                <?php echo file_get_contents('application/icons/table.svg'); ?>
+                                            </button>
+                                            <button type="button" x-tooltip="Visualização em Grade" data-theme="primary" class="btn" :class="{'btn-primary' : modeView == 'grid', 'btn-outline-primary' : modeView != 'grid'}" @click="setModeView('grid')">
+                                                <?php echo file_get_contents('application/icons/grid.svg'); ?>
+                                            </button>
+                                            <button type="button" x-tooltip="Visualização em Lista" data-theme="primary" class="btn" :class="{'btn-primary': modeView == 'list', 'btn-outline-primary' : modeView != 'list'}" @click="setModeView('list')">
+                                                <?php echo file_get_contents('application/icons/list.svg'); ?>
+                                            </button>
+                                        </div>
+                                    </div>                                    
+                                </div>                             
+                            </form>                        
+                        <?php 
+                        }
+                        // Se não tem perfil de busca, mostra mensagem de que não tem perfil de busca
+                        if($resultPerfilBusca[0]['qtd'] == 0){ ?>
+                            <div class="flex items-start min-h-screen mt-4">
+                                <div class="">                                                                  
+                                    <span class="ltr:pr-2 rtl:pl-2 flex items-center gap-2 mb-4 ">
+                                        <?php echo file_get_contents('application/icons/warning.svg'); ?>
+                                        Não há perfil de busca cadastrado para este pretendente.
+                                    </span>
+                                    <a href="javascript:;" class="text-primary hover:text-primary-dark/70" @click="tab='perfis'">
+                                        <button type="button" class="btn btn-primary">
+                                            Cadastrar perfil de busca
+                                        </button>                                        
+                                    </a>                                
+                                </div>
+                                
+                            </div>
+                        <?php 
+                        }
+                        ?>
+                    </template>
 
-                <!-- VISITA -->        
-                <template x-if="tab === 'visita'"> 
-                    <?php include_once('application/pretendente/view/visita/lista.php'); ?>
-                </template>
+                    <!-- VISITA -->        
+                    <template x-if="tab === 'visita'"> 
+                        <?php include_once('application/pretendente/view/visita/lista.php'); ?>
+                    </template>
+                </div>
             </div>
         </div>
 
@@ -291,6 +294,7 @@ if(isset($_GET['tab'])){
     </div>
 </div>
 
+<script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
     //* GLOBAL: mode view (grid ou list)
     let modeView = '<?php echo $_GET['mode'] != '' ? $_GET['mode'] : 'table'; ?>';
@@ -307,31 +311,144 @@ if(isset($_GET['tab'])){
         })        
     }
 
+    const getTableImoveisInitialValues = () => {
+        const values = [];
+        const rowData = [
+            'row 1', 
+            'row 2',
+            'row 3',
+            'row 4',
+            'row 5',
+            'row 6',
+            'row 7',
+            'row 8',
+            'row 9',
+            'row 10',
+            'row 11'
+        ];
+        
+        for (let i = 0; i < 200; i++) {
+            values.push(rowData);
+        }
+
+        return values;
+    }   
+
+    // Inicializa boxTableImoveis 
+    // document.addEventListener("alpine:init", () => {
+    //     Alpine.data("boxTableImoveis", () => ({
+    //         tableImoveis: null,
+    //         currentData: [], // Valores vindos do ajax (getImoveis.php)
+    //         open: false,
+    //         open2: false,
+    //         open3: false,
+        
+    //         // init() {
+    //         //     this.updateTable(this.currentData)
+    //         // },
+    //     }));
+    // });
+
+    /* ALPINE TABLE */
+    const createAlpineTable = (values) => {
+        console.log('CRIA ALPINE TABLE: ', values)        
+        document.addEventListener("alpine:init", () => {
+            Alpine.data("boxTableImoveis", () => ({
+                tableImoveis: null,
+                currentData: values, // Valores vindos do ajax (getImoveis.php)
+                open: false,
+                open2: false,
+                open3: false,
+            
+                init() {
+                    this.updateTable(this.currentData)
+                },
+
+                updateTable(data) {
+                    console.log("🚀 ~ updateTable ~ data:", data)
+                    if (this.tableImoveis) {
+                        this.tableImoveis.destroy();
+                    }
+
+                    this.tableImoveis = new simpleDatatables.DataTable("#tableImoveis", {
+                        data: {
+                            headings: [
+                                'Foto',
+                                'Código',
+                                'Tipo',
+                                'Bairro',
+                                'B',
+                                'D',
+                                'S',
+                                'VG',
+                                'Área construída',
+                                'Valor',
+                                'Ações'
+                            ],
+                            data: data
+                        },
+                        searchable: false,
+                        perPage: 20,
+                        perPageSelect: [10, 20, 30, 50, 100],
+                        columns: [
+                            {
+                                select: 0,
+                                sortable: true,
+                                searchable: true,
+                            },                        
+                        ],
+                        firstLast: true,
+                        firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                        lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                        prevText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                        nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                        labels: {
+                            perPage: "{select}"
+                        },
+                        layout: {
+                            top: "{search}",
+                            bottom: "{info}{select}{pager}",
+                        },
+                    });
+                },
+            }));
+        });
+    }
+    createAlpineTable(getTableImoveisInitialValues())
+
     //* IMOVEIS    
     //* Atualiza imoveis sugeridos pro pretendente
     const getImoveis = (filters = null, mode = 'table') => {
-        console.log("🚀 ~ getImoveis:", mode)
         var data = {
             pretendente: <?php echo $_POST['param_0']; ?>,
             mode: mode,
             filters: filters
         };
         
-        //? Loading
-        setTimeout(() => {
-            document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex justify-center items-start min-h-screen mt-4"><div class="flex flex-col items-center"><span class="animate-spin border-4 border-primary border-l-transparent rounded-full w-12 h-12 mb-5"></span><p class="text-white-dark">Buscando imóveis pro seu perfil...</p></div></div>'
-        }, 30);
+        // ? Loading
+        // setTimeout(() => {
+        //     document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex justify-center items-start min-h-screen mt-4"><div class="flex flex-col items-center"><span class="animate-spin border-4 border-primary border-l-transparent rounded-full w-12 h-12 mb-5"></span><p class="text-white-dark">Buscando imóveis pro seu perfil...</p></div></div>'
+        // }, 30);
 
         fetch('application/pretendente/view/imoveis/getImoveis.php', {
             method: 'POST',
             body: JSON.stringify(data) // Converte o objeto em uma string JSON
         }).then(response => response.json()).then(data => {
-            console.log(data)
-            // Seta resultado do ajax na div        
-            document.getElementById('resulAjaxImoveis').innerHTML = data;
+            if(mode != 'table'){ //? Não é tabela, resultado vem montado via ajax            
+                document.getElementById('resulAjaxImoveis').innerHTML = data;
+            }else{              //? É tabela, resultado vem em json e monta a tabela aqui com Alpine.js
+                console.log('--> ', data)
+                // Cria elementos HTML
+                document.getElementById('resulAjaxImoveis').innerHTML = '<p class="font-semibold text-lg dark:text-white-light my-3">Imóveis</p><div x-data="boxTableImoveis"><table id="tableImoveis" class="tabela whitespace-nowrap"></table></div>';
+                
+                // Cria tabela com Alpine.js
+                setTimeout(() => {
+                    createAlpineTable(getTableImoveisInitialValues())
+                }, 300);
+            }
         })
     }
-    getImoveis(null, modeView)
+    // getImoveis(null, modeView)
 
     const getImovel = (id) => {
         var data = {
