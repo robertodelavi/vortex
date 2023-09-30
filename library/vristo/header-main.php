@@ -9,7 +9,7 @@
 <head>
     <meta charset='utf-8' />
     <meta http-equiv='Content-Security-Policy' content='IE=edge' />
-    <title>VORTEX</title>
+    <title>Vórtex - Simplificando a sua gestão Imobiliária</title>
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_THEME_URL; ?>/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
