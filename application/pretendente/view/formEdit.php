@@ -484,6 +484,7 @@ if(isset($_GET['tab'])){
                     mode: mode,
                     filters: filters
                 };
+                console.log("🚀 ~ getImoveis ~ data:", mode, data)
                 
                 // ? Loading
                 setTimeout(() => {                    
@@ -640,7 +641,7 @@ if(isset($_GET['tab'])){
                     // console.log('imoveis ===> ', key, value);
                 }                
                 
-                getImoveis(filters, modeView)
+                this.getImoveis(filters, modeView)
             },
 
             limpaFiltros() {
@@ -648,7 +649,7 @@ if(isset($_GET['tab'])){
                     select.selectedIndex = 0;
                 })
                 document.getElementById('formFilterId').reset();                
-                getImoveis(null, modeView)
+                this.getImoveis(null, modeView)
             },
         }));
     }); 

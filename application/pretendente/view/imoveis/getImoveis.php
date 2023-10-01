@@ -38,124 +38,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 function mountTable($result, $BASE_URL_IMAGENS){
     $values = [];
     
-    foreach ($result as $i => $imovel) {
-        $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
-        //
-        $row[0] = '<div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-full overflow-hidden h-10 w-10"><div class="bg-cover bg-center h-full" style="background-image: url('.$foto.');" ></div></div>';
-        $row[1] = $imovel['imo_codigo'];
-        $row[2] = $imovel['tpi_descricao'];
-        $row[3] = $imovel['bai_descricao'];
-        $row[4] = $imovel['imo_banheiros'];
-        $row[5] = $imovel['imo_quartos'];
-        $row[6] = $imovel['imo_suites'];
-        $row[7] = $imovel['imo_garagem'];
-        $row[8] = ($imovel['imo_areaconstruida'] ? number_format(($imovel['imo_areaconstruida'] / 100), 0, ',', '.') : '0').'m²';
-        $row[9] = '<div class="text-success">R$ '.number_format(($imovel['imv_valor']/100), 2, ',', '.').'</div>';
-        //? Ações
-        $actions = '
-        <div class="flex items-center gap-2">     
-            <div>
-                <button @click="() => toggleShare('.$i.')" type="button" x-tooltip="Compartilhar este imóvel" data-theme="secondary" class="text-secondary relative" >
-                    ' . file_get_contents('../../../icons/compartilhar.svg') . '
-                </button> 
-                <div x-show="openShare && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1 z-50">
-                    <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
-                        <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
-                            <div class="text-primary">
-                                ' . file_get_contents('../../../icons/copiar.svg') . '
+    if($result && count($result) > 0){
+        foreach ($result as $i => $imovel) {
+            $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+            //
+            $row[0] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');"><div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-full overflow-hidden h-10 w-10"><div class="bg-cover bg-center h-full" style="background-image: url('.$foto.');" ></div></div></div>';
+            $row[1] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_codigo'].'</div>';
+            $row[2] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['tpi_descricao'].'</div>';
+            $row[3] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['bai_descricao'].'</div>';
+            $row[4] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_banheiros'].'</div>';
+            $row[5] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_quartos'].'</div>';
+            $row[6] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_suites'].'</div>';
+            $row[7] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_garagem'].'</div>';
+            $row[8] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.($imovel['imo_areaconstruida'] ? number_format(($imovel['imo_areaconstruida'] / 100), 0, ',', '.') : '0').'m²</div>';
+            $row[9] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');"><div class="text-success">R$ '.number_format(($imovel['imv_valor']/100), 2, ',', '.').'</div></div>';
+            //? Ações
+            $actions = '
+            <div class="flex items-center gap-2">     
+                <div>
+                    <button @click="() => toggleShare('.$i.')" type="button" x-tooltip="Compartilhar este imóvel" data-theme="secondary" class="text-secondary relative" >
+                        ' . file_get_contents('../../../icons/compartilhar.svg') . '
+                    </button> 
+                    <div x-show="openShare && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1 z-50">
+                        <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
+                            <div class="flex gap-1 items-center cursor-pointer" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
+                                <div class="text-primary">
+                                    ' . file_get_contents('../../../icons/copiar.svg') . '
+                                </div>
+                                <p class="text-sm">Copiar Link</p>                                                
                             </div>
-                            <p class="text-sm">Copiar Link</p>                                                
-                        </div>
-                        <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
-                            <div class="text-success">
-                                ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                            <div class="flex gap-1 items-center cursor-pointer" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
+                                <div class="text-success">
+                                    ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                                </div>
+                                <p class="text-sm">WhatsApp</p>                                                
                             </div>
-                            <p class="text-sm">WhatsApp</p>                                                
                         </div>
-                    </div>
-                </div>                                     
-            </div>
-            <div @click="toggle2;" >
-                <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
-                    ' . file_get_contents('../../../icons/flag.svg') . '
-                </button>
-            </div>            
-            <div>';
-                if($imovel['favorito'] == 1){
-                    $actions .= '                                          
-                    <button type="button" x-tooltip="Desfavoritar imóvel" @click="() => setFavorite(false, ' . $imovel['imo_codigo'] . ')" >
-                        ' . file_get_contents('../../../icons/starContained.svg') . '
-                    </button>';
-                }else{
-                    $actions .= '                                        
-                    <button type="button" x-tooltip="Favoritar imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')" >
-                        ' . file_get_contents('../../../icons/star.svg') . '
-                    </button>';
-                }
-            $actions .= '   
-            </div>                          
-        </div>';
-        $row[10] = $actions;        
-        //
-        $values[] = $row;
+                    </div>                                     
+                </div>
+                <div @click="toggle2;" >
+                    <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
+                        ' . file_get_contents('../../../icons/flag.svg') . '
+                    </button>
+                </div>            
+                <div>';
+                    if($imovel['favorito'] == 1){
+                        $actions .= '                                          
+                        <button type="button" x-tooltip="Desfavoritar imóvel" @click="() => setFavorite(false, ' . $imovel['imo_codigo'] . ')" >
+                            ' . file_get_contents('../../../icons/starContained.svg') . '
+                        </button>';
+                    }else{
+                        $actions .= '                                        
+                        <button type="button" x-tooltip="Favoritar imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')" >
+                            ' . file_get_contents('../../../icons/star.svg') . '
+                        </button>';
+                    }
+                $actions .= '   
+                </div>                          
+            </div>';
+            $row[10] = $actions;            
+            //
+            $values[] = $row;
+        }
+    }else{
+        $values = [];
     }
 
     return $values;
-    exit;
-
-    if($result && count($result) > 0){
-        $html = '
-        <div class="cursor-pointer border border-[#ebedf2] dark:border-[#191e3a] rounded-md hover:transition-colors duration-300 bg-white dark:bg-[#0e1726] p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),_0px_12px_24px_-4px_rgba(145,158,171,0.12)]">
-            <table id="table-imoveis">
-                <thead>
-                    <tr>
-                        <th class="text-center">Foto</th>
-                        <th>Código</th>
-                        <th>Tipo</th>
-                        <th>Bairro</th>
-                        <th>B</th>
-                        <th>D</th>
-                        <th>S</th>
-                        <th>VG</th>
-                        <th>Área construída</th>
-                        <th>Valor</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>';   
-                    foreach ($result as $i => $imovel) {
-                        $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
-                        $html .= '
-                        <tr class="dark:hover:bg-[#191e3a] hover:bg-[#ebedf2]">
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">
-                                <div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-full overflow-hidden h-10 w-10"  >
-                                    <div class="bg-cover bg-center h-full" style="background-image: url('.$foto.');" ></div>
-                                </div>
-                            </td>
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_codigo'].'</td>
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['tpi_descricao'].'</td>
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['bai_descricao'].'</td>
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_banheiros'].'</td>                            
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_quartos'].'</td>                            
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_suites'].'</td>                            
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_garagem'].'</td>                            
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.($imovel['imo_areaconstruida'] ? number_format(($imovel['imo_areaconstruida'] / 100), 0, ',', '.') : '0').'m²</td>                            
-                            <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');" class="text-success">R$ '.number_format(($imovel['imv_valor']/100), 2, ',', '.').'</td>  
-                            <!-- Ações -->
-                            <td>
-                                
-                            </td>                          
-                        </tr>';
-                    }                    
-                $html .= '
-                </tbody>
-            </table>
-        </div>';
-    }else{
-        $html = '<p class="text-md">Nenhum imóvel encontrado</p>';
-    }
-
-    return $html;
 }
 
 //* MONTA GRID
