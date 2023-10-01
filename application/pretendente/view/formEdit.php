@@ -123,7 +123,7 @@ if(isset($_GET['tab'])){
                         <li class="inline-block">
                             <a href="javascript:;"
                                 class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                                :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="getImoveis(null, 'table'); tab='imoveis'"
+                                :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="setVisualizationMode(); tab='imoveis'"
                                 onClick="">
                                 <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
                                 <span class="hidden sm:block">Imóveis</span>
@@ -328,8 +328,6 @@ if(isset($_GET['tab'])){
         })
     }
     
-    
-    
     //* Perfil de busca
     const openModalEditPerfil = (ppf_pretendente, ppf_codigo) => {        
         if (ppf_pretendente) {
@@ -418,6 +416,13 @@ if(isset($_GET['tab'])){
             // table imoveis
             tableImoveis: null,
             currentTableImoveis: [],
+            isMobile: window.innerWidth <= 640, // Define a largura limite para considerar como celular
+
+            setVisualizationMode() {
+                const mode = this.isMobile ? 'grid' : 'table';
+                this.modeView = mode
+                this.getImoveis(null, mode);
+            },
             
             toggleShare(i) {
                 this.openShare = !this.openShare;
@@ -448,7 +453,7 @@ if(isset($_GET['tab'])){
                         data: data
                     },
                     searchable: false,
-                    // perPage: 20,
+                    perPage: 40,
                     perPageSelect: [10, 20, 30, 50, 100],
                     columns: [
                         {

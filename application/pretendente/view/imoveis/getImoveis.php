@@ -37,19 +37,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 //* MONTA TABELA
 function mountTable($result, $BASE_URL_IMAGENS){
     $values = [];
-    $row = [];
-    for($i=0; $i< 11; $i++){
-        $row[] = 'get imoveis '.$i;
-    }
-
-    for($i=0; $i< 200; $i++){
+    
+    foreach ($result as $i => $imovel) {
+        $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+        //
+        $row[0] = '<div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-full overflow-hidden h-10 w-10"><div class="bg-cover bg-center h-full" style="background-image: url('.$foto.');" ></div></div>';
+        $row[1] = $imovel['imo_codigo'];
+        $row[2] = $imovel['tpi_descricao'];
+        $row[3] = $imovel['bai_descricao'];
+        $row[4] = $imovel['imo_banheiros'];
+        $row[5] = $imovel['imo_quartos'];
+        $row[6] = $imovel['imo_suites'];
+        $row[7] = $imovel['imo_garagem'];
+        $row[8] = ($imovel['imo_areaconstruida'] ? number_format(($imovel['imo_areaconstruida'] / 100), 0, ',', '.') : '0').'m²';
+        $row[9] = '<div class="text-success">R$ '.number_format(($imovel['imv_valor']/100), 2, ',', '.').'</div>';
+        //? Ações
+        $actions = '
+        <div class="flex items-center gap-2">     
+            <div>
+                <button @click="() => toggleShare('.$i.')" type="button" x-tooltip="Compartilhar este imóvel" data-theme="secondary" class="text-secondary relative" >
+                    ' . file_get_contents('../../../icons/compartilhar.svg') . '
+                </button> 
+                <div x-show="openShare && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1 z-50">
+                    <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
+                        <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
+                            <div class="text-primary">
+                                ' . file_get_contents('../../../icons/copiar.svg') . '
+                            </div>
+                            <p class="text-sm">Copiar Link</p>                                                
+                        </div>
+                        <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
+                            <div class="text-success">
+                                ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                            </div>
+                            <p class="text-sm">WhatsApp</p>                                                
+                        </div>
+                    </div>
+                </div>                                     
+            </div>
+            <div @click="toggle2;" >
+                <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
+                    ' . file_get_contents('../../../icons/flag.svg') . '
+                </button>
+            </div>            
+            <div>';
+                if($imovel['favorito'] == 1){
+                    $actions .= '                                          
+                    <button type="button" x-tooltip="Desfavoritar imóvel" @click="() => setFavorite(false, ' . $imovel['imo_codigo'] . ')" >
+                        ' . file_get_contents('../../../icons/starContained.svg') . '
+                    </button>';
+                }else{
+                    $actions .= '                                        
+                    <button type="button" x-tooltip="Favoritar imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')" >
+                        ' . file_get_contents('../../../icons/star.svg') . '
+                    </button>';
+                }
+            $actions .= '   
+            </div>                          
+        </div>';
+        $row[10] = $actions;        
+        //
         $values[] = $row;
     }
 
     return $values;
     exit;
-
-
 
     if($result && count($result) > 0){
         $html = '
@@ -91,49 +143,7 @@ function mountTable($result, $BASE_URL_IMAGENS){
                             <td @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');" class="text-success">R$ '.number_format(($imovel['imv_valor']/100), 2, ',', '.').'</td>  
                             <!-- Ações -->
                             <td>
-                                <div class="flex items-center gap-2">     
-                                    <div>
-                                        <button @click="() => toggleShare('.$i.')" type="button" x-tooltip="Compartilhar este imóvel" data-theme="secondary" class="text-secondary relative" >
-                                            ' . file_get_contents('../../../icons/compartilhar.svg') . '
-                                        </button> 
-                                        <div x-show="openShare && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1 z-50">
-                                            <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
-                                                <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
-                                                    <div class="text-primary">
-                                                        ' . file_get_contents('../../../icons/copiar.svg') . '
-                                                    </div>
-                                                    <p class="text-sm">Copiar Link</p>                                                
-                                                </div>
-                                                <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
-                                                    <div class="text-success">
-                                                        ' . file_get_contents('../../../icons/whatsapp.svg') . '
-                                                    </div>
-                                                    <p class="text-sm">WhatsApp</p>                                                
-                                                </div>
-                                            </div>
-                                        </div>                                     
-                                    </div>
-                                    <div @click="toggle2;" >
-                                        <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
-                                            ' . file_get_contents('../../../icons/flag.svg') . '
-                                        </button>
-                                    </div>
-                                    
-                                    <div>';
-                                        if($imovel['favorito'] == 1){
-                                            $html .= '                                            
-                                            <button type="button" x-tooltip="Desfavoritar imóvel" @click="() => setFavorite(false, ' . $imovel['imo_codigo'] . ')" >
-                                                ' . file_get_contents('../../../icons/starContained.svg') . '
-                                            </button>';
-                                        }else{
-                                            $html .= '                                               
-                                            <button type="button" x-tooltip="Favoritar imóvel" data-theme="warning" @click="() => setFavorite(true, ' . $imovel['imo_codigo'] . ')" >
-                                                ' . file_get_contents('../../../icons/star.svg') . '
-                                            </button>';
-                                        }
-                                    $html .= '                                    
-                                    </div>
-                                </div>
+                                
                             </td>                          
                         </tr>';
                     }                    
