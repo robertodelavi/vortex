@@ -25,9 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $BASE_URL_IMAGENS = $_SESSION['BASE_URL_IMAGENS'];
 
         //* IMÓVEIS
-        $html = '';
-        $html = $value['mode'] != 'table' ? '<p class="font-semibold text-lg dark:text-white-light my-3">Imóveis</p>' : '';
-        $html .= $value['mode'] == 'table' ? mountTable($resultImoveis, $BASE_URL_IMAGENS) : ($value['mode'] == 'grid' ? mountGrid($resultImoveis, $BASE_URL_IMAGENS) : mountList($resultImoveis, $BASE_URL_IMAGENS));                    
+        $title = $value['mode'] != 'table' ? '<p class="font-semibold text-lg dark:text-white-light my-3">Imóveis</p>' : '';
+        $html = $value['mode'] == 'table' ? mountTable($resultImoveis, $BASE_URL_IMAGENS) : ($value['mode'] == 'grid' ? $title.mountGrid($resultImoveis, $BASE_URL_IMAGENS) : $title.mountList($resultImoveis, $BASE_URL_IMAGENS));                    
 
         //? Retorna resposta
         echo json_encode($html);
@@ -38,21 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 //* MONTA TABELA
 function mountTable($result, $BASE_URL_IMAGENS){
     $values = [];
-    $rowData[0] = 'row 1';
-    $rowData[1] = 'row 1';
-    $rowData[2] = 'row 1';
-    $rowData[3] = 'row 1';
-    $rowData[4] = 'row 1';
-    $rowData[5] = 'row 1';
-    $rowData[6] = 'row 1';
-    $rowData[7] = 'row 1';
-    $rowData[8] = 'row 1';
-    $rowData[9] = 'row 1';
-    $rowData[10] = 'row 1';
+    $row = [];
+    for($i=0; $i< 11; $i++){
+        $row[] = 'get imoveis '.$i;
+    }
 
-    // for com array de 7 posições 
-    for($i = 0; $i < 7; $i++){
-        $values[$i] = $rowData;
+    for($i=0; $i< 200; $i++){
+        $values[] = $row;
     }
 
     return $values;

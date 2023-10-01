@@ -77,6 +77,7 @@ if(isset($_GET['tab'])){
                     <div>
                         <p>Pretendente</p>
                         <h5 class="font-semibold text-lg dark:text-white-light "><?php echo $result[0]['prw_nome']; ?></h5>
+                        
                     </div>
 
                     <div>
@@ -122,8 +123,8 @@ if(isset($_GET['tab'])){
                         <li class="inline-block">
                             <a href="javascript:;"
                                 class="flex items-center gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                                :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="tab='imoveis'"
-                                onClick="getImoveis(null, 'table')">
+                                :class="{'!border-primary text-primary' : tab == 'imoveis'}" @click="getImoveis(null, 'table'); tab='imoveis'"
+                                onClick="">
                                 <?php echo file_get_contents('application/icons/imoveis.svg'); ?>
                                 <span class="hidden sm:block">Imóveis</span>
                             </a>
@@ -169,6 +170,7 @@ if(isset($_GET['tab'])){
             
                     <!-- IMÓVEIS -->
                     <template x-if="tab === 'imoveis'"> 
+                        
                         <!-- Se tem perfil de busca, mostra os imóveis sugeridos -->
                         <?php 
                         if($resultPerfilBusca[0]['qtd'] > 0){ 
@@ -203,6 +205,7 @@ if(isset($_GET['tab'])){
                                     <div class="w-full " >     
                                         <!-- Imóveis vindo do ajax -->
                                         <div class="relative" id="resulAjaxImoveis"></div>   
+                                        <table id="tableImoveis" class="tabela whitespace-nowrap"></table>
                                     </div>
                                     <!-- Botão com modo de exibição (tabela/grid/list) -->
                                     <div class="hidden sm:block absolute right-0 top-0">
@@ -311,145 +314,6 @@ if(isset($_GET['tab'])){
         })        
     }
 
-    const getTableImoveisInitialValues = () => {
-        const values = [];
-        const rowData = [
-            'row 1', 
-            'row 2',
-            'row 3',
-            'row 4',
-            'row 5',
-            'row 6',
-            'row 7',
-            'row 8',
-            'row 9',
-            'row 10',
-            'row 11'
-        ];
-        
-        for (let i = 0; i < 200; i++) {
-            values.push(rowData);
-        }
-
-        return values;
-    }   
-
-    // Inicializa boxTableImoveis 
-    // document.addEventListener("alpine:init", () => {
-    //     Alpine.data("boxTableImoveis", () => ({
-    //         tableImoveis: null,
-    //         currentData: [], // Valores vindos do ajax (getImoveis.php)
-    //         open: false,
-    //         open2: false,
-    //         open3: false,
-        
-    //         // init() {
-    //         //     this.updateTable(this.currentData)
-    //         // },
-    //     }));
-    // });
-
-    /* ALPINE TABLE */
-    const createAlpineTable = (values) => {
-        console.log('CRIA ALPINE TABLE: ', values)        
-        document.addEventListener("alpine:init", () => {
-            Alpine.data("boxTableImoveis", () => ({
-                tableImoveis: null,
-                currentData: values, // Valores vindos do ajax (getImoveis.php)
-                open: false,
-                open2: false,
-                open3: false,
-            
-                init() {
-                    this.updateTable(this.currentData)
-                },
-
-                updateTable(data) {
-                    console.log("🚀 ~ updateTable ~ data:", data)
-                    if (this.tableImoveis) {
-                        this.tableImoveis.destroy();
-                    }
-
-                    this.tableImoveis = new simpleDatatables.DataTable("#tableImoveis", {
-                        data: {
-                            headings: [
-                                'Foto',
-                                'Código',
-                                'Tipo',
-                                'Bairro',
-                                'B',
-                                'D',
-                                'S',
-                                'VG',
-                                'Área construída',
-                                'Valor',
-                                'Ações'
-                            ],
-                            data: data
-                        },
-                        searchable: false,
-                        perPage: 20,
-                        perPageSelect: [10, 20, 30, 50, 100],
-                        columns: [
-                            {
-                                select: 0,
-                                sortable: true,
-                                searchable: true,
-                            },                        
-                        ],
-                        firstLast: true,
-                        firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-                        lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-                        prevText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-                        nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-                        labels: {
-                            perPage: "{select}"
-                        },
-                        layout: {
-                            top: "{search}",
-                            bottom: "{info}{select}{pager}",
-                        },
-                    });
-                },
-            }));
-        });
-    }
-    createAlpineTable(getTableImoveisInitialValues())
-
-    //* IMOVEIS    
-    //* Atualiza imoveis sugeridos pro pretendente
-    const getImoveis = (filters = null, mode = 'table') => {
-        var data = {
-            pretendente: <?php echo $_POST['param_0']; ?>,
-            mode: mode,
-            filters: filters
-        };
-        
-        // ? Loading
-        // setTimeout(() => {
-        //     document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex justify-center items-start min-h-screen mt-4"><div class="flex flex-col items-center"><span class="animate-spin border-4 border-primary border-l-transparent rounded-full w-12 h-12 mb-5"></span><p class="text-white-dark">Buscando imóveis pro seu perfil...</p></div></div>'
-        // }, 30);
-
-        fetch('application/pretendente/view/imoveis/getImoveis.php', {
-            method: 'POST',
-            body: JSON.stringify(data) // Converte o objeto em uma string JSON
-        }).then(response => response.json()).then(data => {
-            if(mode != 'table'){ //? Não é tabela, resultado vem montado via ajax            
-                document.getElementById('resulAjaxImoveis').innerHTML = data;
-            }else{              //? É tabela, resultado vem em json e monta a tabela aqui com Alpine.js
-                console.log('--> ', data)
-                // Cria elementos HTML
-                document.getElementById('resulAjaxImoveis').innerHTML = '<p class="font-semibold text-lg dark:text-white-light my-3">Imóveis</p><div x-data="boxTableImoveis"><table id="tableImoveis" class="tabela whitespace-nowrap"></table></div>';
-                
-                // Cria tabela com Alpine.js
-                setTimeout(() => {
-                    createAlpineTable(getTableImoveisInitialValues())
-                }, 300);
-            }
-        })
-    }
-    // getImoveis(null, modeView)
-
     const getImovel = (id) => {
         var data = {
             id: id
@@ -464,28 +328,7 @@ if(isset($_GET['tab'])){
         })
     }
     
-    //* Favoritar
-    const setFavorite = (action, id) => {
-        var data = {
-            action: action,
-            id: id,
-            pretendente: <?php echo $_POST['param_0']; ?>
-        };
-        if(data){
-            fetch('application/pretendente/view/imoveis/setFavorite.php', {
-                method: 'POST',
-                body: JSON.stringify(data) // Converte o objeto em uma string JSON
-            }).then(response => response.json()).then(data => {
-                setTimeout(() => {
-                    getImoveis(null, modeView)
-                }, 300);
     
-                action ? toast('Imóvel favoritado com sucesso!', 'warning', 300000) : toast('Imóvel desfavoritado com sucesso!', '', 30000)
-            }).catch(error => {
-                console.error('Erro ao enviar dados:', error);
-            });
-        }        
-    }
     
     //* Perfil de busca
     const openModalEditPerfil = (ppf_pretendente, ppf_codigo) => {        
@@ -571,17 +414,118 @@ if(isset($_GET['tab'])){
             openFilter: false,
             openShare: false,
             indexShare: null,
-            // sectionShare: null,
             modeView: modeView,
+            // table imoveis
+            tableImoveis: null,
+            currentTableImoveis: [],
             
             toggleShare(i) {
                 this.openShare = !this.openShare;
                 this.indexShare = i;
-                // this.sectionShare = section;
             },
 
-            copyLink(id){     
+            updateTableImoveis(data) {
+                console.log("🚀 ~ updateTable ~ data:", data)
+                if (this.tableImoveis) {
+                    this.tableImoveis.destroy();
+                }
 
+                this.tableImoveis = new simpleDatatables.DataTable("#tableImoveis", {
+                    data: {
+                        headings: [
+                            'Foto',
+                            'Código',
+                            'Tipo',
+                            'Bairro',
+                            'B',
+                            'D',
+                            'S',
+                            'VG',
+                            'Área construída',
+                            'Valor',
+                            'Ações'
+                        ],
+                        data: data
+                    },
+                    searchable: false,
+                    // perPage: 20,
+                    perPageSelect: [10, 20, 30, 50, 100],
+                    columns: [
+                        {
+                            select: 0,
+                            sortable: true,
+                            searchable: true,
+                        },                        
+                    ],
+                    firstLast: true,
+                    firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                    lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                    prevText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                    nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+                    labels: {
+                        perPage: "{select}"
+                    },
+                    layout: {
+                        top: "{search}",
+                        bottom: "{info}{pager}",
+                    },
+                });
+            },
+           
+            //* Atualiza imoveis sugeridos pro pretendente
+            getImoveis(filters = null, mode = 'table'){
+                var data = {
+                    pretendente: <?php echo $_POST['param_0']; ?>,
+                    mode: mode,
+                    filters: filters
+                };
+                
+                // ? Loading
+                setTimeout(() => {                    
+                    document.getElementById('resulAjaxImoveis').innerHTML = '<div class="flex justify-center items-start min-h-screen mt-4"><div class="flex flex-col items-center"><span class="animate-spin border-4 border-primary border-l-transparent rounded-full w-12 h-12 mb-5"></span><p class="text-white-dark">Buscando imóveis pro seu perfil...</p></div></div>'                
+                }, 30);
+
+                fetch('application/pretendente/view/imoveis/getImoveis.php', {
+                    method: 'POST',
+                    body: JSON.stringify(data) // Converte o objeto em uma string JSON
+                }).then(response => response.json()).then(data => {
+                    if(mode != 'table'){ //? Não é tabela, resultado vem montado via ajax   
+                        document.getElementById('resulAjaxImoveis').innerHTML = data;
+                        document.getElementById('tableImoveis').style.display = 'none';
+                        this.updateTableImoveis(null)
+                    }else{              //? É tabela, resultado vem em json e monta a tabela aqui com Alpine.js
+                        document.getElementById('resulAjaxImoveis').innerHTML = '<p class="font-semibold text-lg dark:text-white-light mt-3 mb-0">Imóveis</p>';      
+                        document.getElementById('tableImoveis').style.display = 'block';                                              
+                        // Atualiza tabela de dados com o resultado vindo do ajax
+                        this.updateTableImoveis(data)                    
+                    }
+                })
+            },
+
+            //* Favoritar
+            setFavorite(action, id){
+                var data = {
+                    action: action,
+                    id: id,
+                    pretendente: <?php echo $_POST['param_0']; ?>
+                };
+                if(data){
+                    fetch('application/pretendente/view/imoveis/setFavorite.php', {
+                        method: 'POST',
+                        body: JSON.stringify(data) // Converte o objeto em uma string JSON
+                    }).then(response => response.json()).then(data => {
+                        setTimeout(() => {
+                            this.getImoveis(null, modeView)
+                        }, 300);
+            
+                        action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
+                    }).catch(error => {
+                        console.error('Erro ao enviar dados:', error);
+                    });
+                }        
+            },
+
+            copyLink(id){
                 this.toggleShare(null)
 
                 let url = this.getUrlImovel(id)                
@@ -630,9 +574,10 @@ if(isset($_GET['tab'])){
             },
 
             setModeView(mode) {
+                console.log("🚀 ~ setModeView ~ mode:", mode)
                 modeView = mode
                 this.modeView = mode
-                getImoveis(null, mode)            
+                this.getImoveis(null, mode)            
             },
 
             getImovelPhotos(id){
