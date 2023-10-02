@@ -56,10 +56,10 @@ function mountTable($result, $BASE_URL_IMAGENS){
             $actions = '
             <div class="flex items-center gap-2">     
                 <div>
-                    <button @click="() => toggleShare('.$i.')" type="button" x-tooltip="Compartilhar este imóvel" data-theme="secondary" class="text-secondary relative" >
+                    <button @click="() => toggleVisibleShare(\'table\', '.$imovel['imo_codigo'].')" type="button" x-tooltip="Compartilhar este imóvel" data-theme="secondary" class="text-secondary relative" >
                         ' . file_get_contents('../../../icons/compartilhar.svg') . '
                     </button> 
-                    <div x-show="openShare && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1 z-50">
+                    <div x-show="openShare == true && visibleShare.mode == \'table\' && visibleShare.id == '.$imovel['imo_codigo'].'" x-transition x-transition.duration.300 class="absolute mt-1 z-50">
                         <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
                             <div class="flex gap-1 items-center cursor-pointer" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
                                 <div class="text-primary">
@@ -125,13 +125,13 @@ function mountGrid($result, $BASE_URL_IMAGENS){
                             <div class="absolute top-2 right-2 w-full flex justify-end gap-1">                                    
                                 <!-- COMPARTILHAR -->
                                 <div>
-                                    <div @click="() => toggleShare('.$i.')" class="bg-white dark:bg-dark rounded p-2 flex relative">
+                                    <div @click="() => toggleVisibleShare(\'grid\', '.$imovel['imo_codigo'].')" class="bg-white dark:bg-dark rounded p-2 flex relative">
                                         <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" >
                                             ' . file_get_contents('../../../icons/compartilhar.svg') . '
                                         </button>
                                     </div>
                                     <!-- SELECIONAR MODO DE COMPARTILHAMENTO -->
-                                    <div x-show="openShare && sectionShare == \'favoritos\' && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1">
+                                    <div x-show="openShare && visibleShare.mode == \'grid\' && visibleShare.id == '.$imovel['imo_codigo'].'" x-transition x-transition.duration.300 class="absolute mt-1">
                                         <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
                                             <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
                                                 <div class="text-primary">
@@ -246,13 +246,13 @@ function mountList($result, $BASE_URL_IMAGENS){
                                 <div class="absolute top-2 right-2 w-full flex justify-end gap-1">                                    
                                     <!-- COMPARTILHAR -->
                                     <div>
-                                        <div @click="() => toggleShare('.$i.')" class="bg-white dark:bg-dark rounded p-2 flex relative">
+                                        <div @click="() => toggleVisibleShare(\'list\', '.$imovel['imo_codigo'].')" class="bg-white dark:bg-dark rounded p-2 flex relative">
                                             <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
                                                 ' . file_get_contents('../../../icons/compartilhar.svg') . '
                                             </button>
                                         </div>
                                         <!-- SELECIONAR MODO DE COMPARTILHAMENTO -->
-                                        <div x-show="openShare && indexShare == '.$i.'" x-transition x-transition.duration.300 class="absolute mt-1">
+                                        <div x-show="openShare && visibleShare.mode == \'list\' && visibleShare.id == '.$imovel['imo_codigo'].'" x-transition x-transition.duration.300 class="absolute mt-1">
                                             <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
                                                 <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
                                                     <div class="text-primary">

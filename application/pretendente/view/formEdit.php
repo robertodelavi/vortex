@@ -413,21 +413,47 @@ if(isset($_GET['tab'])){
             openShare: false,
             indexShare: null,
             modeView: modeView,
+            visibleShare: {
+                mode: null,
+                id: null // id do imóvel
+            },
             // table imoveis
             tableImoveis: null,
             currentTableImoveis: [],
             isMobile: window.innerWidth <= 640, // Define a largura limite para considerar como celular
 
+            // detect header click
+            // headerClick(e) {
+            //     if (e.target.classList.contains('header')) {
+            //         // this.toggleVisibleShare(null, null) // fecha bloco compartilhar
+            //         // this.getImoveis(null, modeView)
+            //         console.log('poáaaaa')
+            //     }
+            // },
+
+            // detectar atualização da tabela, ou quando ordena ou filtra
             setVisualizationMode() {
                 const mode = this.isMobile ? 'grid' : 'table';
                 this.modeView = mode
+
+                this.toggleVisibleShare(null, null) // fecha bloco compartilhar
                 this.getImoveis(null, mode);
             },
-            
-            toggleShare(i) {
+
+            //? NEW
+            toggleVisibleShare(mode, id) {
+                console.log("🚀 ~ toggleVisibleShare => mode, id:", mode, id)
                 this.openShare = !this.openShare;
-                this.indexShare = i;
+                this.visibleShare.mode = mode;
+                this.visibleShare.id = id;
+                console.log('==> ', this.openShare, this.visibleShare)
             },
+
+            //! OLD
+            // toggleShare(i) {
+            //     this.openShare = !this.openShare;
+            //     this.indexShare = i;
+            // },
 
             updateTableImoveis(data) {
                 console.log("🚀 ~ updateTable ~ data:", data)
@@ -435,6 +461,8 @@ if(isset($_GET['tab'])){
                     this.tableImoveis.destroy();
                 }
 
+                this.toggleVisibleShare(null, null) // fecha bloco compartilhar
+                
                 this.tableImoveis = new simpleDatatables.DataTable("#tableImoveis", {
                     data: {
                         headings: [
@@ -452,16 +480,10 @@ if(isset($_GET['tab'])){
                         ],
                         data: data
                     },
+
                     searchable: false,
-                    perPage: 40,
+                    perPage: 20,
                     perPageSelect: [10, 20, 30, 50, 100],
-                    columns: [
-                        {
-                            select: 0,
-                            sortable: true,
-                            searchable: true,
-                        },                        
-                    ],
                     firstLast: true,
                     firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
                     lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
@@ -532,7 +554,7 @@ if(isset($_GET['tab'])){
             },
 
             copyLink(id){
-                this.toggleShare(null)
+                this.toggleVisibleShare(null, null)
 
                 let url = this.getUrlImovel(id)                
                 var data = {
@@ -552,7 +574,7 @@ if(isset($_GET['tab'])){
             },
 
             shareWhatsapp(id, whatsapp){
-                this.toggleShare(null)
+                this.toggleVisibleShare(null, null)
 
                 let url = this.getUrlImovel(id)
                 var data = {
