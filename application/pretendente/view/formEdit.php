@@ -413,6 +413,7 @@ if(isset($_GET['tab'])){
             openShare: false,
             indexShare: null,
             modeView: modeView,
+            sortDirection: 'asc',
             visibleShare: {
                 mode: null,
                 id: null // id do imóvel
@@ -422,38 +423,63 @@ if(isset($_GET['tab'])){
             currentTableImoveis: [],
             isMobile: window.innerWidth <= 640, // Define a largura limite para considerar como celular
 
-            // detect header click
-            // headerClick(e) {
-            //     if (e.target.classList.contains('header')) {
-            //         // this.toggleVisibleShare(null, null) // fecha bloco compartilhar
-            //         // this.getImoveis(null, modeView)
-            //         console.log('poáaaaa')
-            //     }
-            // },
-
             // detectar atualização da tabela, ou quando ordena ou filtra
             setVisualizationMode() {
                 const mode = this.isMobile ? 'grid' : 'table';
                 this.modeView = mode
 
                 this.toggleVisibleShare(null, null) // fecha bloco compartilhar
-                this.getImoveis(null, mode);
+                this.getImoveis(null, mode, null);
             },
 
             //? NEW
             toggleVisibleShare(mode, id) {
-                console.log("🚀 ~ toggleVisibleShare => mode, id:", mode, id)
-                this.openShare = !this.openShare;
+                this.openShare = !this.openShare
                 this.visibleShare.mode = mode;
                 this.visibleShare.id = id;
-                console.log('==> ', this.openShare, this.visibleShare)
+                console.log('toggleVisibleShare: ', this.openShare, this.visibleShare)
             },
 
-            //! OLD
-            // toggleShare(i) {
-            //     this.openShare = !this.openShare;
-            //     this.indexShare = i;
-            // },
+            getColumnBdName(columnNumber){
+                let column = null
+                switch(columnNumber){
+                    case 1:
+                        column = 'imo_codigo'
+                    break;
+                    case 2:
+                        column = 'imo_tipo'
+                    break;
+                    case 3:
+                        column = 'imo_bairro'
+                    break;
+                    case 4:
+                        column = 'imo_banheiros'
+                    break;
+                    case 5:
+                        column = 'i.imo_quartos'
+                    break;
+                    case 6:
+                        column = 'imo_suites'
+                    break;
+                    case 7:
+                        column = 'imo_vagas'
+                    break;
+                    case 8:
+                        column = 'imo_area_construida'
+                    break;
+                    case 9:
+                        column = 'imo_valor'
+                    break;
+                }
+                return column
+            },
+
+            sortTableImoveis(column, direction) {
+                column = this.getColumnBdName(column)
+                direction = this.sortDirection == 'asc' ? 'desc' : 'asc'
+                console.log("🚀 ~ sortTableImoveis ~ column, direction", column, direction)                
+                this.getImoveis(null, this.modeView, { column: column, direction: direction })
+            },
 
             updateTableImoveis(data) {
                 console.log("🚀 ~ updateTable ~ data:", data)
@@ -461,7 +487,7 @@ if(isset($_GET['tab'])){
                     this.tableImoveis.destroy();
                 }
 
-                this.toggleVisibleShare(null, null) // fecha bloco compartilhar
+                this.toggleVisibleShare(null, null) // fecha bloco compartilhar                
                 
                 this.tableImoveis = new simpleDatatables.DataTable("#tableImoveis", {
                     data: {
@@ -482,8 +508,8 @@ if(isset($_GET['tab'])){
                     },
 
                     searchable: false,
-                    perPage: 20,
-                    perPageSelect: [10, 20, 30, 50, 100],
+                    perPage: 5,
+                    // perPageSelect: [10, 20, 30, 50, 100],
                     firstLast: true,
                     firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
                     lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
@@ -497,16 +523,26 @@ if(isset($_GET['tab'])){
                         bottom: "{info}{pager}",
                     },
                 });
+
+                // Armazene uma referência ao contexto do Vue
+                const self = this;
+
+                // detectar click em cada coluna da tabela pra mandar a coluna pra uma função poder ordenar
+                this.tableImoveis.on('datatable.sort', function (column, direction) {
+                    self.sortTableImoveis(column, direction)                    
+                });
             },
            
             //* Atualiza imoveis sugeridos pro pretendente
-            getImoveis(filters = null, mode = 'table'){
+            getImoveis(filters = null, mode = 'table', sort = null){
                 var data = {
                     pretendente: <?php echo $_POST['param_0']; ?>,
                     mode: mode,
-                    filters: filters
+                    filters: filters,
+                    sortColumn: sort?.column,
+                    sortDirection: sort?.direction
                 };
-                console.log("🚀 ~ getImoveis ~ data:", mode, data)
+                console.log("🚀 ~ getImoveis ~ data:", data)
                 
                 // ? Loading
                 setTimeout(() => {                    
@@ -522,6 +558,7 @@ if(isset($_GET['tab'])){
                         document.getElementById('tableImoveis').style.display = 'none';
                         this.updateTableImoveis(null)
                     }else{              //? É tabela, resultado vem em json e monta a tabela aqui com Alpine.js
+                        console.log("🚀 ~ getImoveis ~ data:", data)
                         document.getElementById('resulAjaxImoveis').innerHTML = '<p class="font-semibold text-lg dark:text-white-light mt-3 mb-0">Imóveis</p>';      
                         document.getElementById('tableImoveis').style.display = 'block';                                              
                         // Atualiza tabela de dados com o resultado vindo do ajax
@@ -543,7 +580,7 @@ if(isset($_GET['tab'])){
                         body: JSON.stringify(data) // Converte o objeto em uma string JSON
                     }).then(response => response.json()).then(data => {
                         setTimeout(() => {
-                            this.getImoveis(null, modeView)
+                            this.getImoveis(null, modeView, null)
                         }, 300);
             
                         action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
@@ -605,7 +642,7 @@ if(isset($_GET['tab'])){
                 console.log("🚀 ~ setModeView ~ mode:", mode)
                 modeView = mode
                 this.modeView = mode
-                this.getImoveis(null, mode)            
+                this.getImoveis(null, mode, null)            
             },
 
             getImovelPhotos(id){
@@ -660,10 +697,9 @@ if(isset($_GET['tab'])){
                 const filters = {};
                 for (let [key, value] of formData.entries()) {
                     filters[key] = value;
-                    // console.log('imoveis ===> ', key, value);
                 }                
                 
-                this.getImoveis(filters, modeView)
+                this.getImoveis(filters, modeView, null)
             },
 
             limpaFiltros() {
@@ -671,7 +707,7 @@ if(isset($_GET['tab'])){
                     select.selectedIndex = 0;
                 })
                 document.getElementById('formFilterId').reset();                
-                this.getImoveis(null, modeView)
+                this.getImoveis(null, modeView, null)
             },
         }));
     }); 
