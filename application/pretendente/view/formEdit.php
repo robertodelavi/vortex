@@ -174,11 +174,12 @@ if(isset($_GET['tab'])){
                         <!-- Se tem perfil de busca, mostra os imóveis sugeridos -->
                         <?php 
                         if($resultPerfilBusca[0]['qtd'] > 0){ 
+                            
                         ?>  
                             
                             <form x-on:submit="submitForm($event)" id="formFilterId" >
                                 <!-- Filtros (mobile) -->   
-                                <div class="block sm:hidden overflow-y-auto mb-4" >
+                                <div x-show="isMobile" class="block sm:hidden overflow-y-auto mb-4" >
                                     <div class="panel space-y-4 " >
                                         <div class="flex items-center justify-between">
                                             <p class="font-semibold text-lg dark:text-white-light">Filtros</p>
@@ -187,19 +188,19 @@ if(isset($_GET['tab'])){
                                             </button>
                                         </div>
                                         <div x-show="openFilter" x-transition x-transition.duration.300 class="overflow-hidden">
-                                            <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                            <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>
                                         </div>
                                     </div>        
                                 </div>
         
                                 <div class="flex gap-3 relative">                
                                     <!-- Filtros (desktop) -->
-                                    <div class="hidden sm:block w-1/5">
+                                    <div x-show="!isMobile" class="hidden sm:block w-1/5">
                                         <div class="panel h-full">
                                             <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                                                 Filtros
-                                            </h5>
-                                            <?php require('application/pretendente/view/imoveis/formFilter.php'); ?>
+                                            </h5>                                            
+                                            <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>                                            
                                         </div>
                                     </div>
                                     <div class="w-full " >     
@@ -413,7 +414,8 @@ if(isset($_GET['tab'])){
             openShare: false,
             indexShare: null,
             modeView: modeView,
-            sortDirection: 'asc',
+            sortDirection: null,
+            tableFilters: null,
             visibleShare: {
                 mode: null,
                 id: null // id do imóvel
@@ -427,9 +429,8 @@ if(isset($_GET['tab'])){
             setVisualizationMode() {
                 const mode = this.isMobile ? 'grid' : 'table';
                 this.modeView = mode
-
                 this.toggleVisibleShare(null, null) // fecha bloco compartilhar
-                this.getImoveis(null, mode, null);
+                this.getImoveis(this.tableFilters, mode, null);
             },
 
             //? NEW
@@ -444,31 +445,31 @@ if(isset($_GET['tab'])){
                 let column = null
                 switch(columnNumber){
                     case 1:
-                        column = 'imo_codigo'
+                        column = 'i.imo_codigo'
                     break;
                     case 2:
-                        column = 'imo_tipo'
+                        column = 'i.imo_tipoimovel'
                     break;
                     case 3:
-                        column = 'imo_bairro'
+                        column = 'b.bai_descricao'
                     break;
                     case 4:
-                        column = 'imo_banheiros'
+                        column = 'i.imo_banheiros'
                     break;
                     case 5:
                         column = 'i.imo_quartos'
                     break;
                     case 6:
-                        column = 'imo_suites'
+                        column = 'i.imo_suites'
                     break;
                     case 7:
-                        column = 'imo_vagas'
+                        column = 'i.imo_garagem'
                     break;
                     case 8:
-                        column = 'imo_area_construida'
+                        column = 'i.imo_areaconstruida'
                     break;
                     case 9:
-                        column = 'imo_valor'
+                        column = 'iv.imv_valor'
                     break;
                 }
                 return column
@@ -477,8 +478,9 @@ if(isset($_GET['tab'])){
             sortTableImoveis(column, direction) {
                 column = this.getColumnBdName(column)
                 direction = this.sortDirection == 'asc' ? 'desc' : 'asc'
-                console.log("🚀 ~ sortTableImoveis ~ column, direction", column, direction)                
-                this.getImoveis(null, this.modeView, { column: column, direction: direction })
+                this.sortDirection = direction
+                console.log("🚀 ~ sortTableImoveis: ", column, direction)                
+                this.getImoveis(this.tableFilters, this.modeView, { column: column, direction: direction })
             },
 
             updateTableImoveis(data) {
@@ -508,8 +510,7 @@ if(isset($_GET['tab'])){
                     },
 
                     searchable: false,
-                    perPage: 5,
-                    // perPageSelect: [10, 20, 30, 50, 100],
+                    perPage: 20,
                     firstLast: true,
                     firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
                     lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
@@ -524,25 +525,44 @@ if(isset($_GET['tab'])){
                     },
                 });
 
-                // Armazene uma referência ao contexto do Vue
+                // Armazena uma referência ao contexto do Vue
                 const self = this;
 
-                // detectar click em cada coluna da tabela pra mandar a coluna pra uma função poder ordenar
+                //? Detecta click em cada coluna da tabela pra mandar a coluna pra uma função poder ordenar
                 this.tableImoveis.on('datatable.sort', function (column, direction) {
                     self.sortTableImoveis(column, direction)                    
                 });
             },
+
+            verifyFilters(objFilters){
+                // varre objeto e se todos os valores forem "", retorna null
+                let filters = null
+                if(objFilters){
+                    console.log('entrou 1')
+                    for(let [key, value] of Object.entries(objFilters)){
+                        console.log('entrou 2: ', value)
+                        if(value != ""){
+                            console.log('entrou 3')
+                            filters = objFilters
+                        }
+                    }
+                }
+                console.log("🚀 ~ verifyFilters:", filters)
+                return filters
+            },
            
             //* Atualiza imoveis sugeridos pro pretendente
             getImoveis(filters = null, mode = 'table', sort = null){
+                console.log("🚀 ~ antes filters:", filters)
                 var data = {
                     pretendente: <?php echo $_POST['param_0']; ?>,
                     mode: mode,
-                    filters: filters,
+                    filters: this.verifyFilters(filters),
                     sortColumn: sort?.column,
                     sortDirection: sort?.direction
                 };
-                console.log("🚀 ~ getImoveis ~ data:", data)
+                this.tableFilters = filters
+                console.log("🚀 ~ getImoveis: ", data)
                 
                 // ? Loading
                 setTimeout(() => {                    
@@ -553,16 +573,15 @@ if(isset($_GET['tab'])){
                     method: 'POST',
                     body: JSON.stringify(data) // Converte o objeto em uma string JSON
                 }).then(response => response.json()).then(data => {
-                    if(mode != 'table'){ //? Não é tabela, resultado vem montado via ajax   
-                        document.getElementById('resulAjaxImoveis').innerHTML = data;
-                        document.getElementById('tableImoveis').style.display = 'none';
-                        this.updateTableImoveis(null)
-                    }else{              //? É tabela, resultado vem em json e monta a tabela aqui com Alpine.js
-                        console.log("🚀 ~ getImoveis ~ data:", data)
+                    if(mode == 'table'){ //? É tabela, resultado vem em json e monta a tabela aqui com Alpine.js
                         document.getElementById('resulAjaxImoveis').innerHTML = '<p class="font-semibold text-lg dark:text-white-light mt-3 mb-0">Imóveis</p>';      
                         document.getElementById('tableImoveis').style.display = 'block';                                              
-                        // Atualiza tabela de dados com o resultado vindo do ajax
-                        this.updateTableImoveis(data)                    
+                        //? Atualiza tabela de dados com o resultado vindo do ajax
+                        this.updateTableImoveis(data)                                            
+                    }else{              //? Não é tabela, resultado vem montado via ajax               
+                        document.getElementById('resulAjaxImoveis').innerHTML = data;
+                        document.getElementById('tableImoveis').style.display = 'none';
+                        this.updateTableImoveis(null)                        
                     }
                 })
             },
@@ -580,7 +599,7 @@ if(isset($_GET['tab'])){
                         body: JSON.stringify(data) // Converte o objeto em uma string JSON
                     }).then(response => response.json()).then(data => {
                         setTimeout(() => {
-                            this.getImoveis(null, modeView, null)
+                            this.getImoveis(this.tableFilters, modeView, null)
                         }, 300);
             
                         action ? toast('Imóvel favoritado com sucesso!', 'warning', 3000) : toast('Imóvel desfavoritado com sucesso!', '', 3000)
@@ -642,12 +661,11 @@ if(isset($_GET['tab'])){
                 console.log("🚀 ~ setModeView ~ mode:", mode)
                 modeView = mode
                 this.modeView = mode
-                this.getImoveis(null, mode, null)            
+                this.getImoveis(this.tableFilters, mode, null)            
             },
 
             getImovelPhotos(id){
                 if(id && id > 0){
-                    // faz fetch com arquivo php que retorna as fotos do imóvel e seta no array items
                     fetch('application/pretendente/view/imoveis/getImovelPhotos.php', {
                         method: 'POST',
                         body: JSON.stringify({ id: id }),
@@ -691,24 +709,28 @@ if(isset($_GET['tab'])){
 
             //* Filtros da barra lateral
             submitForm(event) {
+                console.log('NO FORMMM')
                 event.preventDefault();
-
                 const formData = new FormData(event.target);
                 const filters = {};
                 for (let [key, value] of formData.entries()) {
+                    console.log("🚀 ~ submitForm ~ key, value", key, value)
                     filters[key] = value;
                 }                
-                
-                this.getImoveis(filters, modeView, null)
+                console.log("🚀 ~ submit filters:", filters)
+                this.tableFilters = filters                
+                this.getImoveis(filters, this.modeView, null)
             },
 
             limpaFiltros() {
                 document.querySelectorAll('select').forEach((select) => {
                     select.selectedIndex = 0;
                 })
-                document.getElementById('formFilterId').reset();                
-                this.getImoveis(null, modeView, null)
-            },
+                document.getElementById('formFilterId').reset();   
+                console.log('limpaFiltros')
+                this.tableFilters = null             
+                this.getImoveis(null, this.modeView, null)
+            }            
         }));
     }); 
 

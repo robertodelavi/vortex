@@ -40,7 +40,7 @@
     </div>
     <div>
         <label>Suítes</label>
-        <div id="slider"></div>
+        <div></div>
         <div class="flex items-center justify-between gap-2">
             <div>
                 <input type="text" name="suitesIni" class="form-input" />

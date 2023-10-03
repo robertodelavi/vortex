@@ -16,9 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sideFilters = $value['filters'];        
         $filters = getFilters($value['pretendente'], $data); //? Extrai os filtros relevantes do perfil (que possuem valor)
         $sql = createScriptImoveis($value, $filters, $sideFilters, $sortColumn, $sortDirection); //? Cria e configura o script (sql) para buscar os imóveis
-        
-        // echo json_encode($sql); exit;
-        
+        // echo json_encode($sql); exit;        
         $resultImoveis = $data->find('dynamic', $sql);
 
         $sql = '
@@ -60,15 +58,28 @@ function mountTable($result, $BASE_URL_IMAGENS){
             //? Ações
             $actions = '
             <div class="flex items-center gap-2 cursor-pointer">                     
-                <div x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
-                    <div class="text-primary">
-                        ' . file_get_contents('../../../icons/copiar.svg') . '
-                    </div>                                            
-                </div>
-                <div x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
-                    <div class="text-success">
-                        ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                <div>
+                    <div @click="() => toggleVisibleShare(\'table\', '.$imovel['imo_codigo'].')" class="relative">
+                        <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" >
+                            ' . file_get_contents('../../../icons/compartilhar.svg') . '
+                        </button>
                     </div>
+                    <div x-show="openShare && visibleShare.mode == \'table\' && visibleShare.id == '.$imovel['imo_codigo'].'" x-transition x-transition.duration.300 class="absolute mt-1 z-10">
+                        <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
+                            <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$imovel['imo_codigo'].');" >
+                                <div class="text-primary">
+                                    ' . file_get_contents('../../../icons/copiar.svg') . '
+                                </div>
+                                <p class="text-sm">Copiar Link</p>                                                
+                            </div>
+                            <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$imovel['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
+                                <div class="text-success">
+                                    ' . file_get_contents('../../../icons/whatsapp.svg') . '
+                                </div>
+                                <p class="text-sm">WhatsApp</p>                                                
+                            </div>
+                        </div>
+                    </div>                       
                 </div>
                 <div @click="toggle2;" >
                     <button type="button" x-tooltip="Marcar visita" data-theme="primary" class="text-primary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')" >
