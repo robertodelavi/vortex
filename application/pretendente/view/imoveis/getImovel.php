@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </p>                                                        
                             <!-- COMPARTILHAR -->
                             <div class="mt-2">
-                                <div @click="() => toggleShare(-1)" class="bg-white dark:bg-dark rounded p-2 flex">
+                                <div @click="() => toggleShareImovel()" class="bg-white dark:bg-dark rounded p-2 flex">
                                     <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" @click="() => openModalFormVisita(null, '.$imovel['imo_codigo'].')">
                                         <div class="flex items-center text-center gap-2">
                                             '.file_get_contents('../../../icons/compartilhar.svg').'<p class="text-sm"> Compartilhar</p>
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </button>
                                 </div>
                                 <!-- SELECIONAR MODO DE COMPARTILHAMENTO -->
-                                <div x-show="openShare && indexShare == -1" x-transition x-transition.duration.300 class="absolute mt-1 cursor-pointer">
+                                <div x-show="openShareImovel" x-transition x-transition.duration.300 class="absolute mt-1 cursor-pointer">
                                     <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
                                         <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$result[0]['imo_codigo'].');" >
                                             <div class="text-primary">

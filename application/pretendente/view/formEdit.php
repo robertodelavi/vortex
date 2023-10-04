@@ -401,6 +401,7 @@ if(isset($_GET['tab'])){
             items: [],
             openFilter: false,
             openShare: false,
+            openShareImovel: false,
             indexShare: null,
             modeView: modeView,
             sortDirection: null,
@@ -424,6 +425,10 @@ if(isset($_GET['tab'])){
                 this.modeView = mode
                 this.toggleVisibleShare(null, null) // fecha bloco compartilhar
                 this.getImoveis(this.tableFilters, mode, null);
+            },
+
+            toggleShareImovel(){
+                this.openShareImovel = !this.openShareImovel
             },
 
             //? NEW
