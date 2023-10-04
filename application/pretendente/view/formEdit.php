@@ -173,34 +173,23 @@ if(isset($_GET['tab'])){
                         
                         <!-- Se tem perfil de busca, mostra os imóveis sugeridos -->
                         <?php 
-                        if($resultPerfilBusca[0]['qtd'] > 0){ 
-                            
-                        ?>  
-                            
+                        if($resultPerfilBusca[0]['qtd'] > 0){                             
+                        ?>                              
                             <form x-on:submit="submitForm($event)" id="formFilterId" >
-                                <!-- Filtros (mobile) -->   
-                                <div x-show="isMobile" class="block sm:hidden overflow-y-auto mb-4" >
-                                    <div class="panel space-y-4 " >
-                                        <div class="flex items-center justify-between">
-                                            <p class="font-semibold text-lg dark:text-white-light">Filtros</p>
-                                            <button class="btn btn-sm btn-outline-primary" @click="toggleFilter">
-                                                <?php echo file_get_contents('application/icons/filter.svg'); ?>
-                                            </button>
-                                        </div>
-                                        <div x-show="openFilter" x-transition x-transition.duration.300 class="overflow-hidden">
-                                            <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>
-                                        </div>
-                                    </div>        
-                                </div>
-        
-                                <div class="flex gap-3 relative">                
-                                    <!-- Filtros (desktop) -->
-                                    <div x-show="!isMobile" class="hidden sm:block w-1/5">
+                                <div :class="{'flex-col' : isMobile, 'flex' : !isMobile}" class="gap-3 relative">                
+                                    <!-- Filtros (desktop/mobile) -->
+                                    <div :class="{'w-1/5' : !isMobile}" >
                                         <div class="panel h-full">
-                                            <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
-                                                Filtros
-                                            </h5>                                            
-                                            <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>                                            
+                                            <div class="flex items-center justify-between">
+                                                <p class="font-semibold text-lg dark:text-white-light">Filtros</p>
+                                                <!-- mobile -->
+                                                <button class="block sm:hidden btn btn-sm btn-outline-primary" @click="toggleFilter">
+                                                    <?php echo file_get_contents('application/icons/filter.svg'); ?>
+                                                </button>                                      
+                                            </div>
+                                            <div x-show="openFilter || !isMobile" x-transition x-transition.duration.300 class="overflow-hidden mt-4" >
+                                                <?php include('application/pretendente/view/imoveis/formFilter.php'); ?>                                            
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="w-full " >     
@@ -425,6 +414,10 @@ if(isset($_GET['tab'])){
             currentTableImoveis: [],
             isMobile: window.innerWidth <= 640, // Define a largura limite para considerar como celular
 
+            init() {
+                this.getImoveis(this.tableFilters, this.modeView, null)
+            },
+
             // detectar atualização da tabela, ou quando ordena ou filtra
             setVisualizationMode() {
                 const mode = this.isMobile ? 'grid' : 'table';
@@ -508,7 +501,6 @@ if(isset($_GET['tab'])){
                         ],
                         data: data
                     },
-
                     searchable: false,
                     perPage: 20,
                     firstLast: true,
@@ -516,12 +508,26 @@ if(isset($_GET['tab'])){
                     lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
                     prevText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
                     nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-                    labels: {
-                        perPage: "{select}"
-                    },
+                    
                     layout: {
                         top: "{search}",
                         bottom: "{info}{pager}",
+                    },
+                    
+                    // locale pt-br
+                    labels: {
+                        placeholder: "Pesquisar...",
+                        perPage: "{select}",
+                        noRows: "Nenhum registro encontrado",
+                        info: "Mostrando {start} até {end} de {rows} registros",
+                        infoEmpty: "Mostrando 0 até 0 de 0 registros",
+                        infoFiltered: "(Filtrados de {total} registros)",
+                        search: "Pesquisar:",
+                        filter: "Filtrar:",
+                        first: "Primeiro",
+                        last: "Último",
+                        previous: "Anterior",
+                        next: "Próximo",
                     },
                 });
 

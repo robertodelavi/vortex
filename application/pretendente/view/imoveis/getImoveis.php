@@ -449,8 +449,7 @@ function createScriptImoveis($value, $filters, $sideFilters, $sortColumn, $sortD
             (SELECT MAX(pwi_favorito) FROM pretendentesimoveis WHERE pwi_imovel = i.imo_codigo AND pwi_pretendente = '.$value['pretendente'].') DESC,
             i.imo_codigo DESC ';
     }
-    $sql .= '
-    LIMIT 100';
+    // $sql .= ' LIMIT 100 ';
 
     return $sql;
 }
