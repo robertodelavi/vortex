@@ -641,6 +641,7 @@ if(isset($_GET['tab'])){
                     url += `?emp=${encodeURIComponent(data.emp)}&id=${encodeURIComponent(id)}&titulo=${encodeURIComponent(data.titulo)}&img=${data.img}`;             
                     // Share                    
                     navigator.share({
+                        
                         title: data.titulo,
                         text: data.desc,
                         url: url,
