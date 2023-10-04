@@ -427,6 +427,14 @@ if(isset($_GET['tab'])){
                 this.getImoveis(this.tableFilters, mode, null);
             },
 
+            detectDeviceShareImovel(id){
+                if(this.isMobile){
+                    this.shareMobile(id)
+                }else{
+                    this.toggleShareImovel()
+                }
+            },
+
             toggleShareImovel(){
                 this.openShareImovel = !this.openShareImovel
             },
