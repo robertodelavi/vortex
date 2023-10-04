@@ -122,13 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <!-- SELECIONAR MODO DE COMPARTILHAMENTO -->
                                 <div x-show="openShareImovel" x-transition x-transition.duration.300 class="absolute mt-1 cursor-pointer">
                                     <div class="bg-white dark:bg-dark rounded p-2 flex flex-col gap-3">
-                                        <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$result[0]['imo_codigo'].');" >
+                                        <div class="flex gap-1 items-center" x-tooltip="Copiar link do imóvel" data-theme="primary" @click="() => copyLink('.$result[0]['imo_codigo'].');toggleShareImovel();" >
                                             <div class="text-primary">
                                                 ' . file_get_contents('../../../icons/copiar.svg') . '
                                             </div>
                                             <p class="text-sm">Copiar Link</p>                                                
                                         </div>
-                                        <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$result[0]['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\');" >
+                                        <div class="flex gap-1 items-center" x-tooltip="Compartilhar no whatsapp do pretendente" data-theme="success" @click="() => shareWhatsapp('.$result[0]['imo_codigo'].', \''.$pretendente[0]['prw_telefones'].'\'); toggleShareImovel();" >
                                             <div class="text-success">
                                                 ' . file_get_contents('../../../icons/whatsapp.svg') . '
                                             </div>
