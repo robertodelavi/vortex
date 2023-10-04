@@ -620,6 +620,36 @@ if(isset($_GET['tab'])){
                 }        
             },
 
+            detectDeviceShare(modeView, id){
+                if(this.isMobile){
+                    this.shareMobile(id)
+                }else{
+                    this.toggleVisibleShare(modeView, id)
+                }
+            },
+
+            shareMobile(id){
+                let url = this.getUrlImovel(id)                
+                var data = {
+                    id: id,
+                    emp_codigo: '<?php echo $_SESSION['v_emp_codigo']; ?>'
+                };
+                fetch('application/pretendente/view/imoveis/getImovelThumb.php', {
+                    method: 'POST',
+                    body: JSON.stringify(data) // Converte o objeto em uma string JSON
+                }).then(response => response.json()).then(data => {
+                    url += `?emp=${encodeURIComponent(data.emp)}&id=${encodeURIComponent(id)}&titulo=${encodeURIComponent(data.titulo)}&img=${data.img}`;             
+                    // Share                    
+                    navigator.share({
+                        title: data.titulo,
+                        text: data.desc,
+                        url: url,
+                    }).then(() => {
+                        toast('Link compartilhado!', 'success', 3000)
+                    })
+                })
+            },
+
             copyLink(id){
                 this.toggleVisibleShare(null, null)
 
@@ -634,9 +664,10 @@ if(isset($_GET['tab'])){
                 }).then(response => response.json()).then(data => {
                     url += `?emp=${encodeURIComponent(data.emp)}&id=${encodeURIComponent(id)}&titulo=${encodeURIComponent(data.titulo)}&desc=${encodeURIComponent(data.desc)}&img=${data.img}`;
                     
-                    navigator.clipboard.writeText(url)
-                    this.openShare = false
-                    toast('Link copiado!', 'success', 3000)
+                    navigator.clipboard.writeText(url).then(() => {
+                        this.openShare = false
+                        toast('Link copiado!', 'success', 3000)
+                    })                    
                 })
             },
 
@@ -660,7 +691,6 @@ if(isset($_GET['tab'])){
             },
 
             getUrlImovel(id){
-                const emp_codigo = '<?php echo $_SESSION['v_emp_codigo']; ?>';
                 return `https://vegax.com.br/vortex/imovel/detalhes`;                
             },
 

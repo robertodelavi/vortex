@@ -130,7 +130,7 @@ function mountGrid($result, $BASE_URL_IMAGENS){
                             <div class="absolute top-2 right-2 w-full flex justify-end gap-1">                                    
                                 <!-- COMPARTILHAR -->
                                 <div>
-                                    <div @click="() => toggleVisibleShare(\'grid\', '.$imovel['imo_codigo'].')" class="bg-white dark:bg-dark rounded p-2 flex relative">
+                                    <div @click="() => detectDeviceShare(\'grid\', '.$imovel['imo_codigo'].')" class="bg-white dark:bg-dark rounded p-2 flex relative">
                                         <button type="button" class="text-secondary group" data-imovel-id="6" x-tooltip="Compartilhar este imóvel" data-theme="secondary" >
                                             ' . file_get_contents('../../../icons/compartilhar.svg') . '
                                         </button>
@@ -449,7 +449,7 @@ function createScriptImoveis($value, $filters, $sideFilters, $sortColumn, $sortD
             (SELECT MAX(pwi_favorito) FROM pretendentesimoveis WHERE pwi_imovel = i.imo_codigo AND pwi_pretendente = '.$value['pretendente'].') DESC,
             i.imo_codigo DESC ';
     }
-    // $sql .= ' LIMIT 100 ';
+    $sql .= ' LIMIT 100 ';
 
     return $sql;
 }
