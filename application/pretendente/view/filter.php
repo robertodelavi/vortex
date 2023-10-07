@@ -75,8 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($values['atendimentos'] == 'meus') $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
     }
     
-    $sql .= '
-    LIMIT 100';
+    $sql .= 'LIMIT 200';
     $result = $data->find('dynamic', $sql);    
 
     // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
