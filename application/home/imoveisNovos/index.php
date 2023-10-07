@@ -1,7 +1,4 @@
-<?php 
-    include 'application/home/imoveisNovos/getData.php'; 
-    // echo print_r($result);    
-?>
+<?php include 'application/home/imoveisNovos/getData.php'; ?>
 
 <div class="mb-5 text-lg font-bold">
     Imóveis novos para seus pretendentes

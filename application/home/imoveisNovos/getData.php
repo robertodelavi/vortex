@@ -34,17 +34,38 @@
                         LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s" AND ft.imf_web = "s")
                         LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
                         LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
+                        LEFT JOIN cidades AS c ON (i.imo_cidade = c.cid_codigo)
                     WHERE i.imo_datacad > ( 
                         SELECT p.prw_dataatual 
                         FROM pretendentes AS p 
                         WHERE p.prw_codigo = '.$value['prw_codigo'].'
-                    )
-                        -- Perfil do pretendente
-                        AND i.imo_quartos > 0';
+                    ) ';
+                    
+                    // Perfil do pretendente
+                    if($valuePerfil['ppf_tipoimovel'] && $valuePerfil['ppf_tipoimovel'] > 0){ $sql .= ' AND i.imo_tipoimovel = '.$valuePerfil['ppf_tipoimovel']; }
+                    if($valuePerfil['ppf_utilizacao'] && $valuePerfil['ppf_utilizacao'] > 0){ $sql .= ' AND i.imo_utilizacao = '.$valuePerfil['ppf_utilizacao']; }
+                    if($valuePerfil['ppf_quartosini'] && $valuePerfil['ppf_quartosini'] > 0){ $sql .= ' AND i.imo_quartos >= '.$valuePerfil['ppf_quartosini']; }
+                    if($valuePerfil['ppf_quartosfim'] && $valuePerfil['ppf_quartosfim'] > 0){ $sql .= ' AND i.imo_quartos <= '.$valuePerfil['ppf_quartosfim']; }
+                    if($valuePerfil['ppf_suitesini'] && $valuePerfil['ppf_suitesini'] > 0){ $sql .= ' AND i.imo_suites >= '.$valuePerfil['ppf_suitesini']; }
+                    if($valuePerfil['ppf_suitesfim'] && $valuePerfil['ppf_suitesfim'] > 0){ $sql .= ' AND i.imo_suites <= '.$valuePerfil['ppf_suitesfim']; }
+                    if($valuePerfil['ppf_garagem'] && $valuePerfil['ppf_garagem'] > 0){ $sql .= ' AND i.imo_garagem = '.$valuePerfil['ppf_garagem']; }
+                    if($valuePerfil['ppf_valorini'] && $valuePerfil['ppf_valorini'] > 0){ $sql .= ' AND (((iv.imv_valor*m.moe_valor)/100)/100) >= '.$valuePerfil['ppf_valorini']; }
+                    if($valuePerfil['ppf_valorfim'] && $valuePerfil['ppf_valorfim'] > 0){ $sql .= ' AND (((iv.imv_valor*m.moe_valor)/100)/100) <= '.$valuePerfil['ppf_valorfim']; }                    
+                    if($valuePerfil['ppf_areaterrenoini'] && $valuePerfil['ppf_areaterrenoini'] > 0){ $sql .= ' AND i.imo_areaterreno >= '.$valuePerfil['ppf_areaterrenoini']; }
+                    if($valuePerfil['ppf_areaterrenofim'] && $valuePerfil['ppf_areaterrenofim'] > 0){ $sql .= ' AND i.imo_areaterreno <= '.$valuePerfil['ppf_areaterrenofim']; }
+                    if($valuePerfil['ppf_areaconstruidaini'] && $valuePerfil['ppf_areaconstruidaini'] > 0){ $sql .= ' AND i.imo_areaconstruida >= '.$valuePerfil['ppf_areaconstruidaini']; }
+                    if($valuePerfil['ppf_areaconstruidafim'] && $valuePerfil['ppf_areaconstruidafim'] > 0){ $sql .= ' AND i.imo_areaconstruida <= '.$valuePerfil['ppf_areaconstruidafim']; }
+                    if($valuePerfil['ppf_cidade'] && $valuePerfil['ppf_cidade'] != ''){ $sql .= ' AND c.cid_descricao LIKE "%'.$valuePerfil['ppf_cidade'].'%"'; }  
+                    if($valuePerfil['ppf_pontoreferencia'] && $valuePerfil['ppf_pontoreferencia'] != ''){ $sql .= ' AND i.imo_pontoreferencia LIKE "%'.$valuePerfil['ppf_pontoreferencia'].'%"'; }
+                    if($valuePerfil['ppf_edificio'] && $valuePerfil['ppf_edificio'] != ''){ $sql .= ' AND i.imo_edificio LIKE "%'.$valuePerfil['ppf_edificio'].'%"'; }
+                    if($valuePerfil['ppf_rua'] && $valuePerfil['ppf_rua'] != ''){ $sql .= ' AND i.imo_rua LIKE "%'.$valuePerfil['ppf_rua'].'%"'; }
+                    if($valuePerfil['ppf_bairro'] && $valuePerfil['ppf_bairro'] != ''){ $sql .= ' AND b.bai_descricao LIKE "%'.$valuePerfil['ppf_bairro'].'%"'; }
+                    if($valuePerfil['ppf_empreendimento'] && $valuePerfil['ppf_empreendimento'] > 0){ $sql .= ' AND i.imo_empreendimento = '.$valuePerfil['ppf_empreendimento']; }
+                    
+                    // Executa SQL
                     $imoveisPerfil = $data->find('dynamic', $sql);
                         
                     // echo '<br>perfil ('.$valuePerfil['ppf_nome'].') do pretendente '.$value['prw_nome'];
-
                     // Insere imoveis no arrayImoveis, sem repetir o imo_codigo
                     if($imoveisPerfil && count($imoveisPerfil) > 0){
                         foreach ($imoveisPerfil as $keyImovel => $valueImovel) {

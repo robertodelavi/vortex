@@ -143,107 +143,17 @@
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            <div class="grid gap-6 xl:grid-flow-row">
-                <!-- Previous Statement -->
-                <div class="panel overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="text-lg font-bold">Previous Statement</div>
-                            <div class="text-success"> Paid on June 27, 2022 </div>
-                        </div>
-                        <div x-data="dropdown" @click.outside="open = false" class="dropdown">
-                            <a href="javascript:;" @click="toggle">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hover:opacity-80 opacity-70">
-                                    <circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                    <circle opacity="0.5" cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                    <circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                </svg>
-                            </a>
-                            <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0">
-                                <li><a href="javascript:;" @click="toggle">View Report</a></li>
-                                <li><a href="javascript:;" @click="toggle">Edit Report</a></li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="relative mt-10">
-                        <div class="absolute -bottom-12 ltr:-right-12 rtl:-left-12 w-24 h-24">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-success opacity-20 w-full h-full">
-                                <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                                <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                            <div>
-                                <div class="text-primary">Card Limit</div>
-                                <div class="mt-2 font-semibold text-2xl">$50,000.00</div>
-                            </div>
-                            <div>
-                                <div class="text-primary">Spent</div>
-                                <div class="mt-2 font-semibold text-2xl">$15,000.00</div>
-                            </div>
-                            <div>
-                                <div class="text-primary">Minimum</div>
-                                <div class="mt-2 font-semibold text-2xl">$2,500.00</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Current Statement -->
-                <div class="panel overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="text-lg font-bold">Current Statement</div>
-                            <div class="text-danger"> Must be paid before July 27, 2022 </div>
-                        </div>
-                        <div x-data="dropdown" @click.outside="open = false" class="dropdown">
-                            <a href="javascript:;" @click="toggle">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hover:opacity-80 opacity-70">
-                                    <circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                    <circle opacity="0.5" cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                    <circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                </svg>
-                            </a>
-                            <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0">
-                                <li><a href="javascript:;" @click="toggle">View Report</a></li>
-                                <li><a href="javascript:;" @click="toggle">Edit Report</a></li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="relative mt-10">
-                        <div class="absolute -bottom-12 ltr:-right-12 rtl:-left-12 w-24 h-24">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-danger opacity-20 w-24 h-full">
-                                <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                                <path d="M12 7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                <circle cx="12" cy="16" r="1" fill="currentColor" />
-                            </svg>
-                        </div>
-
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                            <div>
-                                <div class="text-primary">Card Limit</div>
-                                <div class="mt-2 font-semibold text-2xl">$50,000.00</div>
-                            </div>
-                            <div>
-                                <div class="text-primary">Spent</div>
-                                <div class="mt-2 font-semibold text-2xl">$30,500.00</div>
-                            </div>
-                            <div>
-                                <div class="text-primary">Minimum</div>
-                                <div class="mt-2 font-semibold text-2xl">$8,000.00</div>
-                            </div>
-                        </div>
-                    </div>
-
+            <div class="grid gap-6 xl:grid-flow-row">                
+                <!-- Status atendimento -->
+                <div class="panel h-full">
+                    <?php include 'statusAtendimento/index.php'; ?>
                 </div>
             </div>
 
-            <!-- Imóveis novos para seus pretendentes -->
-            <div class="panel">
+            <!-- Imóveis novos para seus pretendentes -->            
+            <div class="panel overflow-y-auto" style="height: 350px;">
                 <?php include 'imoveisNovos/index.php'; ?>
-            </div>
+            </div>      
         </div>
     </div>
 </div>
