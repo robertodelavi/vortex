@@ -142,18 +142,6 @@
             </div>
         </div>
 
-        <!-- Looker -->        
-        <!-- <div class="grid grid-cols-12 gap-6">
-            <div class="flex items-center mb-5 font-bold">
-                <span class="text-lg">Looker</span>
-            </div>
-            <div class="flex items-center mb-5 font-bold">
-
-
-            <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/207406f6-fe71-4b58-b1cb-022df687de77/page/dptLD" frameborder="0" style="border:0" allowfullscreen></iframe>
-            </div>
-        </div>     -->
-
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <div class="grid gap-6 xl:grid-flow-row">
                 <!-- Previous Statement -->
@@ -252,78 +240,9 @@
                 </div>
             </div>
 
-            <!-- Recent Transactions -->
+            <!-- Imóveis novos para seus pretendentes -->
             <div class="panel">
-                <div class="mb-5 text-lg font-bold">Recent Transactions</div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="ltr:rounded-l-md rtl:rounded-r-md">ID</th>
-                                <th>DATE</th>
-                                <th>NAME</th>
-                                <th>AMOUNT</th>
-                                <th class="text-center ltr:rounded-r-md rtl:rounded-l-md">STATUS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-semibold">#01</td>
-                                <td class="whitespace-nowrap">Oct 08, 2021</td>
-                                <td class="whitespace-nowrap">Eric Page</td>
-                                <td>$1,358.75</td>
-                                <td class="text-center">
-                                    <span class="badge bg-success/20 text-success rounded-full hover:top-0">Completed</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">#02</td>
-                                <td class="whitespace-nowrap">Dec 18, 2021</td>
-                                <td class="whitespace-nowrap">Nita Parr</td>
-                                <td>-$1,042.82</td>
-                                <td class="text-center">
-                                    <span class="badge bg-info/20 text-info rounded-full hover:top-0">In Process</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">#03</td>
-                                <td class="whitespace-nowrap">Dec 25, 2021</td>
-                                <td class="whitespace-nowrap">Carl Bell</td>
-                                <td>$1,828.16</td>
-                                <td class="text-center">
-                                    <span class="badge bg-danger/20 text-danger rounded-full hover:top-0">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">#04</td>
-                                <td class="whitespace-nowrap">Nov 29, 2021</td>
-                                <td class="whitespace-nowrap">Dan Hart</td>
-                                <td>$1,647.55</td>
-                                <td class="text-center">
-                                    <span class="badge bg-success/20 text-success rounded-full hover:top-0">Completed</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">#05</td>
-                                <td class="whitespace-nowrap">Nov 24, 2021</td>
-                                <td class="whitespace-nowrap">Jake Ross</td>
-                                <td>$927.43</td>
-                                <td class="text-center">
-                                    <span class="badge bg-success/20 text-success rounded-full hover:top-0">Completed</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">#06</td>
-                                <td class="whitespace-nowrap">Jan 26, 2022</td>
-                                <td class="whitespace-nowrap">Anna Bell</td>
-                                <td>$250.00</td>
-                                <td class="text-center">
-                                    <span class="badge bg-info/20 text-info rounded-full hover:top-0">In Process</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <?php include 'imoveisNovos/index.php'; ?>
             </div>
         </div>
     </div>
