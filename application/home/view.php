@@ -151,7 +151,7 @@
             </div>
 
             <!-- Imóveis novos para seus pretendentes -->            
-            <div class="panel overflow-y-auto" style="height: 350px;">
+            <div class="panel overflow-y-auto" style="height: 400px;">
                 <?php include 'imoveisNovos/index.php'; ?>
             </div>      
         </div>

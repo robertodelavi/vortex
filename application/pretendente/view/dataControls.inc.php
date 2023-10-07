@@ -6,6 +6,7 @@
 		case 'gravadados_pretendente':
 			$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 			$data->tabela = 'pretendentes';
+			$_POST['prw_dataatual'] = date('Ymd');
 			$data->add($_POST);
 			$prw_codigo = $data->MaxValue('prw_codigo', 'pretendentes');
 
@@ -14,7 +15,7 @@
             $historico['prh_data'] = date('Ymd');
             $historico['prh_contato'] = $_POST['prw_contato'];
             $historico['prh_descricao'] = addslashes($_POST['prw_obs']);
-            $historico['prh_datacad'] = date('Ymd');
+			$historico['prh_datacad'] = date('Ymd');
             $historico['prh_horacad'] = date('Hi');
             $historico['prh_usuario'] = $_SESSION['v_usu_codigo'];
             $historico['prh_avisar'] = 'n';                       
@@ -28,6 +29,7 @@
 			if(isset($_POST['prw_codigo']) && $_POST['prw_codigo'] > 0){
 				// Converte moeda pra float
 				$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
+				$_POST['prw_dataatual'] = date('Ymd');
 												
 				$data->tabela = 'pretendentes';
 				$data->update($_POST);
@@ -68,9 +70,14 @@
 				// Converte moeda pra float
 				$_POST['ppf_valorini'] = moneyToFloat($_POST['ppf_valorini']);
 				$_POST['ppf_valorfim'] = moneyToFloat($_POST['ppf_valorfim']);
+				$_POST['prw_dataatual'] = date('Ymd');
 								
 				$data->tabela = 'pretendentesperfil';
 				$data->add($_POST);
+
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['ppf_pretendente'];
+				$data->executaSQL($sql);
+
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
 				exit;
 			}else{
@@ -86,6 +93,9 @@
 								
 				$data->tabela = 'pretendentesperfil';
 				$data->update($_POST);
+
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['ppf_pretendente'];
+				$data->executaSQL($sql);
 
                 echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
 				exit;
@@ -113,6 +123,10 @@
 								
 				$data->tabela = 'pretendenteshistorico';
 				$data->add($_POST);
+
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prh_pretendente'];
+				$data->executaSQL($sql);
+
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3\', \''.$_POST['prh_pretendente'].'\' )"></body>';
 				exit;
 			}else{
@@ -128,6 +142,10 @@
 				
 				$data->tabela = 'pretendenteshistorico';
 				$data->update($_POST);
+
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prh_pretendente'];
+				$data->executaSQL($sql);
+
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3&contato='.$_POST['prh_contato'].'\', \''.$_POST['prh_pretendente'].'\' )"></body>';
 				exit;
 
@@ -138,8 +156,7 @@
 
 		//* VISITAS
 		case 'gravavisita_pretendente':
-            echo 'grava visita...';
-			if(isset($_POST['prv_pretendente']) && isset($_POST['prv_imovel'])){
+            if(isset($_POST['prv_pretendente']) && isset($_POST['prv_imovel'])){
                 echo var_dump($_POST);
 				$_POST['prv_acompanhantepretendente'] = addslashes($_POST['prv_acompanhantepretendente']);
 				// Converter data
@@ -152,6 +169,10 @@
 				//
 				$data->tabela = 'pretendentesvisitas';
 				$data->add($_POST);
+
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prv_pretendente'];
+				$data->executaSQL($sql);
+
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=4\', \''.$_POST['prv_pretendente'].'\' )"></body>';
 				exit;
 			}else{
@@ -174,6 +195,10 @@
 				//
 				$data->tabela = 'pretendentesvisitas';
 				$data->update($_POST);
+
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prv_pretendente'];
+				$data->executaSQL($sql);
+
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=5\', \''.$_POST['prv_pretendente'].'\' )"></body>';
 				exit;
 			}else{

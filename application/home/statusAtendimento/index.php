@@ -29,9 +29,7 @@
                             <p class="ltr:ml-auto rtl:mr-auto">'.number_format($percentual, 2, ',', '.').'%</p>
                         </div>
                         <div class="rounded-full h-2 bg-dark-light dark:bg-[#1b2e4b] shadow">
-                            <div 
-                                class="w-12/12 h-full rounded-full"
-                                style="background: linear-gradient(90deg, '.$value['psa_cor'].' '.$percentual.'%, #1b2e4b '.$percentual.'%);"
+                            <div class="w-12/12 h-full rounded-full" style="background: linear-gradient(90deg, '.$value['psa_cor'].' '.$percentual.'%, transparent '.$percentual.'%);"
                             ></div>
                         </div>
                     </div>

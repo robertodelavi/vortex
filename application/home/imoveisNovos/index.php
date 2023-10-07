@@ -23,10 +23,17 @@
                             <td class="font-semibold cursor-pointer hover:text-primary" onClick="nextPage(\'?module=pretendente&acao=edita_pretendente\', '.$value['prw_codigo'].');" >                                
                                 '.$value['pretendente'].'                                
                             </td>
-                            <td class="whitespace-nowrap">'.$value['imovel'].'</td>
+                            <td class="whitespace-nowrap">
+                                <div class="flex items-center gap-2"> 
+                                    <div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-full overflow-hidden h-10 w-10">
+                                        <div class="bg-cover bg-center h-full" style="background-image: url('.$value['foto'].');" ></div>
+                                    </div>
+                                    <div>'.$value['imovel'].'</div>
+                                </div>
+                            </td>
                             <td class="whitespace-nowrap text-success">'.$value['valor'].'</td>
                             <td class="text-center">
-                                <span class="badge bg-primary/20 text-primary rounded-full hover:top-0">há '.($value['diasCadastro'] == 1 ? $value['diasCadastro'].' dia' : $value['diasCadastro'].' dias').'</span>
+                                <span class="badge bg-primary whitespace-nowrap">há '.($value['diasCadastro'] == 1 ? $value['diasCadastro'].' dia' : $value['diasCadastro'].' dias').'</span>
                             </td>
                         </tr>';
                     }

@@ -1,6 +1,12 @@
 <?php
 
 $sql = '
+SELECT emp_diasavisoatendimento1, emp_diasavisoatendimento2, emp_diasavisoatendimento3
+FROM sisempresas
+LIMIT 1';
+$empresa = $data->find('dynamic', $sql);
+
+$sql = '
 SELECT 
     IF((p.prw_usuario = '.$_SESSION['v_usu_codigo'].' OR u.usu_nivel < '.$_SESSION['v_usu_nivel'].'), p.prw_codigo, 0) AS prw_codigo, 
     p.prw_nome, 
@@ -11,7 +17,8 @@ SELECT
     ps.psa_descricao AS statusNome, 
     ps.psa_cor,
     p.prw_datacad AS primeiroCadastro,
-    p.prw_dataatual AS ultimoCadastro
+    p.prw_dataatual AS ultimoCadastro,
+    DATEDIFF(CURRENT_DATE(), p.prw_dataatual) AS diasSemAtendimento
 FROM pretendentes AS p
     LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
     LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
@@ -56,11 +63,13 @@ foreach ($result as $row) {
     array_push($arrRow, trim($row['prw_nome']));    
     array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['psa_cor'].'; "></div>');
     array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
+    array_push($arrRow, 'xxx dias');
     array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
     array_push($arrRow, trim($row['primeiroCadastro']));
     array_push($arrRow, trim($row['ultimoCadastro']));
     array_push($arrRow, trim($row['prw_email'] ? $row['prw_email'] : '--'));   
     array_push($arrRow, $row['prw_codigo']);
+    array_push($arrRow, $row['diasSemAtendimento']);
     //
     array_push($tableResult, $arrRow);
 }
@@ -262,17 +271,19 @@ if(isset($_GET['res'])){
 
                 this.datatable2 = new simpleDatatables.DataTable('#myTable2', {
                     data: {
-                        headings: ['Nome do Pretendente', 'Status', 'Atendido por', 'Telefones', 'P. Atendimento', 'U. Atendimento', 'E-mail', 'Ações'],
+                        headings: ['Nome do Pretendente', 'Status', 'Atendido por', 'Tempo sem atendimento', 'Telefones', 'P. Atendimento', 'U. Atendimento', 'E-mail', 'Ações', '#'],
                         data: data,
                     },
                     searchable: false,
                     perPage: 20,
                     perPageSelect: [10, 20, 30, 50, 100],
+                    // ocultar coluna 9
+                    
                     columns: [
                         {
                             select: 0,
                             render: (data, cell, row) => {
-                                const id = row.cells[7].data
+                                const id = row.cells[8].data
                                 if(id > 0){
                                     return `<div class="flex items-center w-max">
                                                 <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}')" class="hover:text-primary">${data}</a>
@@ -289,15 +300,38 @@ if(isset($_GET['res'])){
                             select: 1,
                             sortable: false,
                             render: (data, cell, row) => {
-                                const id = row.cells[7].data
+                                const id = row.cells[8].data
                                 return `<div @click="toggle2; getStatusScrumBoard('${id}');" x-tooltip="Alterar o status do pretendente" data-placement="top" class="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex cursor-pointer" >${data}</div>`;
                             },
                         },
                         {
-                            // exibir coluna somente se id > 0
+                            // tempo sem atendimento
                             select: 3,
                             render: (data, cell, row) => {
-                                const id = row.cells[7].data
+                                const id = row.cells[8].data
+                                const diasSemAtendimento = row.cells[9].data
+                                const arrayCoresTempoSemAtendimento = ['bg-success', 'bg-primary', 'bg-danger'];
+                                const intervalosSemAtendimento = [<?php echo $empresa[0]['emp_diasavisoatendimento1']; ?>, <?php echo $empresa[0]['emp_diasavisoatendimento2']; ?>, <?php echo $empresa[0]['emp_diasavisoatendimento3']; ?>];
+
+                                if(diasSemAtendimento >= 0){
+                                    const indexCor = diasSemAtendimento > intervalosSemAtendimento[0] ? (diasSemAtendimento > intervalosSemAtendimento[1] ? (diasSemAtendimento > intervalosSemAtendimento[2] ? 2 : 1) : 0) : 0;
+                                    const cor = arrayCoresTempoSemAtendimento[indexCor];
+                                    return `<span class="badge ${cor} whitespace-nowrap">${diasSemAtendimento} dias</div>`;                                
+                                }else{
+                                    return `<span class="badge ${cor} whitespace-nowrap">--</div>`;
+                                }
+                            }
+                        },
+                        {
+                            select: 9,
+                            // ocultar esta coluna
+                            hidden: true,
+                        },
+                        {
+                            // exibir coluna somente se id > 0
+                            select: 4,
+                            render: (data, cell, row) => {
+                                const id = row.cells[8].data
                                 if(id > 0){
                                     return data;
                                 }else{
@@ -306,10 +340,10 @@ if(isset($_GET['res'])){
                             }
                         },
                         {
-                            select: 7,
+                            select: 8,
                             sortable: false,
                             render: (data, cell, row) => {
-                                const id = row.cells[7].data
+                                const id = row.cells[8].data
                                 const nome = row.cells[0].data
                                 
                                 if(id > 0){
@@ -527,7 +561,7 @@ if(isset($_GET['res'])){
                 }
                 
                 this.currentData.map((item) => { // varre pretendentes
-                    if(item[7] == this.pretendenteID){
+                    if(item[8] == this.pretendenteID){
                         if(etapas.length == 0){
                             return this.currentData
                         }

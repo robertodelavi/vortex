@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         FROM pretendenteshistorico AS ph 
         WHERE ph.prh_pretendente = p.prw_codigo
         ORDER BY ph.prh_datacad DESC
-        LIMIT 1) AS ultimoCadastro
+        LIMIT 1) AS ultimoCadastro,
+        DATEDIFF(CURRENT_DATE(), p.prw_dataatual) AS diasSemAtendimento
     FROM pretendentes AS p
         LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
         LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
@@ -97,11 +98,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             array_push($arrRow, trim($row['prw_nome']));    
             array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['psa_cor'].'; "></div>');
             array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
+            array_push($arrRow, trim('xxx diasss'));
             array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
             array_push($arrRow, trim($row['primeiroCadastro']));
             array_push($arrRow, trim($row['ultimoCadastro']));
             array_push($arrRow, trim($row['prw_email'] ? $row['prw_email'] : '--'));   
             array_push($arrRow, $row['prw_codigo']);
+            array_push($arrRow, $row['diasSemAtendimento']);
             //
             array_push($filteredData, $arrRow);
         }

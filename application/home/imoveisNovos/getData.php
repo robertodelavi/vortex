@@ -27,7 +27,9 @@
                         b.bai_descricao, 
                         ((iv.imv_valor*m.moe_valor)/100) AS imv_valor,
                         i.imo_datacad,
-                        (SELECT DATEDIFF(NOW(), i.imo_datacad)) AS diasCadastro
+                        (SELECT DATEDIFF(NOW(), i.imo_datacad)) AS diasCadastro,
+                        ft.imf_imovel,
+                        ft.imf_arquivo
                     FROM imoveis AS i 
                         INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
                         LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
@@ -78,9 +80,12 @@
                 
                 if($arrayImoveis && count($arrayImoveis) > 0){ // Encontrou pelo menos 1 imóvel novo pro pretendente atual, insere no array $result
                     foreach ($arrayImoveis as $keyImovel => $valueImovel) {
+                        $foto = $valueImovel['imf_arquivo'] ? $_SESSION['BASE_URL_IMAGENS'].$valueImovel['imf_imovel'].'-'.$valueImovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+
                         $result[] = array(
                             'prw_codigo' => $value['prw_codigo'],
                             'pretendente' => $value['prw_nome'],
+                            'foto' => $foto, 
                             'imovel' => $valueImovel['imo_codigo'].' - '.$valueImovel['tpi_descricao'].' - '.$valueImovel['bai_descricao'],
                             'valor' => 'R$ '.number_format(($valueImovel['imv_valor']/100), 2, ',', '.'),
                             'diasCadastro' => $valueImovel['diasCadastro']
