@@ -36,7 +36,7 @@ if($_SESSION['v_somente_atendimentos_meu'] == "s"){
 
 $sql .= '
 ORDER BY 10 DESC, 2 ASC
-LIMIT 200';
+-- LIMIT 200';
 $result = $data->find('dynamic', $sql);
 
 // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 

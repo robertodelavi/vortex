@@ -70,7 +70,6 @@
 				// Converte moeda pra float
 				$_POST['ppf_valorini'] = moneyToFloat($_POST['ppf_valorini']);
 				$_POST['ppf_valorfim'] = moneyToFloat($_POST['ppf_valorfim']);
-				$_POST['prw_dataatual'] = date('Ymd');
 								
 				$data->tabela = 'pretendentesperfil';
 				$data->add($_POST);

@@ -414,29 +414,7 @@ function createScriptImoveis($value, $filters, $sideFilters, $sortColumn, $sortD
         $sql = substr($sql, 0, -4);
         $sql .= ') ';
     }else{
-        $filters = json_decode($filters);
-        // $sql .= ' AND ( ';
-        foreach($filters as $keyPerfil => $valuePerfil){ // cada perfil
-            $sql .= ' (';
-            foreach($valuePerfil as $keyCampo => $valueCampo){ // cada campo do perfil
-                //? Com intervalo de valores
-                if($valueCampo->intervalo && $valueCampo->inicio != '' && $valueCampo->fim != ''){
-                    if($keyCampo == 'ppf_valor'){ //? Valor faz join com tabela imovelvenda
-                        $sql .= '(((iv.'.convertField($keyCampo).'*m.moe_valor)/100)/100) BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
-                    }else{
-                        $sql .= 'i.'.convertField($keyCampo) .' BETWEEN "'.$valueCampo->inicio.'" AND "'.$valueCampo->fim.'" AND ';
-                    }
-                }else 
-                //? Com valores únicos
-                if(!$valueCampo->intervalo && $valueCampo->valor != ''){
-                    $sql .= 'i.'.convertField($keyCampo) .' = "'.$valueCampo->valor.'" AND ';
-                }
-            }
-            $sql = substr($sql, 0, -4);
-            $sql .= ') OR ';
-        }
-        $sql = substr($sql, 0, -4);
-        $sql .= ' ) ';
+        $sql .= $filters;        
     }
 
     $sql .= ' 
@@ -454,39 +432,6 @@ function createScriptImoveis($value, $filters, $sideFilters, $sortColumn, $sortD
     return $sql;
 }
 
-//? Converte nome da coluna da tabela pretendentesperfil pra nome da coluna da tabela imoveis
-function convertField($field){
-    switch($field){
-        case 'ppf_tipoimovel':
-            return 'imo_tipoimovel';
-        break;
-        case 'ppf_utilizacao':
-            return 'imo_utilizacao';
-        break;
-        case 'ppf_quartos':
-            return 'imo_quartos';
-        break;
-        case 'ppf_suites':
-            return 'imo_suites';
-        break;
-        case 'ppf_garagem':
-            return 'imo_garagem';
-        break;
-        case 'ppf_valor':
-            return 'imv_valor'; //* tabela imovelvenda
-        break;
-        case 'ppf_areaterreno':
-            return 'imo_areaterreno';
-        break;
-        case 'ppf_areaconstruida':
-            return 'imo_areaconstruida';
-        break;
-        case 'ppf_empreendimento':
-            return 'imo_empreendimento';
-        break;
-    }
-}
-
 //? Extrai os filtros relevantes do perfil (que possuem valor)
 function getFilters($prw_codigo, $data){
     if(!$prw_codigo){
@@ -498,62 +443,34 @@ function getFilters($prw_codigo, $data){
     $result = $data->find('dynamic', $sql);    
 
     // Busca filtros 
-    $filtros = array();
-    foreach($result as $key => $value){ // cada perfil  
-        $perfil = array();
-        foreach($value as $k => $v){
-            if($v != '' && $v != 0 && $k != 'ppf_nome' && $k != 'ppf_pretendente' && $k != 'ppf_codigo' && $k != 'ppf_permuta'){            
-                switch($k){
-                    //? Campos com intervalo de valores
-                    case 'ppf_quartosini':
-                        $perfil['ppf_quartos']['inicio'] = $v;
-                        $perfil['ppf_quartos']['intervalo'] = true;                        
-                    break;
-                    case 'ppf_quartosfim':
-                        $perfil['ppf_quartos']['fim'] = $v;
-                        $perfil['ppf_quartos']['intervalo'] = true;
-                    break;
-                    case 'ppf_suitesini':
-                        $perfil['ppf_suites']['inicio'] = $v;
-                        $perfil['ppf_suites']['intervalo'] = true;
-                    break;
-                    case 'ppf_suitesfim':
-                        $perfil['ppf_suites']['fim'] = $v;
-                        $perfil['ppf_suites']['intervalo'] = true;
-                    break;
-                    case 'ppf_valorini':
-                        $perfil['ppf_valor']['inicio'] = $v;
-                        $perfil['ppf_valor']['intervalo'] = true;
-                    break;
-                    case 'ppf_valorfim':
-                        $perfil['ppf_valor']['fim'] = $v;
-                        $perfil['ppf_valor']['intervalo'] = true;
-                    break;
-                    case 'ppf_areaterrenoini':
-                        $perfil['ppf_areaterreno']['inicio'] = $v;
-                        $perfil['ppf_areaterreno']['intervalo'] = true;
-                    break;
-                    case 'ppf_areaterrenofim':
-                        $perfil['ppf_areaterreno']['fim'] = $v;
-                        $perfil['ppf_areaterreno']['intervalo'] = true;
-                    break;
-                    case 'ppf_areaconstruidaini':
-                        $perfil['ppf_areaconstruida']['inicio'] = $v;
-                        $perfil['ppf_areaconstruida']['intervalo'] = true;
-                    break;
-                    case 'ppf_areaconstruidafim':
-                        $perfil['ppf_areaconstruida']['fim'] = $v;  
-                        $perfil['ppf_areaconstruida']['intervalo'] = true;
-                    break;
-                    //? Campos com valores únicos
-                    default:
-                        $perfil[$k]['valor'] = $v;                              
-                        $perfil[$k]['intervalo'] = false;
-                    break;
-                }              
-            }
-        }
-        $filtros[] = $perfil;
+    $sql = '';
+    foreach($result as $keyPerfil => $valuePerfil){ //? cada perfil  
+        $sql .= '(1 = 1 AND ';
+        // Perfil do pretendente
+        if($valuePerfil['ppf_tipoimovel'] && $valuePerfil['ppf_tipoimovel'] > 0){ $sql .= ' i.imo_tipoimovel = '.$valuePerfil['ppf_tipoimovel'].' AND '; }
+        if($valuePerfil['ppf_utilizacao'] && $valuePerfil['ppf_utilizacao'] > 0){ $sql .= ' i.imo_utilizacao = '.$valuePerfil['ppf_utilizacao'].' AND '; }
+        if($valuePerfil['ppf_quartosini'] && $valuePerfil['ppf_quartosini'] > 0){ $sql .= ' i.imo_quartos >= '.$valuePerfil['ppf_quartosini'].' AND '; }
+        if($valuePerfil['ppf_quartosfim'] && $valuePerfil['ppf_quartosfim'] > 0){ $sql .= ' i.imo_quartos <= '.$valuePerfil['ppf_quartosfim'].' AND '; }
+        if($valuePerfil['ppf_suitesini'] && $valuePerfil['ppf_suitesini'] > 0){ $sql .= ' i.imo_suites >= '.$valuePerfil['ppf_suitesini'].' AND '; }
+        if($valuePerfil['ppf_suitesfim'] && $valuePerfil['ppf_suitesfim'] > 0){ $sql .= ' i.imo_suites <= '.$valuePerfil['ppf_suitesfim'].' AND '; }
+        if($valuePerfil['ppf_garagem'] && $valuePerfil['ppf_garagem'] > 0){ $sql .= ' i.imo_garagem = '.$valuePerfil['ppf_garagem'].' AND '; }
+        if($valuePerfil['ppf_valorini'] && $valuePerfil['ppf_valorini'] > 0){ $sql .= ' (((iv.imv_valor*m.moe_valor)/100)/100) >= '.$valuePerfil['ppf_valorini'].' AND '; }
+        if($valuePerfil['ppf_valorfim'] && $valuePerfil['ppf_valorfim'] > 0){ $sql .= ' (((iv.imv_valor*m.moe_valor)/100)/100) <= '.$valuePerfil['ppf_valorfim'].' AND '; }                    
+        if($valuePerfil['ppf_areaterrenoini'] && $valuePerfil['ppf_areaterrenoini'] > 0){ $sql .= ' i.imo_areaterreno >= '.$valuePerfil['ppf_areaterrenoini'].' AND '; }
+        if($valuePerfil['ppf_areaterrenofim'] && $valuePerfil['ppf_areaterrenofim'] > 0){ $sql .= ' i.imo_areaterreno <= '.$valuePerfil['ppf_areaterrenofim'].' AND '; }
+        if($valuePerfil['ppf_areaconstruidaini'] && $valuePerfil['ppf_areaconstruidaini'] > 0){ $sql .= ' i.imo_areaconstruida >= '.$valuePerfil['ppf_areaconstruidaini'].' AND '; }
+        if($valuePerfil['ppf_areaconstruidafim'] && $valuePerfil['ppf_areaconstruidafim'] > 0){ $sql .= ' i.imo_areaconstruida <= '.$valuePerfil['ppf_areaconstruidafim'].' AND '; }
+        if($valuePerfil['ppf_cidade'] && $valuePerfil['ppf_cidade'] != ''){ $sql .= ' c.cid_descricao LIKE "%'.$valuePerfil['ppf_cidade'].'%" AND '; }  
+        if($valuePerfil['ppf_pontoreferencia'] && $valuePerfil['ppf_pontoreferencia'] != ''){ $sql .= ' i.imo_pontoreferencia LIKE "%'.$valuePerfil['ppf_pontoreferencia'].'%" AND '; }
+        if($valuePerfil['ppf_edificio'] && $valuePerfil['ppf_edificio'] != ''){ $sql .= ' i.imo_edificio LIKE "%'.$valuePerfil['ppf_edificio'].'%" AND '; }
+        if($valuePerfil['ppf_rua'] && $valuePerfil['ppf_rua'] != ''){ $sql .= ' i.imo_rua LIKE "%'.$valuePerfil['ppf_rua'].'%" AND '; }
+        if($valuePerfil['ppf_bairro'] && $valuePerfil['ppf_bairro'] != ''){ $sql .= ' b.bai_descricao LIKE "%'.$valuePerfil['ppf_bairro'].'%" AND '; }
+        if($valuePerfil['ppf_empreendimento'] && $valuePerfil['ppf_empreendimento'] > 0){ $sql .= ' i.imo_empreendimento = '.$valuePerfil['ppf_empreendimento'].' AND '; }
+        //
+        $sql = substr($sql, 0, -4);
+        $sql .= ') OR ';  
     }
-    return json_encode($filtros);        
+    $sql = substr($sql, 0, -4);
+    $sql .= ')';
+    return $sql;        
 }
