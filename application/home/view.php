@@ -27,18 +27,25 @@
                     </div>
                     <!-- Corpo -->
                     <div class="flex items-center mt-5">
-                        <a href="?module=pretendente&acao=lista_pretendente" @click="toggle" class="flex justify-between cursor-pointer">
+                        <a href="?module=pretendente&acao=lista_pretendente" @click="toggle" class="flex justify-between cursor-pointer hover:text-dark">
                             <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> Pretendentes </div>
                             <div class="badge bg-white/30">+ 2.35% </div>
                         </a>
                     </div>
                     <div class="flex items-center font-semibold mt-5">
-                        <a href="?module=pretendente&acao=lista_pretendente" @click="toggle" class="flex justify-between cursor-pointer">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                                <path opacity="0.5" d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z" stroke="currentColor" stroke-width="1.5"></path>
-                                <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                        <a href="?module=pretendente&acao=lista_pretendente" @click="toggle" class="flex justify-between cursor-pointer hover:text-dark ">
+                            <div class="flex items-center gap-2">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.5 11C7.06692 11.6303 7.75638 12 8.5 12C9.24362 12 9.93308 11.6303 10.5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M13.5 11C14.0669 11.6303 14.7564 12 15.5 12C16.2436 12 16.9331 11.6303 17.5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16C11 15.4477 11.4477 15 12 15C12.5523 15 13 15.4477 13 16Z" fill="currentColor"/>
+                                <path d="M17 4L20.4641 2L19 7.4641L22.4641 5.4641" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M14.0479 5.5L15.7799 6.5L13.0479 7.23205L14.7799 8.23205" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 12C22 17.5228 17.5228 22 12 22C10.1786 22 8.47087 21.513 7 20.6622M12 2C6.47715 2 2 6.47715 2 12C2 13.8214 2.48697 15.5291 3.33782 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                             </svg>
-                            Last Week 44,700
+                           
+                                <span>Sem atendimento 44.700</span>                            
+                            </div>
                         </a>
                     </div>
                 </div>

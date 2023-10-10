@@ -69,14 +69,14 @@
                     echo '<option value="todos">Todos</option>';
                 }
             ?>            
-            <option value="meus" >Somente meus</option>
+            <option value="meus" selected>Somente meus</option>
         </select>
     </div>
     <div>
         <label>Situação</label>
         <select name="situacao" class="form-select text-white-dark">
             <option value="">-- Todos --</option>
-            <option value="n">Em aberto</option>
+            <option value="n" selected>Em aberto</option>
             <option value="s">Concluído</option>            
         </select>
     </div>
@@ -113,9 +113,12 @@
         <label>Status do atendimento</label>
         <select name="prw_psa_codigo" class="form-select text-white-dark">
             <option value="">-- Todos --</option>
-            <?php foreach ($statusAtendimento as $key => $value) { ?>
-                <option value="<?php echo $value['psa_codigo'] ?>"><?php echo $value['psa_descricao']; ?></option>
-            <?php } ?>
+            <?php 
+                foreach ($statusAtendimento as $key => $value) { 
+                    $selected = $_GET['status'] && $_GET['status'] == $value['psa_codigo'] ? 'selected' : '';
+                    echo '<option value="'.$value['psa_codigo'].'" '.$selected.' >'.$value['psa_descricao'].'</option>';
+                } 
+            ?>
         </select>
     </div>
     <div>
@@ -164,10 +167,12 @@
     <!-- Botões de ação -->
     <div class="flex gap-2 pt-4">
         <div class="">
-            <button type="submit" class="btn btn-primary">Aplicar</button>
+            <button type="submit" class="btn btn-primary" x-bind:disabled="filterLoading">
+                <span>Aplicar</span>
+            </button>
         </div>
         <div class="">
-            <button type="button" class="btn btn-secondary" x-on:click="limpaFiltros()">Limpar</button>
+            <button type="button" class="btn btn-secondary" x-bind:disabled="filterLoading" x-on:click="limpaFiltros()">Limpar</button>
         </div>
     </div>
 </form>

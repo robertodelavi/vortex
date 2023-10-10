@@ -6,7 +6,15 @@
 		case 'gravadados_pretendente':
 			$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 			$data->tabela = 'pretendentes';
+			$_POST['prw_datacad'] = date('Ymd');
+			$_POST['prw_horacad'] = date('Hi');
 			$_POST['prw_dataatual'] = date('Ymd');
+			$_POST['prw_horaatual'] = date('Hi');
+			$_POST['prw_usuario'] = $_SESSION['v_usu_codigo'];
+			$_POST['prw_ip'] = $_SERVER['REMOTE_ADDR'];
+			$_POST['prw_empresa'] = $_SESSION['v_emp_codigo'];
+			$_POST['prw_operacao'] = 'v'; // Venda
+			//
 			$data->add($_POST);
 			$prw_codigo = $data->MaxValue('prw_codigo', 'pretendentes');
 
@@ -30,7 +38,8 @@
 				// Converte moeda pra float
 				$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 				$_POST['prw_dataatual'] = date('Ymd');
-												
+				$_POST['prw_horaatual'] = date('Hi');
+				//
 				$data->tabela = 'pretendentes';
 				$data->update($_POST);
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=1\', \''.$_POST['prw_codigo'].'\' )"></body>';
@@ -74,7 +83,7 @@
 				$data->tabela = 'pretendentesperfil';
 				$data->add($_POST);
 
-				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['ppf_pretendente'];
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'", prw_horaatual = "'.date('Hi').'" WHERE prw_codigo = '.$_POST['ppf_pretendente'];
 				$data->executaSQL($sql);
 
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
@@ -93,7 +102,7 @@
 				$data->tabela = 'pretendentesperfil';
 				$data->update($_POST);
 
-				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['ppf_pretendente'];
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'", prw_horaatual = "'.date('Hi').'" WHERE prw_codigo = '.$_POST['ppf_pretendente'];
 				$data->executaSQL($sql);
 
                 echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=2\', \''.$_POST['ppf_pretendente'].'\' )"></body>';
@@ -123,7 +132,7 @@
 				$data->tabela = 'pretendenteshistorico';
 				$data->add($_POST);
 
-				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prh_pretendente'];
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'", prw_horaatual = "'.date('Hi').'" WHERE prw_codigo = '.$_POST['prh_pretendente'];
 				$data->executaSQL($sql);
 
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3\', \''.$_POST['prh_pretendente'].'\' )"></body>';
@@ -142,7 +151,7 @@
 				$data->tabela = 'pretendenteshistorico';
 				$data->update($_POST);
 
-				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prh_pretendente'];
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'", prw_horaatual = "'.date('Hi').'" WHERE prw_codigo = '.$_POST['prh_pretendente'];
 				$data->executaSQL($sql);
 
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=3&contato='.$_POST['prh_contato'].'\', \''.$_POST['prh_pretendente'].'\' )"></body>';
@@ -169,7 +178,7 @@
 				$data->tabela = 'pretendentesvisitas';
 				$data->add($_POST);
 
-				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prv_pretendente'];
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'", prw_horaatual = "'.date('Hi').'" WHERE prw_codigo = '.$_POST['prv_pretendente'];
 				$data->executaSQL($sql);
 
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=4\', \''.$_POST['prv_pretendente'].'\' )"></body>';
@@ -195,7 +204,7 @@
 				$data->tabela = 'pretendentesvisitas';
 				$data->update($_POST);
 
-				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'" WHERE prw_codigo = '.$_POST['prv_pretendente'];
+				$sql = 'UPDATE pretendentes SET prw_dataatual = "'.date('Ymd').'", prw_horaatual = "'.date('Hi').'" WHERE prw_codigo = '.$_POST['prv_pretendente'];
 				$data->executaSQL($sql);
 
 				echo '<body onload="nextPage(\'?module=pretendente&acao=edita_pretendente&tab=5\', \''.$_POST['prv_pretendente'].'\' )"></body>';

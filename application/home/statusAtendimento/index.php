@@ -25,7 +25,9 @@
                     </div>
                     <div class="flex-1">
                         <div class="flex font-semibold text-white-dark mb-2">
-                            <h6>'.$value['psa_descricao'].' ('.($total == 1 ? $total.' pretendente' : $total.' pretendentes').')</h6>
+                            <a href="?module=pretendente&acao=lista_pretendente&status='.$value['psa_codigo'].'" class="hover:text-primary">
+                                <h6>'.$value['psa_descricao'].' ('.($total == 1 ? $total.' pretendente' : $total.' pretendentes').')</h6>
+                            </a>
                             <p class="ltr:ml-auto rtl:mr-auto">'.number_format($percentual, 2, ',', '.').'%</p>
                         </div>
                         <div class="rounded-full h-2 bg-dark-light dark:bg-[#1b2e4b] shadow">

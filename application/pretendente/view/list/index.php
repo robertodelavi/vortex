@@ -24,19 +24,16 @@ FROM pretendentes AS p
     LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
 WHERE prw_codigo > 0';
 
-//? Usuário logado só ve pretententes que foram cadastrados por ele mesmo e com niveis menores ao dele
-if($_SESSION['v_usu_nivel']){
-    $sql .= ' AND (u.usu_codigo = '.$_SESSION['v_usu_codigo'].' OR u.usu_nivel <= '.$_SESSION['v_usu_nivel'].')';
-}
+$sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" '; // Somente meus atendimentos
+$sql .= ' AND p.prw_concluido = "n" '; // Situação em aberto
 
-//? Usuário logado tem permisão de ver somente os atendimentos dele
-if($_SESSION['v_somente_atendimentos_meu'] == "s"){
-    $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
+//? Filtro status vindo da home
+if($_GET['status'] && $_GET['status'] > 0){
+    $sql .= ' AND p.prw_psa_codigo = '.$_GET['status'];
 }
 
 $sql .= '
-ORDER BY 10 DESC, 2 ASC
--- LIMIT 200';
+ORDER BY 10 DESC, 2 ASC';
 $result = $data->find('dynamic', $sql);
 
 // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
@@ -54,24 +51,26 @@ ORDER BY psa_ordem ASC)';
 $etapas = $data->find('dynamic', $sql);
 
 $tableResult = [];
-foreach ($result as $row) {
-    // Converte data yyyymmdd pra dd/mm/yyyy
-    $row['primeiroCadastro'] = $row['primeiroCadastro'] ? date('d/m/Y', strtotime($row['primeiroCadastro'])) : '--';
-    $row['ultimoCadastro'] = $row['ultimoCadastro'] ? date('d/m/Y', strtotime($row['ultimoCadastro'])) : '--';
-
-    $arrRow = [];
-    array_push($arrRow, trim($row['prw_nome']));    
-    array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['psa_cor'].'; "></div>');
-    array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
-    array_push($arrRow, 'xxx dias');
-    array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
-    array_push($arrRow, trim($row['primeiroCadastro']));
-    array_push($arrRow, trim($row['ultimoCadastro']));
-    array_push($arrRow, trim($row['prw_email'] ? $row['prw_email'] : '--'));   
-    array_push($arrRow, $row['prw_codigo']);
-    array_push($arrRow, $row['diasSemAtendimento']);
-    //
-    array_push($tableResult, $arrRow);
+if($result && count($result) > 0){
+    foreach ($result as $row) {
+        // Converte data yyyymmdd pra dd/mm/yyyy
+        $row['primeiroCadastro'] = $row['primeiroCadastro'] ? date('d/m/Y', strtotime($row['primeiroCadastro'])) : '--';
+        $row['ultimoCadastro'] = $row['ultimoCadastro'] ? date('d/m/Y', strtotime($row['ultimoCadastro'])) : '--';
+    
+        $arrRow = [];
+        array_push($arrRow, trim($row['prw_nome']));    
+        array_push($arrRow, '<div class="h-2.5 rounded-full rounded-bl-full text-center text-white text-xs" style="width:'.getProgressPercent($totalEtapas[0]['qtd'], $row).'%; background-color: '.$row['psa_cor'].'; "></div>');
+        array_push($arrRow, trim($row['usu_nome'] ? $row['usu_nome'] : '--'));
+        array_push($arrRow, 'xxx dias');
+        array_push($arrRow, trim($row['prw_telefones'] ? $row['prw_telefones'] : '--'));
+        array_push($arrRow, trim($row['primeiroCadastro']));
+        array_push($arrRow, trim($row['ultimoCadastro']));
+        array_push($arrRow, trim($row['prw_email'] ? $row['prw_email'] : '--'));   
+        array_push($arrRow, $row['prw_codigo']);
+        array_push($arrRow, $row['diasSemAtendimento']);
+        //
+        array_push($tableResult, $arrRow);
+    }
 }
 function getProgressPercent($totalEtapas, $row){
     if(!$totalEtapas) $totalEtapas = 1;
@@ -136,8 +135,14 @@ if(isset($_GET['res'])){
                         <div>                    
                             <button id="searchButton" class="btn btn-primary" @click="toggle;" >Novo</button>                    
                         </div>
-                    </div>                        
-                    <table id="myTable2" class="tabela whitespace-nowrap"></table>            
+                    </div>   
+                    <div x-show="!filterLoading">
+                        <table id="myTable2" class="tabela whitespace-nowrap"></table>            
+                    </div>                     
+                    <div x-show="filterLoading" class="flex items-center mt-4 gap-2">
+                        <div class="animate-spin border-2 border-primary border-l-transparent rounded-full w-5 h-5 inline-block align-middle"></div>
+                        Buscando resultados...
+                    </div>
                 </div>
             </div>
         </div>    
@@ -252,6 +257,7 @@ if(isset($_GET['res'])){
             currentData: arrData,
             etapas: etapas,
             openFilter: false,
+            filterLoading: false,
 
             toggleFilter() {
                 this.openFilter = !this.openFilter;
@@ -426,7 +432,8 @@ if(isset($_GET['res'])){
 
             submitForm(event) {
                 event.preventDefault();
-
+                this.filterLoading = true;
+                
                 // Obtém os valores do formulário
                 const formData = new FormData(event.target);
                 this.setFormValues(formData);
@@ -438,9 +445,10 @@ if(isset($_GET['res'])){
                 })
                     .then(response => response.json())
                     .then(data => {
-                        // Atualiza os dados da tabela com os dados filtrados
+                        // Atualiza os dados da tabela com os dados filtrados                        
+                        this.filterLoading = false;
                         this.currentData = data;
-                        this.updateTableData(data);
+                        this.updateTableData(data);                                                
                     })
                     .catch(error => {
                         console.error('Erro ao enviar o formulário:', error);

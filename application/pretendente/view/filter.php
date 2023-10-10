@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($values['atendimentos'] == 'meus') $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
     }
     
-    $sql .= 'LIMIT 200';
+    // $sql .= 'LIMIT 200';
     $result = $data->find('dynamic', $sql);    
 
     // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     $filteredData = [];
-    if (count($result) > 0){
+    if ($result && count($result) > 0){
         foreach($result as $row){
             $arrRow = [];
             array_push($arrRow, trim($row['prw_nome']));    
@@ -110,8 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Retorna os dados filtrados em formato JSON
-    header('Content-Type: application/json');
-    
+    header('Content-Type: application/json');    
     echo json_encode($filteredData);
-
 }
