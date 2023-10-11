@@ -1,4 +1,7 @@
 <?php
+
+// echo '==> '.var_dump($_SESSION['filters']);
+
 $sql = '
 SELECT p.prw_codigo, p.prw_nome, p.prw_telefones
 FROM pretendentes AS p 

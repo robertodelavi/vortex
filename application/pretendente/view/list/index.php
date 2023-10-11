@@ -1,5 +1,18 @@
 <?php
 
+if(isset($_GET['res'])){
+    switch($_GET['res']){
+        case -1:
+            echo '
+            <script>
+                setTimeout(() => {
+                    toast("Já existe um pretendente cadastrado com este Nome, E-mail e Telefone!", "danger", 10000);
+                }, 1000);
+            </script>';
+        break;
+    }
+}
+
 $sql = '
 SELECT emp_diasavisoatendimento1, emp_diasavisoatendimento2, emp_diasavisoatendimento3
 FROM sisempresas
@@ -24,8 +37,8 @@ FROM pretendentes AS p
     LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
 WHERE prw_codigo > 0';
 
-$sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" '; // Somente meus atendimentos
-$sql .= ' AND p.prw_concluido = "n" '; // Situação em aberto
+$sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" '; //? Somente meus atendimentos
+$sql .= ' AND p.prw_concluido = "n" '; //? Situação em aberto
 
 //? Filtro status vindo da home
 if($_GET['status'] && $_GET['status'] > 0){
@@ -227,6 +240,7 @@ if(isset($_GET['res'])){
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
+    let formFilters = null // Pra armazenar os filtros e quando enviar pro pretendente, ele setar os valores em SESSAO
     const arrData = <?php echo json_encode($tableResult); ?>;
     console.log("🚀 ~ arrData:", arrData)
     const etapas = <?php echo json_encode($etapas); ?>;
@@ -258,7 +272,7 @@ if(isset($_GET['res'])){
             etapas: etapas,
             openFilter: false,
             filterLoading: false,
-
+            
             toggleFilter() {
                 this.openFilter = !this.openFilter;
             },
@@ -292,7 +306,7 @@ if(isset($_GET['res'])){
                                 const id = row.cells[8].data
                                 if(id > 0){
                                     return `<div class="flex items-center w-max">
-                                                <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}')" class="hover:text-primary">${data}</a>
+                                                <a href="#" @click="saveFilters();" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}')" class="hover:text-primary">${data}</a>
                                             </div>`;
                                             
                                 }else{
@@ -354,7 +368,7 @@ if(isset($_GET['res'])){
                                 
                                 if(id > 0){
                                     return `<div class="flex gap-4 items-center" >
-                                                <a href="#" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}');" class="hover:text-info">
+                                                <a href="#" @click="saveFilters();" onClick="nextPage('?module=pretendente&acao=edita_pretendente', '${id}');" class="hover:text-info">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5">
                                                         <path
                                                             opacity="0.5"
@@ -443,16 +457,30 @@ if(isset($_GET['res'])){
                     method: 'POST',
                     body: formData
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Atualiza os dados da tabela com os dados filtrados                        
-                        this.filterLoading = false;
-                        this.currentData = data;
-                        this.updateTableData(data);                                                
+                .then(response => response.json())
+                .then(data => {
+                    // Atualiza os dados da tabela com os dados filtrados                        
+                    this.filterLoading = false;
+                    this.currentData = data;
+                    this.updateTableData(data);                                                
                     })
                     .catch(error => {
                         console.error('Erro ao enviar o formulário:', error);
                     });
+            },
+
+            saveFilters() {
+                // Insere filtros em uma variavel de sessao php            
+                fetch('application/pretendente/view/filter/saveFilters.php', {
+                    method: 'POST',
+                    body: JSON.stringify(formFilters)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Ok...');
+                }).catch(error => {
+                    console.error('Erro ao enviar o formulário:', error);
+                });                           
             },
 
             setFormValues(formData) {
@@ -460,6 +488,7 @@ if(isset($_GET['res'])){
                 for (let [key, value] of formData.entries()) {
                     formValues[key] = value;
                 }
+                formFilters = formValues;
                 // Adiciona os valores extras ao formData
                 formData.append('values', JSON.stringify(formValues));
             },
@@ -488,9 +517,13 @@ if(isset($_GET['res'])){
 
             limpaFiltros() {
                 document.querySelectorAll('select').forEach((select) => {
-                    select.selectedIndex = 0;
+                    // Limpa todos os selects, exceto Atendimento e Situação
+                    select.selectedIndex = select.id == 'selectAtendimentos' ? 2 : (select.id == 'selectSituacao' ? 1 : 0)
                 })
-                document.getElementById("formFilter").reset();
+                // Limpa todos os inputs type text
+                document.querySelectorAll('input[type="text"]').forEach((input) => {
+                    input.value = '';
+                })
                 this.updateTableData(arrData);
             },
 

@@ -49,7 +49,7 @@
 <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
     <div>
         <label>Nome</label>
-        <input name="nome" type="text" placeholder="Ed. Fiorentin" class="form-input" />
+        <input name="nome" type="text" placeholder="Fulano da Silva" class="form-input" value="<?php echo $_SESSION['filters']['nome']; ?>" />
     </div>
     <div>
         <label>E-mail</label>
@@ -61,8 +61,7 @@
     </div>
     <div>
         <label>Atendimentos</label>
-
-        <select name="atendimentos" class="form-select text-white-dark">
+        <select name="atendimentos" id="selectAtendimentos" class="form-select text-white-dark">
             <option value="" >-- Selecione --</option>
             <?php 
                 if($usuarioLogado[0]['usu_somenteatendimentomeu'] != 's') {
@@ -74,7 +73,7 @@
     </div>
     <div>
         <label>Situação</label>
-        <select name="situacao" class="form-select text-white-dark">
+        <select name="situacao" id="selectSituacao" class="form-select text-white-dark">
             <option value="">-- Todos --</option>
             <option value="n" selected>Em aberto</option>
             <option value="s">Concluído</option>            

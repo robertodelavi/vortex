@@ -4,6 +4,18 @@
 
 		//* DADOS DO PRETENDENTE
 		case 'gravadados_pretendente':
+			// Valida duplicidade por nome, email e telefone
+			$sql = '
+			SELECT prw_codigo 
+			FROM pretendentes 
+			WHERE prw_nome = "'.addslashes($_POST['prw_nome']).'" AND prw_email = "'.addslashes($_POST['prw_email']).'" AND prw_telefones = "'.addslashes($_POST['prw_telefones']).'"';
+			$result = $data->find('dynamic', $sql);
+
+			if($result && count($result) > 0){
+				echo '<body onload="nextPage(\'?module=pretendente&acao=lista_pretendente&res=-1\', \'\' )"></body>';
+				exit;				
+			}
+
 			$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 			$data->tabela = 'pretendentes';
 			$_POST['prw_datacad'] = date('Ymd');
@@ -39,6 +51,8 @@
 				$_POST['prw_valorprospeccao'] = moneyToFloat($_POST['prw_valorprospeccao']);
 				$_POST['prw_dataatual'] = date('Ymd');
 				$_POST['prw_horaatual'] = date('Hi');
+				// Obs é um blob, preciso tratar a acentuação
+				$_POST['prw_obs'] = addslashes($_POST['prw_obs']);
 				//
 				$data->tabela = 'pretendentes';
 				$data->update($_POST);

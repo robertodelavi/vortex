@@ -19,19 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         u.usu_nome, 
         p.prw_telefones, 
         ps.psa_descricao AS statusNome, 
-        ps.psa_cor,
-        
-        (SELECT IF(ph.prh_datacad <> "", DATE_FORMAT(ph.prh_datacad, "%d/%m/%y"), "--")
-        FROM pretendenteshistorico AS ph 
-        WHERE ph.prh_pretendente = p.prw_codigo
-        ORDER BY ph.prh_datacad ASC
-        LIMIT 1) AS primeiroCadastro,
-
-        (SELECT IF(ph.prh_datacad <> "", DATE_FORMAT(ph.prh_datacad, "%d/%m/%y"), "--")
-        FROM pretendenteshistorico AS ph 
-        WHERE ph.prh_pretendente = p.prw_codigo
-        ORDER BY ph.prh_datacad DESC
-        LIMIT 1) AS ultimoCadastro,
+        ps.psa_cor,        
+        IF(p.prw_datacad, DATE_FORMAT(p.prw_datacad, "%d/%m/%y"), "--") AS primeiroCadastro,
+        IF(p.prw_dataatual, DATE_FORMAT(p.prw_dataatual, "%d/%m/%y"), "--") AS ultimoCadastro,
         DATEDIFF(CURRENT_DATE(), p.prw_dataatual) AS diasSemAtendimento
     FROM pretendentes AS p
         LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
@@ -75,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($values['atendimentos'] == 'meus') $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" ';
     }
     
-    // $sql .= 'LIMIT 200';
     $result = $data->find('dynamic', $sql);    
 
     // Obtém o total de etapas/status do pretendente pra calcular a % de progresso 
