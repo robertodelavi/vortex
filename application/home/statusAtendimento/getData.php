@@ -12,7 +12,7 @@
             SELECT COUNT(p.prw_codigo)
             FROM pretendentes p
                 JOIN sisusuarios u ON (p.prw_usuario = u.usu_codigo)
-            WHERE p.prw_psa_codigo = ps.psa_codigo AND p.prw_concluido = "n" AND u.usu_nivel <= '.$usuario[0]['usu_nivel'].'
+            WHERE p.prw_usuario = '.$usuario[0]['usu_codigo'].' AND p.prw_psa_codigo = ps.psa_codigo AND p.prw_concluido = "n"
         ) AS total
     FROM pretendentesstatusatendimento ps
     ORDER BY ps.psa_ordem ASC';

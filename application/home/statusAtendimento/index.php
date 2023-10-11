@@ -1,9 +1,11 @@
 <?php include 'application/home/statusAtendimento/getData.php'; ?>    
 
-<div class="font-bold text-lg mb-5">
+<div class="font-bold text-lg">
     Status Atendimentos
     <?php if($result && count($result) > 0){ echo '<span class="badge bg-success/20 text-success rounded-full hover:top-0">Total de '.number_format($totalPretendentes, 0, ',', '.').' pretendentes</span>'; } ?>
 </div>    
+<p class="mb-8 text-xs">Contém os seus atendimentos em aberto</p>
+
 <div class="space-y-9">
     <?php 
         if($result && count($result) > 0) {

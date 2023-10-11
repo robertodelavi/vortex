@@ -1,9 +1,11 @@
 <?php include 'application/home/imoveisNovos/getData.php'; ?>
 
-<div class="mb-5 text-lg font-bold">
+<div class="text-lg font-bold">
     Imóveis novos para seus pretendentes
     <?php if($result && count($result) > 0){ echo '<span class="badge bg-success/20 text-success rounded-full hover:top-0">'.count($result).' registros encontrados</span>'; } ?>
 </div>
+<p class="mb-8 text-xs">Contém os imóveis novos que atendem aos critérios dos seus pretendentes</p>
+
 <div class="table-responsive">
     <table>
         <thead>
