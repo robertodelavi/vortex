@@ -88,7 +88,7 @@ if(isset($_GET['res'])){
                     <h5 class="mt-2 mb-5 font-semibold text-lg dark:text-white-light">
                         Filtros
                     </h5>
-                    <div class="flex-1 "> <!-- Da acesso aos dados da tabela -->
+                    <div class="flex-1 ">
                         <form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
                             <div>
                                 <label for="name">Nome</label>

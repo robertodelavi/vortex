@@ -51,10 +51,10 @@
                 </div>
             </div>
 
-            <!-- Sessions -->
+            <!-- Imóveis -->
             <div class="panel bg-gradient-to-r from-violet-500 to-violet-400">
                 <div class="flex justify-between">
-                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Sessions</div>
+                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Acessar</div>
                     <div x-data="dropdown" @click.outside="open = false" class="dropdown">
                         <a href="javascript:;" @click="toggle">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hover:opacity-80 opacity-70">
@@ -72,8 +72,10 @@
                     </div>
                 </div>
                 <div class="flex items-center mt-5">
-                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 74,137 </div>
-                    <div class="badge bg-white/30">- 2.35% </div>
+                    <a href="?module=venda&acao=lista_imovel" @click="toggle" class="flex justify-between cursor-pointer hover:text-dark">
+                        <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3">Imóveis</div>
+                        <div class="badge bg-white/30">- 2.35% </div>
+                    </a>
                 </div>
                 <div class="flex items-center font-semibold mt-5">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
