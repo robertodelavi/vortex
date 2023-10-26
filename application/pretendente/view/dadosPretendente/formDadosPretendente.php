@@ -141,12 +141,6 @@
                 ?>
             </select>
         </div>
-        <!-- OLD -->
-        <!-- <div>
-            <label for="address">Telefones</label>
-            <input name="prw_telefones" type="text" placeholder="(49) 99999-9999" class="form-input" value="<?php //echo $result[0]['prw_telefones']; ?>" />
-        </div> -->
-
         <div>
             <label for="address">Celular/WhatsApp</label>
             <input name="prw_fonecelular" type="text" placeholder="(49) 99999-9999" maxlength="15" class="form-input" value="<?php echo $result[0]['prw_fonecelular']; ?>" />
@@ -163,7 +157,6 @@
             <label for="address">Tel. Residencial</label>
             <input name="prw_foneresidencial" type="text" placeholder="(49) 9999-9999" maxlength="14" class="form-input" value="<?php echo $result[0]['prw_foneresidencial']; ?>" />
         </div>
-
         <div>
             <label for="email">E-mail</label>
             <input name="prw_email" type="email" placeholder="fulano@email.com" class="form-input" value="<?php echo $result[0]['prw_email']; ?>" />

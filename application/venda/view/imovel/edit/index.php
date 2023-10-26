@@ -108,7 +108,7 @@
 
                 <!-- Geral -->
                 <template x-if="tab === 'geral'">
-                    <p>Aba geral...</p>
+                    <?php include_once('application/venda/view/imovel/edit/geral/index.php'); ?>
                 </template>
                 <!-- Agenciamento -->
                 <template x-if="tab === 'agenciamento'">
