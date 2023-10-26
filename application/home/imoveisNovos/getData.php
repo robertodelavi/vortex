@@ -80,7 +80,7 @@
                 
                 if($arrayImoveis && count($arrayImoveis) > 0){ // Encontrou pelo menos 1 imóvel novo pro pretendente atual, insere no array $result
                     foreach ($arrayImoveis as $keyImovel => $valueImovel) {
-                        $foto = $valueImovel['imf_arquivo'] ? $_SESSION['BASE_URL_IMAGENS'].$valueImovel['imf_imovel'].'-'.$valueImovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+                        $foto = $valueImovel['imf_arquivo'] ? $_SESSION['BASE_URL_IMAGENS'].$valueImovel['imf_imovel'].'-'.$valueImovel['imf_arquivo'] : 'application/images/no-image-transparent2.png';
 
                         $result[] = array(
                             'prw_codigo' => $value['prw_codigo'],

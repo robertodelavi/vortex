@@ -43,7 +43,7 @@ function mountTable($result, $BASE_URL_IMAGENS){
     
     if($result && count($result) > 0){
         foreach ($result as $i => $imovel) {
-            $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent.png';
+            $foto = $imovel['imf_arquivo'] ? $BASE_URL_IMAGENS.$imovel['imf_imovel'].'-'.$imovel['imf_arquivo'] : 'application/images/no-image-transparent2.png';
             //
             $row[0] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');"><div class="border border-[#ebedf2] dark:border-[#191e3a] rounded-full overflow-hidden h-10 w-10"><div class="bg-cover bg-center h-full" style="background-image: url('.$foto.');" ></div></div></div>';
             $row[1] = '<div class="cursor-pointer" @click="toggle; getImovel('.$imovel['imo_codigo'].'); getImovelPhotos('.$imovel['imo_codigo'].');">'.$imovel['imo_codigo'].'</div>';

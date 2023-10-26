@@ -8,6 +8,7 @@ $data = new DataManipulation();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $req = json_decode(file_get_contents('php://input'), true);
     $values = $req['filters'];
+    $BASE_URL_IMAGENS = $_SESSION['BASE_URL_IMAGENS'];
     
     $sql = '
     SELECT 
@@ -21,11 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         i.imo_banheiros,
         i.imo_garagem,
 
+        ft.imf_imovel,
+        ft.imf_arquivo,
+
         (((iv.imv_valor*m.moe_valor)/100)/100) AS imv_valor
     FROM imoveis AS i 
         JOIN pessoas AS p ON (i.imo_proprietario = p.pes_codigo)
         INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
         LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
+        LEFT JOIN imovelfoto AS ft ON (i.imo_codigo = ft.imf_imovel AND ft.imf_principal = "s" AND ft.imf_web = "s")
         LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
         LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
     WHERE i.imo_codigo > 0 ';
@@ -45,13 +50,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $sql .= ' 
-    LIMIT 60';
+    LIMIT 100';
     $result = $data->find('dynamic', $sql);
 
     $tableResult = [];
     foreach ($result as $row) {
+        //? Foto
+        $foto = $row['imf_arquivo'] ? $BASE_URL_IMAGENS.$row['imf_imovel'].'-'.$row['imf_arquivo'] : 'application/images/no-image-transparent2.png';
+        //
         $arrRow = [];
         array_push($arrRow, $row['imo_codigo']);    
+        array_push($arrRow, $foto);
         array_push($arrRow, trim($row['proprietario']));   
         array_push($arrRow, $row['tpi_descricao']);
         array_push($arrRow, $row['bai_descricao']);
