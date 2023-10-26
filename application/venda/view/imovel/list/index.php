@@ -3,6 +3,8 @@
     SELECT 
         i.imo_codigo, 
         p.pes_nome1 AS proprietario,
+        ti.tpi_descricao,
+        b.bai_descricao,
 
         i.imo_quartos,
         i.imo_suites,
@@ -14,6 +16,8 @@
         JOIN pessoas AS p ON (i.imo_proprietario = p.pes_codigo)
         INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
         LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
+        LEFT JOIN tipoimovel AS ti ON (i.imo_tipoimovel = ti.tpi_codigo)
+        LEFT JOIN bairros AS b ON (i.imo_bairro = b.bai_codigo)
     LIMIT 60';
     $result = $data->find('dynamic', $sql);
 
@@ -22,6 +26,8 @@
         $arrRow = [];
         array_push($arrRow, $row['imo_codigo']);    
         array_push($arrRow, trim($row['proprietario']));   
+        array_push($arrRow, $row['tpi_descricao']);
+        array_push($arrRow, $row['bai_descricao']);
         array_push($arrRow, $row['imo_quartos']);
         array_push($arrRow, $row['imo_suites']);
         array_push($arrRow, $row['imo_banheiros']);         
@@ -80,6 +86,7 @@
             openFilter: false,
             datatable: null,
             openDelete: false,
+            tableFilters: {},
             currentData: defaultData ?? [],
 
             // Tabela
@@ -96,7 +103,7 @@
 
                 this.datatable = new simpleDatatables.DataTable('#myTable', {
                     data: {
-                        headings: ['ID', 'Proprietário', 'D', 'S', 'B', 'VG', 'Valor', 'Ações'],
+                        headings: ['ID', 'Proprietário', 'Tipo', 'Bairro', 'D', 'S', 'B', 'VG', 'Valor', 'Ações'],
                         data: data
                     },
                     searchable: false,
@@ -134,7 +141,16 @@
                             }
                         },
                         {
-                            select: 7,
+                            //? Valor em verde
+                            select: 8,
+                            render: (data, cell, row) => {
+                                const id = row.cells[0].data
+                                return `<div class="text-success">${data}</div>`;
+                            }
+
+                        },
+                        {
+                            select: 9,
                             sortable: false,
                             render: (data, cell, row) => {
                                 const id = row.cells[0].data
@@ -192,23 +208,49 @@
 
             },
 
-            // Filtros
-            toggleFilter() {
-                this.openFilter = !this.openFilter;
-            },
-            submitFormFilter(event) {
-                event.preventDefault();
-                console.log('submit');
-            },
-            limpaFiltros() {
-                document.getElementById('formFilter').reset();
-            },
-
             // Deleta imóvel
             confirmDelete(id, nome) {
                 this.openDelete = true;                
             },
-           
+
+            getImoveis(filters) {
+                const data = {
+                    filters: filters
+                }                
+                fetch('application/venda/view/imovel/list/filter/index.php', {
+                    method: 'POST',
+                    body: JSON.stringify(data) // Converte o objeto em uma string JSON
+                }).then(response => response.json()).then(data => {
+                    console.log("🚀 ~ getImoveis ~ data", data)
+                    this.currentData = data;
+                    this.updateTable(data);
+                }) 
+            },
+
+            //? Filtros
+            toggleFilter() {
+                this.openFilter = !this.openFilter;
+            },
+
+            submitFormFilter(event) {
+                console.log("🚀 ~ submitForm ~ event", event)
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const filters = {};
+                for (let [key, value] of formData.entries()) {
+                    console.log("🚀 ~ submitForm ~ key, value", key, value)
+                    filters[key] = value;
+                }                
+                console.log("🚀 ~ submit filters:", filters)
+                this.tableFilters = filters                
+                this.getImoveis(filters)                
+            },
+            
+            limpaFiltros() {
+                document.getElementById('formFilter').reset();
+                this.tableFilters = {};
+                this.updateTable(defaultData);
+            }           
         }));
     });
 </script>
