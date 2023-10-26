@@ -459,14 +459,14 @@ if(isset($_GET['res'])){
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('=> ', data)
                     // Atualiza os dados da tabela com os dados filtrados                        
                     this.filterLoading = false;
                     this.currentData = data;
                     this.updateTableData(data);                                                
-                    })
-                    .catch(error => {
-                        console.error('Erro ao enviar o formulário:', error);
-                    });
+                }).catch(error => {
+                    console.error('Erro ao enviar o formulário:', error);
+                });
             },
 
             saveFilters() {

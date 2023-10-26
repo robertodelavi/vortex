@@ -10,8 +10,13 @@
 			FROM pretendentes 
 			WHERE prw_nome = "'.addslashes($_POST['prw_nome']).'" AND prw_email = "'.addslashes($_POST['prw_email']).'" AND prw_telefones = "'.addslashes($_POST['prw_telefones']).'"';
 			$result = $data->find('dynamic', $sql);
+			$sql = '
+			SELECT emp_corretorpodeconfirmarduplicado
+			FROM sisempresas 
+			WHERE emp_codigo = '.$_SESSION['v_emp_codigo'];
+			$parametros = $data->find('dynamic', $sql);
 
-			if($result && count($result) > 0){
+			if($result && count($result) > 0 && ($parametros[0]['emp_corretorpodeconfirmarduplicado'] == 'n' || $_SESSION['v_usu_nivel'] == 1)){
 				echo '<body onload="nextPage(\'?module=pretendente&acao=lista_pretendente&res=-1\', \'\' )"></body>';
 				exit;				
 			}
@@ -26,6 +31,12 @@
 			$_POST['prw_ip'] = $_SERVER['REMOTE_ADDR'];
 			$_POST['prw_empresa'] = $_SESSION['v_emp_codigo'];
 			$_POST['prw_operacao'] = 'v'; // Venda
+
+			// Concatena prw_fonecelular, prw_fonecelular1, prw_fonecomercial e prw_foneresidencial em prw_telefones
+			$_POST['prw_telefones'] = $_POST['prw_fonecelular'] ? $_POST['prw_fonecelular'] : '';
+			$_POST['prw_telefones'] .= $_POST['prw_fonecelular1'] ? ($_POST['prw_telefones'] ? ' / ' : '').$_POST['prw_fonecelular1'] : '';
+			$_POST['prw_telefones'] .= $_POST['prw_fonecomercial'] ? ($_POST['prw_telefones'] ? ' / ' : '').$_POST['prw_fonecomercial'] : '';
+			$_POST['prw_telefones'] .= $_POST['prw_foneresidencial'] ? ($_POST['prw_telefones'] ? ' / ' : '').$_POST['prw_foneresidencial'] : '';
 			//
 			$data->add($_POST);
 			$prw_codigo = $data->MaxValue('prw_codigo', 'pretendentes');
@@ -53,6 +64,11 @@
 				$_POST['prw_horaatual'] = date('Hi');
 				// Obs é um blob, preciso tratar a acentuação
 				$_POST['prw_obs'] = addslashes($_POST['prw_obs']);
+				// Concatena prw_fonecelular, prw_fonecelular1, prw_fonecomercial e prw_foneresidencial em prw_telefones
+				$_POST['prw_telefones'] = $_POST['prw_fonecelular'] ? $_POST['prw_fonecelular'] : '';
+				$_POST['prw_telefones'] .= $_POST['prw_fonecelular1'] ? ($_POST['prw_telefones'] ? ' / ' : '').$_POST['prw_fonecelular1'] : '';
+				$_POST['prw_telefones'] .= $_POST['prw_fonecomercial'] ? ($_POST['prw_telefones'] ? ' / ' : '').$_POST['prw_fonecomercial'] : '';
+				$_POST['prw_telefones'] .= $_POST['prw_foneresidencial'] ? ($_POST['prw_telefones'] ? ' / ' : '').$_POST['prw_foneresidencial'] : '';
 				//
 				$data->tabela = 'pretendentes';
 				$data->update($_POST);
