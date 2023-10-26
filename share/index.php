@@ -6,6 +6,8 @@
     $data = new DataManipulation();
     $conn = new MySql();
 
+    
+
     //* Autenticação
 	// $conn->connOpen('localhost','vortex__autenticacao','root', '');
     $conn->connOpen('brs36.brs.com.br','vegacscom_vortex','vegacscom_vortex', 'vortex@54741');
