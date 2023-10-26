@@ -14,6 +14,10 @@
 		// Geral		
 		case 'update_imovel':
 			require_once 'application/venda/view/imovel/edit/geral/dataControls.inc.php';
-		break;		
+		break;
+        // Agenciamento
+        case 'update_agenciamento_imovel':		
+            require_once 'application/venda/view/imovel/edit/agenciamento/dataControls.inc.php';
+        break;
 	}
 ?>

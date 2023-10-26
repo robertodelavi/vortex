@@ -3,6 +3,12 @@
     SELECT 
         i.imo_codigo, 
         p.pes_nome1 AS proprietario,
+
+        i.imo_quartos,
+        i.imo_suites,
+        i.imo_banheiros,
+        i.imo_garagem,
+
         (((iv.imv_valor*m.moe_valor)/100)/100) AS imv_valor
     FROM imoveis AS i 
         JOIN pessoas AS p ON (i.imo_proprietario = p.pes_codigo)
@@ -15,7 +21,11 @@
     foreach ($result as $row) {
         $arrRow = [];
         array_push($arrRow, $row['imo_codigo']);    
-        array_push($arrRow, trim($row['proprietario']));            
+        array_push($arrRow, trim($row['proprietario']));   
+        array_push($arrRow, $row['imo_quartos']);
+        array_push($arrRow, $row['imo_suites']);
+        array_push($arrRow, $row['imo_banheiros']);         
+        array_push($arrRow, $row['imo_garagem']);
         array_push($arrRow, 'R$ '.number_format($row['imv_valor'], 2, ',', '.'));
         array_push($arrRow, $row['prw_codigo']);
         //
@@ -86,7 +96,7 @@
 
                 this.datatable = new simpleDatatables.DataTable('#myTable', {
                     data: {
-                        headings: ['ID', 'Proprietário', 'Valor', 'Ações'],
+                        headings: ['ID', 'Proprietário', 'D', 'S', 'B', 'VG', 'Valor', 'Ações'],
                         data: data
                     },
                     searchable: false,
@@ -124,7 +134,7 @@
                             }
                         },
                         {
-                            select: 3,
+                            select: 7,
                             sortable: false,
                             render: (data, cell, row) => {
                                 const id = row.cells[0].data

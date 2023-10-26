@@ -112,7 +112,7 @@
                 </template>
                 <!-- Agenciamento -->
                 <template x-if="tab === 'agenciamento'">
-                    <p>Aba agenciamento...</p>
+                    <?php include_once('application/venda/view/imovel/edit/agenciamento/index.php'); ?>
                 </template>
                 <!-- Valores -->
                 <template x-if="tab === 'valores'">
