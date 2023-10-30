@@ -19,5 +19,9 @@
         case 'update_agenciamento_imovel':		
             require_once 'application/venda/view/imovel/edit/agenciamento/dataControls.inc.php';
         break;
+		// Valores
+		case 'update_valores_imovel':
+			require_once 'application/venda/view/imovel/edit/valores/dataControls.inc.php';
+		break;
 	}
 ?>

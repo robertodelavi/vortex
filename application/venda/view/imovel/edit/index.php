@@ -10,6 +10,36 @@
         LEFT JOIN moedas AS m ON (iv.imv_moeda = m.moe_codigo)
     WHERE i.imo_codigo = '.$_POST['param_0'];
     $result = $data->find('dynamic', $sql);
+
+    $currentTab = 'geral';
+    if(isset($_GET['tab'])){
+        switch($_GET['tab']){
+            case 1:
+                $currentTab = 'geral';
+            break;
+            case 2:
+                $currentTab = 'agenciamento';
+            break;
+            case 3:
+                $currentTab = 'valores';
+            break;
+            case 4:
+                $currentTab = 'observacoes';
+            break;
+            case 5:
+                $currentTab = 'fotos';
+            break;
+            case 6:
+                $currentTab = 'visitas';
+            break;
+            case 7:
+                $currentTab = 'ocorrencias';
+            break;
+            case 8:
+                $currentTab = 'anexos';
+            break;
+        }
+    }
 ?>
 
 <div class="overflow-y-auto" x-data="dataEdit">
@@ -30,7 +60,7 @@
             </div>
         
             <!-- ABAS -->
-            <div x-data="{tab: 'geral'}">
+            <div x-data="{tab: '<?php echo $currentTab; ?>'}">
                 <ul class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
                     <!-- Geral -->
                     <li class="inline-block">
@@ -116,7 +146,7 @@
                 </template>
                 <!-- Valores -->
                 <template x-if="tab === 'valores'">
-                    <p>Aba valores...</p>
+                    <?php include_once('application/venda/view/imovel/edit/valores/index.php'); ?>
                 </template>
                 <!-- Observações -->
                 <template x-if="tab === 'observacoes'">

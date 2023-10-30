@@ -621,5 +621,152 @@
                 </div>
             </div>
         </div>
+
+        <!-- Composição -->
+        <div class="panel">
+            <h5 class="text-lg font-semibold mb-4">Composição</h5>
+
+            <div class="flex-1 grid sm:grid-cols-2 md:grid-cols-4 gap-5">
+                <!-- Cozinha -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_cozinha'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_cozinha" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Cozinha</span>
+                </label>
+
+                <!-- Sala de Jantar -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_salajantar'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_salajantar" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Sala de Jantar</span>
+                </label>
+
+                <!-- Sala de Estar -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_salaestar'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_salaestar" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Sala de Estar</span>
+                </label>
+
+                <!-- Sala de TV -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_salatv'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_salatv" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Sala de TV</span>
+                </label>
+
+                <!-- Lareira -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_lareira'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_lareira" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Lareira</span>
+                </label>
+
+                <!-- Área de serviço -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_areadeservico'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_areadeservico" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Área de serviço</span>
+                </label>
+
+                <!-- Playgroud -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_playground'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_playground" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Playgroud</span>
+                </label>
+
+                <!-- Gás central -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_gascentral'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_gascentral" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Gás central</span>
+                </label>
+
+                <!-- Dependência de Empregada -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_dependenciaempregada'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_dependenciaempregada" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Dependência de Empregada</span>
+                </label>
+
+                <!-- Lavabo -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_lavabo'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_lavabo" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Lavabo</span>
+                </label>
+
+                <!-- Churrasqueira -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_churrasqueira'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_churrasqueira" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Churrasqueira</span>
+                </label>
+
+                <!-- Salão de Festas -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_salaofestas'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_salaofestas" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Salão de Festas</span>
+                </label>
+
+                <!-- Sacada -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_sacada'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_sacada" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Sacada</span>
+                </label>
+
+                <!-- Portão eletrônico -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_portaoeletronico'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_portaoeletronico" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Portão eletrônico</span>
+                </label>
+
+                <!-- Hobby Box/Depósito -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_hobbybox'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_hobbybox" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Hobby Box/Depósito</span>
+                </label>
+
+                <!-- Área de Lazer -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_arealazer'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_arealazer" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Área de Lazer</span>
+                </label>
+
+                <!-- Poço Artesiano -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_pocoartesiano'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_pocoartesiano" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Poço Artesiano</span>
+                </label>
+
+                <!-- Condomínio fechado -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_condominiofechado'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_condominiofechado" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Condomínio fechado</span>
+                </label>
+
+                <!-- Piscina -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_piscina'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_piscina" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Piscina</span>
+                </label>
+
+                <!-- Terraço -->
+                <label class="inline-flex">
+                    <?php $checked = $result[0]['imo_terraco'] == 's' ? 'checked' : ''; ?>
+                    <input name="imo_terraco" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                    <span class="cursor-pointer">Terraço</span>
+                </label>
+            </div>
+        </div>
     </div>
 </form>

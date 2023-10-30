@@ -25,7 +25,7 @@
             WHERE iv.imv_codigo = i.imo_codigo
         ) AS validadeDias
     FROM imoveis AS i 
-        LEFT JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
+        LEFT JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo)
     WHERE i.imo_codigo = '.$_POST['param_0'];
     $result = $data->find('dynamic', $sql);
 
@@ -60,113 +60,6 @@
                 <button type="submit" class="btn btn-primary">Salvar</button>
             </div>            
         </div>   
-
-        <!-- Tabela imoveis:        
-            imo_proprietario
-            imo_tipoimovel
-            imo_tipoconstrucao
-            imo_tiposala
-            imo_utilizacao
-            imo_cidade
-            imo_rua
-            imo_numero
-            imo_bairro
-            imo_cep
-            imo_complemento
-            imo_edificio
-            imo_pontoreferencia
-            imo_condominio
-            imo_posicao
-            imo_longitude
-            imo_latitude
-            imo_quadra
-            imo_lote
-            imo_horariovisitacao
-            imo_valorcondominio
-            imo_obscondominio
-            imo_ocupacao
-            imo_dimensoes
-            imo_areaterreno
-            imo_areaconstruida
-            imo_areaprivativa
-            imo_areautil
-            imo_areacomum
-            imo_areagaragem
-            imo_andares
-            imo_unidadesandar
-            imo_elevadores
-            imo_anoconstrucao
-            imo_confrontacao
-            imo_titulopropriedade
-            imo_inscricaomunicipal
-            imo_cartorio
-            imo_matriculacartorio
-            imo_registroagua
-            imo_numerohidrometro
-            imo_registroenergia
-            imo_tipopiso
-            imo_construtora
-            imo_tipoforro
-            imo_tipomobilia
-            imo_quartos
-            imo_suites
-            imo_garagem
-            imo_tipovagagaragem
-            imo_salajantar
-            imo_salaestar
-            imo_salatv
-            imo_lareira
-            imo_cozinha
-            imo_banheiros
-            imo_areadeservico
-            imo_dependenciaempregada
-            imo_gascentral
-            imo_playground
-            imo_lavabo
-            imo_churrasqueira
-            imo_salaofestas
-            imo_sacada
-            imo_portaoeletronico
-            imo_pocoartesiano
-            imo_condominiofechado
-            imo_detalhes
-            imo_fotos
-            imo_principal
-            imo_habitese
-            imo_filial
-            imo_numerodagaragem
-            imo_numerododeposito
-            imo_hobbybox
-            imo_arealazer
-            imo_topografia
-            imo_viabilidade
-            imo_empreendimento
-            imo_permiteanimais
-            imo_tipoestrutura
-            imo_fornecimentoeletrico
-            imo_pavimentacao
-            imo_urlvideo
-            imo_urltour
-            imo_urldescricao
-            imo_empresa 
-            imo_usuario
-            imo_excluido
-            imo_datacad
-            imo_dataatual
-            imo_onibus
-            imo_ondepegar
-            imo_ondedescer
-            imo_entreruaa
-            imo_entreruab
-            imo_chavedisponivel
-            imo_itinerario
-            imo_codigocasasoft
-            imo_admcondominio
-            imo_ocupadoatedata
-            imo_tipoofertaportal
-            imo_piscina
-            imo_terraco
-            imo_ordemprincipal -->
         
         <!-- Dados -->
         <div class="flex flex-col gap-5" >

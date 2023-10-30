@@ -38,7 +38,7 @@
                 // imoveis
                 $data->tabela = 'imoveis';
                 $data->update($_POST);
-                echo '<body onload="nextPage(\'?module=venda&acao=edita_imovel&tab=1\', \''.$_POST['imo_codigo'].'\' )"></body>';
+                echo '<body onload="nextPage(\'?module=venda&acao=edita_imovel&tab=2\', \''.$_POST['imo_codigo'].'\' )"></body>';
                 exit;
             }
         break;
