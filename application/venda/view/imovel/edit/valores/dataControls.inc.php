@@ -6,6 +6,10 @@
 
                 $_POST['imv_valor'] = moneyToFloat($_POST['imv_valor']);
                 $_POST['imv_valorcomissao'] = moneyToFloat($_POST['imv_valorcomissao']);
+                $_POST['imv_valoriptu'] = moneyToFloat($_POST['imv_valoriptu']);
+                $_POST['imv_valorpoupanca'] = moneyToFloat($_POST['imv_valorpoupanca']);
+                $_POST['imv_valorparcela'] = moneyToFloat($_POST['imv_valorparcela']);
+                $_POST['imv_valorsaldo'] = moneyToFloat($_POST['imv_valorsaldo']);
                 $_POST['imv_podefinanciar'] = $_POST['imv_podefinanciar'] == 's' ? 's' : 'n';
                 $_POST['imv_financiado'] = $_POST['imv_financiado'] == 's' ? 's' : 'n';
                 $_POST['imv_valoraluguel'] = moneyToFloat($_POST['imv_valoraluguel']);

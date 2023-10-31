@@ -3,7 +3,8 @@
     SELECT 
         i.imo_codigo, 
         p.pes_nome1 AS proprietario,
-        (((iv.imv_valor*m.moe_valor)/100)/100) AS imv_valor
+        (((iv.imv_valor*m.moe_valor)/100)/100) AS imv_valor,
+        iv.imv_financiado
     FROM imoveis AS i 
         JOIN pessoas AS p ON (i.imo_proprietario = p.pes_codigo)
         INNER JOIN imovelvenda AS iv ON (i.imo_codigo = iv.imv_codigo AND iv.imv_web = "s")
@@ -172,3 +173,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("alpine:init", () => {
+        Alpine.data("dataEdit", () => ({
+            editFinanciamento: <?php echo $result[0]['imv_financiado'] == 's' ? 'true' : 'false'; ?>,
+
+            setFinanciamento(){
+                this.editFinanciamento = !this.editFinanciamento;            
+            }
+        }));
+    });
+</script>

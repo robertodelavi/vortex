@@ -36,84 +36,44 @@
     ORDER BY ip.ipe_descricao ASC';
     $permuta = $data->find('dynamic', $sql);
 
-    // Estágio da obra (estagioobra)
+    // Estágio da obra
     $sql = '
     SELECT eo.eso_codigo, eo.eso_descricao
     FROM estagioobra AS eo
     ORDER BY eo.eso_descricao ASC';
     $estagioObra = $data->find('dynamic', $sql);    
+
+    // Bancos
+    $sql = '
+    SELECT b.ban_codigo, b.ban_numero, b.ban_descricao
+    FROM bancos AS b
+    ORDER BY b.ban_descricao ASC';
+    $bancos = $data->find('dynamic', $sql);
 ?>
 
-<div class="panel">
-    <form method="POST" action="?module=venda&acao=update_valores_imovel" >
-        <input type="hidden" name="imv_codigo" value="<?php echo $_POST['param_0']; ?>" />
-
-        <!-- Cabeçalho -->
-        <div class="flex justify-between mb-4">
-            <div>
-                <h5 class="text-lg font-semibold">Valores</h5>
-            </div>    
-            <div>
-                <button type="submit" class="btn btn-primary">Salvar</button>
-            </div>            
-        </div>   
-
-        <!-- Tabela imoveis:      
-        imv_controle
-        imv_corretor
-        imv_numerochave
-        imv_localchave
-        imv_perfil
-        imv_situacao
-        imv_motivosituacao
-        imv_datasituacao
-        imv_reservadocorretor
-        imv_inicioreserva
-        imv_fimreserva
-        imv_autorizainternet
-        imv_autorizaimprensa
-        imv_autorizafotos
-        imv_exclusividade
-        imv_placa
-        imv_dataagenciamento
-        imv_datarenovacao
-        imv_datavalidade
-        imv_tipoautorizacao
-        imv_valoraluguel
-        imv_valoriptu
-        imv_valor
-        imv_moeda
-        imv_valorcomissao
-        imv_percentualcomissao
-        imv_condicaopagamento
-        imv_programahabitacional
-        imv_permuta
-        imv_estagioobra
-        imv_podefinanciar
-        imv_financiado
-        imv_banco
-        imv_valorpoupanca
-        imv_quantidadeparcelas
-        imv_parcelasrestantes
-        imv_valorparcela
-        imv_valorsaldo
-        imv_obsfinanciamento
-        imv_obsformapagamento
-        imv_classificacao
-        imv_web
-        imv_destaqueweb
-        imv_anunciotexto
-        imv_responsavelagenciamento -->
-        
-        <!-- Dados -->
-        <div class="flex flex-col gap-5" >
+<form method="POST" action="?module=venda&acao=update_valores_imovel" >
+    <div class="flex flex-col gap-3"  >
+        <div class="panel">
+            <input type="hidden" name="imv_codigo" value="<?php echo $_POST['param_0']; ?>" />
+    
+            <!-- Cabeçalho -->
+            <div class="flex justify-between mb-4">
+                <div>
+                    <h5 class="text-lg font-semibold">Valores</h5>
+                </div>    
+                <div>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>            
+            </div>       
+            
+            <!-- Dados -->        
             <div class="flex-1 grid sm:grid-cols-2 md:grid-cols-4 gap-5">
                 <!-- Valor -->
                 <div>
                     <label>Valor</label>
                     <input name="imv_valor" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valor']); ?>" onkeyup="formatCurrency(this)" />
                 </div>
-
+    
                 <!-- Moeda -->
                 <div>
                     <label>Moeda</label>
@@ -130,31 +90,31 @@
                         ?>
                     </select>
                 </div>
-
+    
                 <!-- Valor resultante da multiplicação valor * moeda -->
                 <div>
                     <label>Valor (temp)</label>
                     <input class="form-input" type="text" value="<?php echo (floatval($result[0]['imv_valor']) * floatval($result[0]['moe_valor'])); ?>" disabled />
                 </div>
-
+    
                 <!-- Honorário (%) -->
                 <div>
                     <label>Honorário (%)</label>
                     <input name="imv_percentualcomissao" type="text" class="form-input" value="<?php echo $result[0]['imv_percentualcomissao']; ?>" />
                 </div>
-
+    
                 <!-- Valor do honorário -->
                 <div>
                     <label>Valor do Honorário</label>
                     <input name="imv_valorcomissao" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valorcomissao']); ?>" onkeyup="formatCurrency(this)" />
                 </div>
-
+    
                 <!-- Condição de Pagamento -->
                 <div>
                     <label>Condição de Pagamento</label>
                     <input type="text" class="form-input" value="<?php echo $result[0]['imv_condicaopagamento']; ?>" />
                 </div>
-
+    
                 <!-- Programa Habitacional -->
                 <div>
                     <label>Programa Habitacional</label>
@@ -171,7 +131,7 @@
                         ?>
                     </select>
                 </div>
-
+    
                 <!-- Permuta -->
                 <div>
                     <label>Permuta</label>
@@ -188,7 +148,7 @@
                         ?>
                     </select>
                 </div>
-
+    
                 <!-- Estágio da obra -->
                 <div>
                     <label>Estágio da obra</label>
@@ -205,7 +165,7 @@
                         ?>
                     </select>
                 </div>
-
+    
                 <div class="flex items-center mt-7 gap-5" >
                     <!-- Pode ser financiado -->
                     <label class="inline-flex">
@@ -213,37 +173,88 @@
                         <input name="imv_podefinanciar" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
                         <span class="cursor-pointer">Pode ser financiado</span>
                     </label>
-
+    
                     <!-- Financiamento -->
                     <label class="inline-flex">
                         <?php $checked = $result[0]['imv_financiado'] == 's' ? 'checked' : ''; ?>
-                        <input name="imv_financiado" type="checkbox" class="form-checkbox" value="s" <?php echo $checked; ?> />
+                        <input name="imv_financiado" type="checkbox" @click="setFinanciamento" class="form-checkbox" value="s" <?php echo $checked; ?> />
                         <span class="cursor-pointer">Financiamento</span>
                     </label>
                 </div>  
-            </div>
-                
+            </div>        
+        </div>
+    
+        <div class="panel">                
             <div class="flex-1 grid sm:grid-cols-2 md:grid-cols-4 gap-5">
                 <!-- Banco -->
                 <div>
-                    <label>Banco (temp)</label>
-                    <input name="imv_banco" type="text" class="form-input" value="<?php echo $result[0]['imv_banco']; ?>" />
+                    <label>Banco</label>
+                    <select :disabled="!editFinanciamento" name="imv_banco" class="form-select text-white-dark">
+                        <option selected="">-- Selecione --</option>
+                        <?php 
+                            foreach($bancos as $row){
+                                $selected = $result[0]['imv_banco'] == $row['ban_codigo'] ? 'selected' : '';
+                                echo '
+                                <option value="'.$row['ban_codigo'].'" '.$selected.' >
+                                '.$row['ban_descricao'].' ('.$row['ban_numero'].')
+                                </option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                
+                <!-- Valor Poupança -->
+                <div>
+                    <label>Valor Poupança</label>
+                    <input :disabled="!editFinanciamento" name="imv_valorpoupanca" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valorpoupanca']); ?>" onkeyup="formatCurrency(this)" />                    
+                </div>
+    
+                <!-- Quantidade de Parcelas -->
+                <div>
+                    <label>Quantidade de Parcelas</label>
+                    <input :disabled="!editFinanciamento" name="imv_quantidadeparcelas" type="text" class="form-input" value="<?php echo $result[0]['imv_quantidadeparcelas']; ?>" />
+                </div>
+    
+                <!-- Parcelas Restantes -->
+                <div>
+                    <label>Parcelas Restantes</label>
+                    <input :disabled="!editFinanciamento" name="imv_parcelasrestantes" type="text" class="form-input" value="<?php echo $result[0]['imv_parcelasrestantes']; ?>" />
+                </div>
+    
+                <!-- Valor Parcela -->
+                <div>
+                    <label>Valor Parcela</label>
+                    <input :disabled="!editFinanciamento" name="imv_valorparcela" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valorparcela']); ?>" onkeyup="formatCurrency(this)" />
+                </div>
+    
+                <!-- Valor Saldo -->
+                <div>
+                    <label>Saldo</label>
+                    <input :disabled="!editFinanciamento" name="imv_valorsaldo" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valorsaldo']); ?>" onkeyup="formatCurrency(this)" />
                 </div>
             </div>
-                        
+                
+            <!-- Observações -->
+            <div class="mt-4">
+                <label>Observações</label>
+                <textarea :disabled="!editFinanciamento" name="imv_obsfinanciamento" placeholder="Observações do financiamento" class="form-input" ><?php echo $result[0]['imv_obsfinanciamento']; ?></textarea>
+            </div>        
+        </div>
+    
+        <div class="panel">                        
             <div class="flex-1 grid sm:grid-cols-2 md:grid-cols-4 gap-5">
                 <!-- Valor Aluguel -->
                 <div>
                     <label>Valor Aluguel</label>
                     <input name="imv_valoraluguel" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valoraluguel']); ?>" onkeyup="formatCurrency(this)" />
                 </div>
-
+    
                 <!-- Valor condomínio -->
                 <div>
                     <label>Valor condomínio (?)</label>
                     <input type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valorcondominio']); ?>" onkeyup="formatCurrency(this)" />
                 </div>
-
+    
                 <!-- Próprio (select com sim ou não) -->
                 <div>
                     <label>Próprio (?)</label>
@@ -253,7 +264,31 @@
                         <option value="n">Não</option>
                     </select>
                 </div>
+    
+                <!-- Valor IPTU -->
+                <div>
+                    <label>Valor IPTU</label>
+                    <input name="imv_valoriptu" type="text" class="form-input" placeholder="R$ 0,00" value="<?php echo floatToMoney($result[0]['imv_valoriptu']); ?>" onkeyup="formatCurrency(this)" />
+                </div>
+    
+                <!-- Valor m² terreno (visualização) -->
+                <div>
+                    <label>Valor m² Terreno (temp)</label>
+                    <p>R$ 300,00</p>
+                </div>
+                
+                <!-- Valor m² Construção (visualização) -->
+                <div>
+                    <label>Valor m² Construção (temp)</label>
+                    <p>R$ 300,00</p>
+                </div>
+                
+                <!-- Valor m² Privativa (visualização) -->
+                <div>
+                    <label>Valor m² Privativa (temp)</label>
+                    <p>R$ 300,00</p>
+                </div>
             </div>            
         </div>
-    </form>
-</div>
+    </div>    
+</form>
