@@ -13,14 +13,11 @@
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/customFunctions/functions.js"></script> 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/nice-select2.js"></script>
 
- <!-- Load FilePond library -->
- <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
-    <!-- <script src="<?php echo BASE_THEME_URL; ?>/filepond/dist/filepond.js"></script> -->
-
-    <!-- Turn all file input elements into ponds -->
-    <script>
-        FilePond.parse(document.body);
-    </script>
+<!-- FilePond -->
+<script src="<?php echo BASE_THEME_URL; ?>/filepond/dist/filepond.js"></script>
+<script>
+    FilePond.parse(document.body);
+</script>
 
 </body>
 
