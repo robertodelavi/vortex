@@ -27,5 +27,9 @@
 		case 'update_observacoes_imovel':
 			require_once 'application/venda/view/imovel/edit/observacoes/dataControls.inc.php';
 		break;
+        // Fotos
+        case 'update_fotos_imovel':
+            require_once 'application/venda/view/imovel/edit/fotos/dataControls.inc.php';
+        break;
 	}
 ?>

@@ -155,7 +155,7 @@
                 </template>
                 <!-- Fotos -->
                 <template x-if="tab === 'fotos'">
-                    <p>Aba fotos...</p>
+                    <?php include_once('application/venda/view/imovel/edit/fotos/index.php'); ?>
                 </template>
                 <!-- Visitas -->
                 <template x-if="tab === 'visitas'">
