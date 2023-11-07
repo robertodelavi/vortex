@@ -9,6 +9,7 @@
 ?>
 
 <div class="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-[#0e1726]">
+    
     <div class="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
         <a href="<?php echo BASE_URL; ?>/?module=home" class="main-logo flex items-center shrink-0">
             <!-- Mobile -->
