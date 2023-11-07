@@ -35,9 +35,6 @@
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden overflow-y-auto horizontal" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme, $store.app.menu, $store.app.layout,$store.app.rtlClass]">
 
-    <!-- We'll transform this input into a pond -->
-    <input type="file" class="filepond" name="opa">
-
     <!-- sidebar menu overlay -->
     <div x-cloak class="fixed inset-0 bg-[black]/60 z-50 lg:hidden" :class="{'hidden' : !$store.app.sidebar}" @click="$store.app.toggleSidebar()"></div>
 
