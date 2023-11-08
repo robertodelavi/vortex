@@ -136,7 +136,6 @@
                         </a>
                     </li>                    
                 </ul>
-
                 <!-- Geral -->
                 <template x-if="tab === 'geral'">
                     <?php include_once('application/venda/view/imovel/edit/geral/index.php'); ?>
