@@ -154,9 +154,9 @@
                     <?php include_once('application/venda/view/imovel/edit/observacoes/index.php'); ?>
                 </template>
                 <!-- Fotos -->
-                <template x-if="tab === 'fotos'">
+                <div :class="{'hidden' : tab != 'fotos'}">
                     <?php include_once('application/venda/view/imovel/edit/fotos/index.php'); ?>
-                </template>
+                </div>                
                 <!-- Visitas -->
                 <template x-if="tab === 'visitas'">
                     <p>Aba visitas...</p>
