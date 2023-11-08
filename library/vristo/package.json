@@ -18,8 +18,15 @@
         "tailwindcss": "^3.3.2"
     },
     "dependencies": {
+        "@pqina/filepond-plugin-image-editor": "^9.0.3",
+        "@pqina/jquery-pintura": "^9.0.1",
+        "@pqina/pintura": "^8.67.4",
+        "@pqina/pintura-input": "^9.0.2",
         "animate.css": "^4.1.1",
+        "filepond": "^4.30.4",
+        "filepond-plugin-file-poster": "^2.5.1",
         "nouislider": "^15.7.1",
-        "perfect-scrollbar": "^1.5.5"
+        "perfect-scrollbar": "^1.5.5",
+        "pintura": "^0.3.10"
     }
 }
