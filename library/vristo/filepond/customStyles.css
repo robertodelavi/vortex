@@ -1,0 +1,9 @@
+.filepond--item {
+    width: calc(20% - 0.5em);
+}
+
+
+/* the background color of the filepond drop area */
+.filepond--panel-root {
+    background-color: #cfcecd;
+}

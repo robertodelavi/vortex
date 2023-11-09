@@ -25,21 +25,23 @@
 <script src="<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/filepond-plugin-image-editor/dist/FilePondPluginImageEditor.js"></script>
 <script src="<?php echo BASE_THEME_URL; ?>/filepond/dist/filepond.js"></script> -->
 
-
 <script type="module">
     import * as FilePond from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond/dist/filepond.esm.js';
     import FilePondPluginFilePoster from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js';
     import FilePondPluginImageEditor from '<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/filepond-plugin-image-editor/dist/FilePondPluginImageEditor.js';
+    import FilePondPluginImageTransform from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.esm.js';
+    // Locales
     import ptBr from '<?php echo BASE_THEME_URL; ?>/filepond/locale/pt-br.js';
-    import ptBrTranslations from '<?php echo BASE_THEME_URL; ?>/pintura-pt-br.js'; // Substitua pelo caminho correto
-    
+
     // Register FilePond plugins
     FilePond.registerPlugin(
         FilePondPluginImageEditor,
-        FilePondPluginFilePoster
+        FilePondPluginFilePoster,
+        //
+        FilePondPluginImageTransform
     );
 
-    FilePond.setOptions(ptBr)    
+    FilePond.setOptions(ptBr)   
 
     import {
         openEditor,
@@ -49,17 +51,32 @@
         getEditorDefaults,
     } from '<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/pintura/pintura.js';
 
-    const pinturaConfig = getEditorDefaults({
-        // Defina o locale para pt-BR
-        locale: ptBrTranslations,
-    });
-
     FilePond.create(document.querySelector('.filepond'), {
         allowReorder: true,
-        filePosterMaxHeight: 256,
-
-        // Options 
-
+        filePosterMaxWidth: 128,
+        //
+        imageResizeTargetWidth: 600,
+        imageCropAspectRatio: 1,
+        imageTransformVariants: {
+            thumb_medium_: (transforms) => {
+                transforms.resize = {
+                    size: {
+                        width: 384,
+                        height: 384,
+                    },
+                };
+                return transforms;
+            },
+            thumb_small_: (transforms) => {
+                transforms.resize = {
+                    size: {
+                        width: 128,
+                        height: 128,
+                    },
+                };
+                return transforms;
+            },
+        },
 
         // Image Editor plugin properties
         imageEditor: {
@@ -79,33 +96,6 @@
                         width: 128,
                     },
                 },
-
-                /* Uncomment when editing videos, remove above code
-                () =>
-                    createDefaultMediaWriter(
-                        // Generic Media Writer options, passed to image and video writer
-                        {
-                            targetSize: {
-                                width: 400,
-                            },
-                        },
-                        [
-                            // For handling images
-                            createDefaultImageWriter(),
-
-                            // For handling videos
-                            createDefaultVideoWriter({
-                                // Video writer instructions here
-                                // ...
-
-                                // Encoder to use
-                                encoder: createMediaStreamEncoder({
-                                    imageStateToCanvas,
-                                }),
-                            }),
-                        ]
-                    ),
-                    */
             ],
 
             // used to generate poster images, runs an editor in the background
@@ -113,53 +103,17 @@
 
             // Pintura Image Editor properties
             editorOptions: {
-                ...pinturaConfig, // Use as configurações do Pintura definidas acima
-
                 // pass the editor default configuration options
                 ...getEditorDefaults({
-                    // options                    
+                    /* Uncomment when editing videos
+                    locale: { ...plugin_trim_locale_en_gb },
+                    */
                 }),
 
                 // we want a square crop
                 imageCropAspectRatio: 1,
             },
-
-            /* uncomment if you've used FilePond with version 6 of Pintura and are loading old file metadata
-            // map legacy data objects to new imageState objects
-            legacyDataToImageState: legacyDataToImageState,
-            */
         },
-
-        /* Ucomment when editing videos
-        filePosterFilterItem: (item) => {
-            // We currently cannot create video posters
-            return /image/.test(item.fileType);
-        },
-        */
-
-        /* Ucomment when editing videos
-        // When editing video's it's advised to use asynchronous uploading, this will trigger video processing on upload instead of on file drop
-        instantUpload: false,
-        server: {
-            // https://pqina.nl/filepond/docs/api/server/#end-points
-        },
-        */
-
-        /* Uncomment when editing videos
-        imageEditorSupportImage: (file) =>
-            /image/.test(file.type) || /video/.test(file.type),
-        */
-
-        /* uncomment to preview the resulting file in the document after editing
-        onpreparefile: (fileItem, file) => {
-            const media = document.createElement(
-                /video/.test(file.type) ? 'video' : 'img'
-            );
-            media.controls = true;
-            media.src = URL.createObjectURL(file);
-            document.body.appendChild(media);
-        },
-            */
     });
 </script>
 </body>

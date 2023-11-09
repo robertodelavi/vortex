@@ -10,15 +10,7 @@
     <meta charset='utf-8' />
     <meta http-equiv='Content-Security-Policy' content='IE=edge' />
     <title>Vórtex - Simplificando a sua gestão Imobiliária</title>
-
-    <!-- Filepond -->
-    <link href="<?php echo BASE_THEME_URL; ?>/filepond/dist/filepond.css" rel="stylesheet">
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
-    <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet" />
-    <!-- Pintura -->
-    <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/pintura/pintura.css" />
-    <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css" />
-
+   
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link rel="icon" type="image/x-icon" href="<?php echo BASE_THEME_URL; ?>/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -36,6 +28,15 @@
     <script src="<?php echo BASE_THEME_URL; ?>/assets/js/customFunctions/functions.js"></script> 
     <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/assets/css/tailwind.css" /> <!-- Tailwind -->
     <link rel="stylesheet" type="text/css" href="<?php echo BASE_THEME_URL; ?>/assets/css/nice-select2.css">
+    
+    <!-- Filepond -->
+    <link href="<?php echo BASE_THEME_URL; ?>/filepond/dist/filepond.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" /> -->
+    <!-- <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet" /> -->
+    <link href="<?php echo BASE_THEME_URL; ?>/filepond/customStyles.css" rel="stylesheet">
+    <!-- Pintura -->
+    <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/pintura/pintura.css" />
+    <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css" />
 </head>
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden overflow-y-auto horizontal" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme, $store.app.menu, $store.app.layout,$store.app.rtlClass]">
