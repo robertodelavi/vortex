@@ -29,13 +29,11 @@
             <div class="flex flex-col gap-3">
 
                 <!-- Área pra inserir fotos -->
-                <div class="flex-1 grid sm:grid-cols-2 md:grid-cols-4 gap-5">
+                <div class="flex-1">
                 <input type="file" 
                     class="filepond"
                     name="filepond" 
-                    multiple 
-                    data-allow-reorder="true"
-                    data-max-file-size="3MB">            
+                    multiple >            
                 </div>
 
             </div>        

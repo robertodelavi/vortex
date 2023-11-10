@@ -30,6 +30,8 @@
     import FilePondPluginFilePoster from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js';
     import FilePondPluginImageEditor from '<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/filepond-plugin-image-editor/dist/FilePondPluginImageEditor.js';
     import FilePondPluginImageTransform from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.esm.js';
+    import FilePondPluginFileMetadata from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-metadata/dist/filepond-plugin-file-metadata.esm.js';
+    import FilePondPluginFileEncode from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.esm.js';
     // Locales
     import ptBr from '<?php echo BASE_THEME_URL; ?>/filepond/locale/pt-br.js';
 
@@ -38,7 +40,9 @@
         FilePondPluginImageEditor,
         FilePondPluginFilePoster,
         //
-        FilePondPluginImageTransform
+        FilePondPluginImageTransform,
+        FilePondPluginFileMetadata,
+        FilePondPluginFileEncode
     );
 
     FilePond.setOptions(ptBr)   
@@ -54,7 +58,49 @@
     FilePond.create(document.querySelector('.filepond'), {
         allowReorder: true,
         filePosterMaxWidth: 128,
+        allowFileEncode: true,
         //
+
+        // Configure the server option
+        server: {
+            // URL of your PHP endpoint for handling the file upload
+            url: '<?php echo BASE_URL; ?>/application/venda/view/imovel/edit/fotos/upload.php',
+
+            // Additional parameters to send along with the file
+            process: {
+                method: 'POST', // HTTP method for file upload
+                headers: {
+                    'X-CSRF-TOKEN': 'your_csrf_token_here', // Add any necessary headers
+                },
+                onload: (response) => {
+                    // Handle the response from the server after the upload is complete
+                    console.log('Upload response:', response);
+                    // You can handle the response here, e.g., to update the UI.
+                },
+                onerror: (response) => {
+                    // Handle any upload errors
+                    console.error('Upload error:', response);
+                },
+            },
+
+            // Additional parameters for fetching the file
+            // fetch: {
+            //     method: 'GET', // HTTP method for fetching the file
+            //     headers: {
+            //         'Authorization': 'Bearer your_token_here', // Add any necessary headers
+            //     },
+            //     onload: (response) => {
+            //         // Handle the response from the server after fetching the file
+            //         console.log('Fetch response:', response);
+            //         // You can handle the response here, e.g., to display the uploaded image.
+            //     },
+            //     onerror: (response) => {
+            //         // Handle any fetch errors
+            //         console.error('Fetch error:', response);
+            //     },
+            // },
+        },
+
         imageResizeTargetWidth: 600,
         imageCropAspectRatio: 1,
         imageTransformVariants: {

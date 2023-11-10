@@ -25,6 +25,7 @@
         "animate.css": "^4.1.1",
         "filepond": "^4.30.4",
         "filepond-plugin-file-encode": "^2.1.11",
+        "filepond-plugin-file-metadata": "^1.0.8",
         "filepond-plugin-file-poster": "^2.5.1",
         "filepond-plugin-file-validate-size": "^2.2.8",
         "filepond-plugin-image-crop": "^2.0.6",

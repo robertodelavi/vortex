@@ -31,5 +31,9 @@
         case 'update_fotos_imovel':
             require_once 'application/venda/view/imovel/edit/fotos/dataControls.inc.php';
         break;
+        case 'envia_fotos_imovel':
+			echo 'passando pelo controller...';
+            require_once 'application/venda/view/imovel/edit/fotos/dataControls.inc.php';
+        break;
 	}
 ?>

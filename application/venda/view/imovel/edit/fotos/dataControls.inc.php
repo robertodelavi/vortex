@@ -1,6 +1,14 @@
 
 <?php
 	switch($_GET['acao']){
+
+        case 'envia_fotos_imovel':
+            echo 'Chegou....';
+
+            
+
+        break;
+
 		case 'update_fotos_imovel':
             if(isset($_POST['imv_codigo']) && $_POST['imv_codigo'] > 0){
 
