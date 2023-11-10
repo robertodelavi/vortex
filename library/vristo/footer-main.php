@@ -40,9 +40,9 @@
         FilePondPluginImageEditor,
         FilePondPluginFilePoster,
         //
-        FilePondPluginImageTransform,
-        FilePondPluginFileMetadata,
-        FilePondPluginFileEncode
+        // FilePondPluginImageTransform,
+        // FilePondPluginFileMetadata,
+        // FilePondPluginFileEncode
     );
 
     FilePond.setOptions(ptBr)   
@@ -81,48 +81,32 @@
                     // Handle any upload errors
                     console.error('Upload error:', response);
                 },
-            },
-
-            // Additional parameters for fetching the file
-            // fetch: {
-            //     method: 'GET', // HTTP method for fetching the file
-            //     headers: {
-            //         'Authorization': 'Bearer your_token_here', // Add any necessary headers
-            //     },
-            //     onload: (response) => {
-            //         // Handle the response from the server after fetching the file
-            //         console.log('Fetch response:', response);
-            //         // You can handle the response here, e.g., to display the uploaded image.
-            //     },
-            //     onerror: (response) => {
-            //         // Handle any fetch errors
-            //         console.error('Fetch error:', response);
-            //     },
-            // },
+            }
         },
 
         imageResizeTargetWidth: 600,
         imageCropAspectRatio: 1,
-        imageTransformVariants: {
-            thumb_medium_: (transforms) => {
-                transforms.resize = {
-                    size: {
-                        width: 384,
-                        height: 384,
-                    },
-                };
-                return transforms;
-            },
-            thumb_small_: (transforms) => {
-                transforms.resize = {
-                    size: {
-                        width: 128,
-                        height: 128,
-                    },
-                };
-                return transforms;
-            },
-        },
+
+        // imageTransformVariants: {
+        //     thumb_medium_: (transforms) => {
+        //         transforms.resize = {
+        //             size: {
+        //                 width: 384,
+        //                 height: 384,
+        //             },
+        //         };
+        //         return transforms;
+        //     },
+        //     thumb_small_: (transforms) => {
+        //         transforms.resize = {
+        //             size: {
+        //                 width: 1280,
+        //                 height: 1280,
+        //             },
+        //         };
+        //         return transforms;
+        //     },
+        // },
 
         // Image Editor plugin properties
         imageEditor: {
@@ -135,15 +119,16 @@
             // optionally. can leave out when not generating a preview thumbnail and/or output image
             imageWriter: [
                 // The image writer to use
-                createDefaultImageWriter,
+                createDefaultImageWriter,                
+
                 // optional image writer instructions, this instructs the image writer to resize the image to match a width of 384 pixels
                 {
                     targetSize: {
-                        width: 128,
+                        width: 384
                     },
                 },
             ],
-
+            
             // used to generate poster images, runs an editor in the background
             imageProcessor: processImage,
 

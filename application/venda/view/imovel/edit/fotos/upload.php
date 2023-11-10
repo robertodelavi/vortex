@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // save on uploads folder
     $file_destination = 'uploads/' . $file_name;
     move_uploaded_file($file_tmp, $file_destination);
-    
+
 
 
     
