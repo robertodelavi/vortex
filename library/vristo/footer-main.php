@@ -32,14 +32,16 @@
     import FilePondPluginImageTransform from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.esm.js';
     import FilePondPluginFileMetadata from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-metadata/dist/filepond-plugin-file-metadata.esm.js';
     import FilePondPluginFileEncode from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.esm.js';
+    import FilePondPluginImagePreview from '<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.esm.js';
     // Locales
     import ptBr from '<?php echo BASE_THEME_URL; ?>/filepond/locale/pt-br.js';
 
     // Register FilePond plugins
     FilePond.registerPlugin(
         FilePondPluginImageEditor,
-        FilePondPluginFilePoster,
+        FilePondPluginFilePoster,        
         //
+        FilePondPluginImagePreview
         // FilePondPluginImageTransform,
         // FilePondPluginFileMetadata,
         // FilePondPluginFileEncode
@@ -59,6 +61,7 @@
         allowReorder: true,
         filePosterMaxWidth: 128,
         allowFileEncode: true,
+        allowImagePreview: true,
         //
 
         // Configure the server option
@@ -81,7 +84,31 @@
                     // Handle any upload errors
                     console.error('Upload error:', response);
                 },
-            }
+            },
+            // Get data from the server to display alongside uploaded files
+            fetch: {
+                // URL of your PHP endpoint for getting file information
+                url: '<?php echo BASE_URL; ?>/application/venda/view/imovel/edit/fotos/getUploaded.php',
+
+                // Send any custom headers here
+                headers: {
+                    'X-CSRF-TOKEN': 'your_csrf_token_here',
+                },
+
+                // The returned object must include a `files` property, which is an array of objects.
+                // Each object must include an `id` property and a `name` property.
+                onload: (response) => {
+                    // Handle the response from the server after fetching the file data
+                    console.log('Load response:', response);
+                    // You can handle the response here, e.g., to update the UI.
+                },
+                onerror: (response) => {
+                    // Handle any fetch errors
+                    console.error('Fetch error:', response);
+                },
+            },
+
+            
         },
 
         imageResizeTargetWidth: 600,
@@ -122,11 +149,11 @@
                 createDefaultImageWriter,                
 
                 // optional image writer instructions, this instructs the image writer to resize the image to match a width of 384 pixels
-                {
-                    targetSize: {
-                        width: 384
-                    },
-                },
+                // {
+                //     targetSize: {
+                //         width: 384
+                //     },
+                // },
             ],
             
             // used to generate poster images, runs an editor in the background

@@ -451,15 +451,19 @@ if(isset($_GET['res'])){
                 // Obtém os valores do formulário
                 const formData = new FormData(event.target);
                 this.setFormValues(formData);
+
+                for(let [key, value] of formData.entries()) {
+                    console.log('===================================> ', key, value);
+                }
                 
                 // Faz a requisição AJAX para o arquivo PHP
-                fetch('application/pretendente/view/filter.php', {
+                fetch('application/pretendente/view/list/filter/index.php', {
                     method: 'POST',
-                    body: formData
+                    body: JSON.stringify({ values: formData })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('=> ', data)
+                    console.log('Response: ', data)
                     // Atualiza os dados da tabela com os dados filtrados                        
                     this.filterLoading = false;
                     this.currentData = data;
@@ -489,6 +493,7 @@ if(isset($_GET['res'])){
                     formValues[key] = value;
                 }
                 formFilters = formValues;
+
                 // Adiciona os valores extras ao formData
                 formData.append('values', JSON.stringify(formValues));
             },
