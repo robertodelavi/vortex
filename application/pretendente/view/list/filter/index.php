@@ -6,10 +6,10 @@ require_once('../../../../script/php/functions.php');
 $data = new DataManipulation();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Recupera os valores do formulário
-    $formData = json_decode(file_get_contents('php://input'), true); 
-    $values = $formData['values']; 
-    
+    // Obtem os valores do formulário passados via JSON
+    $formData = json_decode(file_get_contents('php://input'), true);
+    $values = $formData['values'];
+
     $sql = '
     SELECT 
         IF((p.prw_usuario = '.$_SESSION['v_usu_codigo'].' OR u.usu_nivel < '.$_SESSION['v_usu_nivel'].'), p.prw_codigo, 0) AS prw_codigo, 
@@ -27,9 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         LEFT JOIN sisusuarios AS u ON (p.prw_usuario = u.usu_codigo)
         LEFT JOIN pretendentesstatusatendimento AS ps ON (p.prw_psa_codigo = ps.psa_codigo)
     WHERE prw_codigo > 0 ';
-
-    $sql .= ' AND p.prw_usuario = "'.$_SESSION['v_usu_codigo'].'" '; //? Somente meus atendimentos
-    $sql .= ' AND p.prw_concluido = "n" '; //? Situação em aberto
 
     //? Usuário logado só ve pretententes que foram cadastrados por ele mesmo e com niveis menores ao dele
     if($_SESSION['v_usu_nivel']){

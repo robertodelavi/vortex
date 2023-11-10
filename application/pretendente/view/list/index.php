@@ -449,17 +449,15 @@ if(isset($_GET['res'])){
                 this.filterLoading = true;
                 
                 // Obtém os valores do formulário
-                const formData = new FormData(event.target);
-                this.setFormValues(formData);
-
-                for(let [key, value] of formData.entries()) {
-                    console.log('===================================> ', key, value);
+                const formData = new FormData(event.target);                                
+                const data = {
+                    values: this.setFormValues(formData)
                 }
                 
                 // Faz a requisição AJAX para o arquivo PHP
                 fetch('application/pretendente/view/list/filter/index.php', {
                     method: 'POST',
-                    body: JSON.stringify({ values: formData })
+                    body: JSON.stringify(data)
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -491,11 +489,13 @@ if(isset($_GET['res'])){
                 const formValues = {};
                 for (let [key, value] of formData.entries()) {
                     formValues[key] = value;
+                    console.log("🚀 ~ value:", value)
                 }
-                formFilters = formValues;
-
+                // formFilters = formValues;
+                console.log("🚀 ~ formValues:", formValues)
+                return formValues;
                 // Adiciona os valores extras ao formData
-                formData.append('values', JSON.stringify(formValues));
+                // formData.append('values', JSON.stringify(formValues));
             },
 
             formatDate(date) {
