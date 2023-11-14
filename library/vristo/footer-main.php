@@ -41,13 +41,11 @@
         FilePondPluginImageEditor,
         FilePondPluginFilePoster,        
         //
-        FilePondPluginImagePreview
+        // FilePondPluginImagePreview
         // FilePondPluginImageTransform,
         // FilePondPluginFileMetadata,
         // FilePondPluginFileEncode
     );
-
-    FilePond.setOptions(ptBr)   
 
     import {
         openEditor,
@@ -57,11 +55,32 @@
         getEditorDefaults,
     } from '<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/pintura/pintura.js';
 
+    FilePond.setOptions(ptBr);
+
+    // 1. Obter a lista de arquivos do backend
+    const fileList = [
+        {
+            source: '<?php echo BASE_URL; ?>/application/venda/view/imovel/edit/fotos/uploads/ferias-na-praia-o-que-fazer-das-f163.jpg',
+            options: {
+                type: 'local',
+            },
+        },
+        {
+            source: '<?php echo BASE_URL; ?>/application/venda/view/imovel/edit/fotos/uploads/convertida600.jpg',
+            options: {
+                type: 'local',
+            },
+        },
+        // ... adicione outros arquivos conforme necessário
+    ];
+
     FilePond.create(document.querySelector('.filepond'), {
+        
         allowReorder: true,
         filePosterMaxWidth: 128,
         allowFileEncode: true,
-        allowImagePreview: true,
+        // allowImagePreview: true,
+        files: fileList,
         //
 
         // Configure the server option
@@ -69,71 +88,31 @@
             // URL of your PHP endpoint for handling the file upload
             url: '<?php echo BASE_URL; ?>/application/venda/view/imovel/edit/fotos/upload.php',
 
-            // Additional parameters to send along with the file
-            process: {
-                method: 'POST', // HTTP method for file upload
-                headers: {
-                    'X-CSRF-TOKEN': 'your_csrf_token_here', // Add any necessary headers
-                },
-                onload: (response) => {
-                    // Handle the response from the server after the upload is complete
-                    console.log('Upload response:', response);
-                    // You can handle the response here, e.g., to update the UI.
-                },
-                onerror: (response) => {
-                    // Handle any upload errors
-                    console.error('Upload error:', response);
-                },
-            },
-            // Get data from the server to display alongside uploaded files
-            fetch: {
-                // URL of your PHP endpoint for getting file information
-                url: '<?php echo BASE_URL; ?>/application/venda/view/imovel/edit/fotos/getUploaded.php',
-
-                // Send any custom headers here
-                headers: {
-                    'X-CSRF-TOKEN': 'your_csrf_token_here',
-                },
-
-                // The returned object must include a `files` property, which is an array of objects.
-                // Each object must include an `id` property and a `name` property.
-                onload: (response) => {
-                    // Handle the response from the server after fetching the file data
-                    console.log('Load response:', response);
-                    // You can handle the response here, e.g., to update the UI.
-                },
-                onerror: (response) => {
-                    // Handle any fetch errors
-                    console.error('Fetch error:', response);
-                },
+            // load data from backend
+            load: (source, load, error, progress, abort, headers) => {
+                // fetch the file data using the source property and create a blob out of it
+                fetch(source)
+                    .then((res) => res.blob())
+                    .then(load)
+                    .catch(error);
             },
 
-            
+            fetch: (url, load, error, progress, abort, headers) => {
+                console.log("🚀 ~ url:", url)
+                // fetch com console no response
+                fetch(url)
+                    .then((res) => {
+                        console.log("🚀 ~ res:", res.data)
+                        return res.blob()
+                    })
+                    .then(load)
+                    .catch(error);
+                
+            },
         },
 
         imageResizeTargetWidth: 600,
         imageCropAspectRatio: 1,
-
-        // imageTransformVariants: {
-        //     thumb_medium_: (transforms) => {
-        //         transforms.resize = {
-        //             size: {
-        //                 width: 384,
-        //                 height: 384,
-        //             },
-        //         };
-        //         return transforms;
-        //     },
-        //     thumb_small_: (transforms) => {
-        //         transforms.resize = {
-        //             size: {
-        //                 width: 1280,
-        //                 height: 1280,
-        //             },
-        //         };
-        //         return transforms;
-        //     },
-        // },
 
         // Image Editor plugin properties
         imageEditor: {

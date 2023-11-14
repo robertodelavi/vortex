@@ -1,5 +1,10 @@
 <?php
 
+// Header default
+// session_start();
+require_once('../../../../../../library/DataManipulation.php');
+require_once('../../../../../script/php/functions.php');
+$data = new DataManipulation();
 
 // Handle the file upload
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -30,12 +35,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $file_destination = 'uploads/' . $file_name;
     move_uploaded_file($file_tmp, $file_destination);
 
-
-
+    //? BD
     
 
-    
+    $data->tabela = 'imovelfoto';
+    $foto['imf_imovel'] = 1;
+    $foto['imf_arquivo'] = 'opa.jpg';
+    $foto['imf_descricao'] = 'teste betha 1.0';
+    $foto['imf_principal'] = 's';
+    $foto['imf_ficha'] = 's';
+    $foto['imf_web'] = 's';
 
+    $data->add($foto);    
 
     // Send a response (e.g., JSON) back to the client to indicate success or failure
     $response = [
@@ -43,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 'message' => 'File uploaded successfully!!!!!!!!!!!!!!!!!', // Add a message if needed
         'files' => var_dump($_FILES),
         'received' => $_POST['filepond'],
+        'database' => $foto,
     ];
 
     echo json_encode($response);
