@@ -10,19 +10,6 @@ $data = new DataManipulation();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $file = $_FILES['filepond'];
 
-    // $file = array(5) {
-//     ["name"]=>
-//     string(52) "thumb_small_ferias-na-praia-o-que-fazer-das-f163.jpg"
-//     ["type"]=>
-//     string(10) "image/jpeg"
-//     ["tmp_name"]=>
-//     string(24) "C:\xampp\tmp\php28A8.tmp"
-//     ["error"]=>
-//     int(0)
-//     ["size"]=>
-//     int(8205)
-//   }
-
     // save $file at folder uploads 
     $file_name = $file['name'];
     $file_tmp = $file['tmp_name'];
@@ -54,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 'message' => 'File uploaded successfully!!!!!!!!!!!!!!!!!', // Add a message if needed
         'files' => var_dump($_FILES),
         'received' => $_POST['filepond'],
-        'database' => $foto,
+        'database' => var_dump($foto)
     ];
 
     echo json_encode($response);

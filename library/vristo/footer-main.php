@@ -97,18 +97,51 @@
                     .catch(error);
             },
 
-            fetch: (url, load, error, progress, abort, headers) => {
-                console.log("🚀 ~ url:", url)
-                // fetch com console no response
-                fetch(url)
-                    .then((res) => {
-                        console.log("🚀 ~ res:", res.data)
-                        return res.blob()
-                    })
-                    .then(load)
-                    .catch(error);
-                
+            //? Additional parameters to send along with the file
+            process: (fieldName, file, metadata, load, error, progress, abort) => {
+                // Cria um objeto com o imovelID
+                const data = {
+                    imovelID: 69,
+                    file: file
+                };
+
+                // Envia o objeto para o servidor
+                fetch('<?php echo BASE_URL; ?>/application/venda/view/imovel/edit/fotos/upload.php', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(response => {
+                    // Lida com a resposta do servidor
+                    if (response.status === 'success') {
+                        load(response);
+                    } else {
+                        error(response.message);
+                    }
+                })
+                .catch(error => {
+                    // Lida com qualquer erro de rede
+                    console.error('Upload error:', error);
+                    error(error.message);
+                });
             },
+
+            // process: {
+            //     method: 'POST', // HTTP method for file upload
+                
+            //     // Enviar parametros extras pro backend como id do imovel 
+                
+
+            //     onload: (response) => {
+            //         // Handle the response from the server after the upload is complete
+            //         console.log('Upload response:', response);
+            //         // You can handle the response here, e.g., to update the UI.
+            //     },
+            //     onerror: (response) => {
+            //         // Handle any upload errors
+            //         console.error('Upload error:', response);
+            //     },
+            // },
         },
 
         imageResizeTargetWidth: 600,
