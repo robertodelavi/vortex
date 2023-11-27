@@ -30,13 +30,13 @@
     <link rel="stylesheet" type="text/css" href="<?php echo BASE_THEME_URL; ?>/assets/css/nice-select2.css">
     
     <!-- Filepond -->
-    <link href="<?php echo BASE_THEME_URL; ?>/filepond/dist/filepond.css" rel="stylesheet">
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+    <!-- <link href="<?php echo BASE_THEME_URL; ?>/filepond/dist/filepond.css" rel="stylesheet"> -->
+    <!-- <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" /> -->
     <!-- <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet" /> -->
-    <link href="<?php echo BASE_THEME_URL; ?>/filepond/customStyles.css" rel="stylesheet">
+    <!-- <link href="<?php echo BASE_THEME_URL; ?>/filepond/customStyles.css" rel="stylesheet"> -->
     <!-- Pintura -->
-    <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/pintura/pintura.css" />
-    <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css" />
+    <!-- <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/@pqina/pintura/pintura.css" /> -->
+    <!-- <link rel="stylesheet" href="<?php echo BASE_THEME_URL; ?>/node_modules/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css" /> -->
 </head>
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden overflow-y-auto horizontal" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme, $store.app.menu, $store.app.layout,$store.app.rtlClass]">

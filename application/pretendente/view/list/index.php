@@ -108,7 +108,7 @@ if(isset($_GET['res'])){
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/Sortable.min.js"></script>
 <div x-data="modal">
-    <div x-data="multipleTable">
+    <div x-data="dataListPretendentes">
 
         <!-- Filtros (mobile) -->   
         <div class="block sm:hidden overflow-y-auto mb-4" >
@@ -240,7 +240,7 @@ if(isset($_GET['res'])){
 
 <script src="<?php echo BASE_THEME_URL; ?>/assets/js/simple-datatables.js"></script>
 <script>
-    let formFilters = null // Pra armazenar os filtros e quando enviar pro pretendente, ele setar os valores em SESSAO
+    // let formFilters = null // Pra armazenar os filtros e quando enviar pro pretendente, ele setar os valores em SESSAO
     const arrData = <?php echo json_encode($tableResult); ?>;
     console.log("🚀 ~ arrData:", arrData)
     const etapas = <?php echo json_encode($etapas); ?>;
@@ -263,7 +263,7 @@ if(isset($_GET['res'])){
     
     document.addEventListener("alpine:init", () => {
 
-        Alpine.data("multipleTable", () => ({
+        Alpine.data("dataListPretendentes", () => ({
             datatable2: null,
             isAddEventModal: false,
             idDelete: null,
@@ -332,13 +332,13 @@ if(isset($_GET['res'])){
                                 const diasSemAtendimento = row.cells[9].data
                                 const arrayCoresTempoSemAtendimento = ['bg-success', 'bg-primary', 'bg-danger'];
                                 const intervalosSemAtendimento = [<?php echo $empresa[0]['emp_diasavisoatendimento1']; ?>, <?php echo $empresa[0]['emp_diasavisoatendimento2']; ?>, <?php echo $empresa[0]['emp_diasavisoatendimento3']; ?>];
-
+                                //
                                 if(diasSemAtendimento >= 0){
                                     const indexCor = diasSemAtendimento > intervalosSemAtendimento[0] ? (diasSemAtendimento > intervalosSemAtendimento[1] ? (diasSemAtendimento > intervalosSemAtendimento[2] ? 2 : 1) : 0) : 0;
                                     const cor = arrayCoresTempoSemAtendimento[indexCor];
                                     return `<span class="badge ${cor} whitespace-nowrap">${diasSemAtendimento} dias</div>`;                                
                                 }else{
-                                    return `<span class="badge ${cor} whitespace-nowrap">--</div>`;
+                                    return `--`;
                                 }
                             }
                         },
@@ -444,7 +444,8 @@ if(isset($_GET['res'])){
                 });
             },
 
-            submitForm(event) {
+            submitFormPretentende(event) {
+                console.log('submitando....')
                 event.preventDefault();
                 this.filterLoading = true;
                 
@@ -473,16 +474,16 @@ if(isset($_GET['res'])){
 
             saveFilters() {
                 // Insere filtros em uma variavel de sessao php            
-                fetch('application/pretendente/view/filter/saveFilters.php', {
-                    method: 'POST',
-                    body: JSON.stringify(formFilters)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Ok...');
-                }).catch(error => {
-                    console.error('Erro ao enviar o formulário:', error);
-                });                           
+                // fetch('application/pretendente/view/filter/saveFilters.php', {
+                //     method: 'POST',
+                //     body: JSON.stringify(formFilters)
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     alert('Ok...');
+                // }).catch(error => {
+                //     console.error('Erro ao enviar o formulário:', error);
+                // });                           
             },
 
             setFormValues(formData) {

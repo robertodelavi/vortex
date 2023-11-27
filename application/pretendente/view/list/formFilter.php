@@ -46,7 +46,7 @@
     );
 ?>
 
-<form x-on:submit="submitForm($event)" id="formFilter" class="space-y-4">
+<form x-on:submit="submitFormPretentende($event)" id="formFilter" class="space-y-4">
     <div>
         <label>Nome</label>
         <input name="nome" type="text" placeholder="Fulano da Silva" class="form-input" value="<?php echo $_SESSION['filters']['nome']; ?>" />
